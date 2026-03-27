@@ -98,12 +98,12 @@ function Home() {
       {/* Passport Modal (Optimized for Mobile/No-Scroll Feel) */}
       {showPassportModal && (
         <div className="fixed inset-0 bg-brand-blue/90 backdrop-blur-md z-50 flex items-center justify-center sm:p-4">
-          <div className="bg-white w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl sm:max-w-2xl shadow-2xl flex flex-col animate-slide-in relative">
+          <div className="bg-white w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl sm:max-w-md shadow-2xl flex flex-col animate-slide-in relative overflow-hidden">
             {/* Sticky Header inside Modal */}
-            <div className="sticky top-0 bg-white border-b border-gray-100 p-4 sm:p-6 flex items-center justify-between z-10 sm:rounded-t-3xl shadow-sm">
+            <div className="sticky top-0 bg-white border-b border-gray-100 p-4 sm:p-6 flex items-center justify-between z-20 shadow-sm">
                <div className="flex flex-col">
-                 <h2 className="text-xl font-extrabold text-brand-blue uppercase">Seus Dados</h2>
-                 <p className="text-xs text-gray-500 font-medium">Preencha para gerar o documento</p>
+                 <h2 className="text-xl font-extrabold text-brand-blue uppercase">Criar Passaporte</h2>
+                 <p className="text-xs text-gray-500 font-medium">Preencha seus dados oficiais</p>
                </div>
                <button
                 onClick={() => setShowPassportModal(false)}
@@ -113,8 +113,8 @@ function Home() {
               </button>
             </div>
             
-            {/* Scrollable Form Content */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 sm:pb-6 custom-scrollbar">
+            {/* Horizontal Scrollable Form Content */}
+            <div className="flex-1 relative bg-gray-50">
               <Suspense fallback={<div className="h-full flex items-center justify-center"><div className="w-10 h-10 border-4 border-brand-teal border-t-transparent rounded-full animate-spin"/></div>}>
                 <PassportForm onSubmit={handleSubmit} />
               </Suspense>
