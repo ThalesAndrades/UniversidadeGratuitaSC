@@ -27,8 +27,9 @@ function PassportForm({ onSubmit }: PassportFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [photoPreview, setPhotoPreview] = useState<string>('');
   const [selectedUniversity, setSelectedUniversity] = useState<string>('');
-  const [selectedMonth, setSelectedMonth] = useState<number>(1);
-  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear() - 20);
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formContainerRef = useRef<HTMLDivElement>(null);
 
@@ -45,6 +46,17 @@ function PassportForm({ onSubmit }: PassportFormProps) {
   });
 
   const phoneValue = watch('phone') || '';
+  const birthDateValue = watch('birthDate');
+
+  // Sync date selects with form value if needed
+  useEffect(() => {
+    if (selectedDay && selectedMonth && selectedYear) {
+      const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+      if (dateStr !== birthDateValue) {
+        setValue('birthDate', dateStr, { shouldValidate: true });
+      }
+    }
+  }, [selectedDay, selectedMonth, selectedYear, setValue, birthDateValue]);
 
   const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatPhone(e.target.value);
@@ -76,11 +88,11 @@ function PassportForm({ onSubmit }: PassportFormProps) {
   }, [setValue, currentStep]);
 
   const handleDateChange = useCallback((day: number, month: number, year: number) => {
-    const date = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    setValue('birthDate', date, { shouldValidate: true });
-  }, [setValue]);
+    // This function is kept for backward compatibility if needed, 
+    // but the actual sync happens in the useEffect now.
+  }, []);
 
-  const currentDays = useMemo(() => getDaysInMonth(selectedMonth, selectedYear), [selectedMonth, selectedYear]);
+  const currentDays = useMemo(() => getDaysInMonth(selectedMonth || 1, selectedYear || 2000), [selectedMonth, selectedYear]);
   const years = useMemo(() => generateYears(), []);
   const months = useMemo(() => [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -251,7 +263,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
             <div>
               <Label className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Nascimento *</Label>
               <div className="grid grid-cols-3 gap-2 mt-1">
-                <Select onValueChange={(value) => handleDateChange(parseInt(value), selectedMonth, selectedYear)}>
+                <Select onValueChange={(value) => setSelectedDay(parseInt(value))}>
                   <SelectTrigger className="h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
                     <SelectValue placeholder="Dia" />
                   </SelectTrigger>
@@ -260,11 +272,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   </SelectContent>
                 </Select>
 
-                <Select onValueChange={(value) => {
-                  const month = parseInt(value);
-                  setSelectedMonth(month);
-                  handleDateChange(1, month, selectedYear);
-                }}>
+                <Select onValueChange={(value) => setSelectedMonth(parseInt(value))}>
                   <SelectTrigger className="h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
                     <SelectValue placeholder="Mês" />
                   </SelectTrigger>
@@ -273,11 +281,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   </SelectContent>
                 </Select>
 
-                <Select onValueChange={(value) => {
-                  const year = parseInt(value);
-                  setSelectedYear(year);
-                  handleDateChange(1, selectedMonth, year);
-                }}>
+                <Select onValueChange={(value) => setSelectedYear(parseInt(value))}>
                   <SelectTrigger className="h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
                     <SelectValue placeholder="Ano" />
                   </SelectTrigger>
@@ -286,7 +290,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   </SelectContent>
                 </Select>
               </div>
-              {errors.birthDate && <p className="text-destructive text-xs mt-1 font-bold">{errors.birthDate.message}</p>}
+              {(!selectedDay || !selectedMonth || !selectedYear) && currentStep === 2 && (
+                <p className="text-muted-foreground text-xs mt-1 font-medium ml-1">Selecione dia, mês e ano.</p>
+              )}
+              {errors.birthDate && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.birthDate.message}</p>}
             </div>
           </div>
 
