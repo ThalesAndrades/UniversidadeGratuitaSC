@@ -8,6 +8,18 @@ export const compressImage = async (
   maxWidthOrHeight: number = 1024
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
+    // 1. Verificação Estrita de Tipo MIME (Bloqueia arquivos mascarados como imagem)
+    if (!file.type.startsWith('image/')) {
+      reject(new Error('Tipo de arquivo não permitido. Apenas imagens.'));
+      return;
+    }
+
+    // 2. Bloquear SVGs (Potencial vetor de ataque XSS em uploads)
+    if (file.type === 'image/svg+xml') {
+      reject(new Error('Formato SVG não permitido por motivos de segurança.'));
+      return;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     
@@ -45,6 +57,7 @@ export const compressImage = async (
         // Desenhar imagem otimizada
         ctx.drawImage(img, 0, 0, width, height);
         
+        // Forçar saída como JPEG/WebP para purificar qualquer dado embutido no arquivo original (Limpeza Exif/Metadados/Malware Oculto)
         // Comprimir para JPEG com qualidade ajustada
         let quality = 0.9;
         let result = canvas.toDataURL('image/jpeg', quality);
@@ -59,7 +72,7 @@ export const compressImage = async (
       };
       
       img.onerror = () => {
-        reject(new Error('Erro ao carregar imagem'));
+        reject(new Error('O arquivo enviado não é uma imagem válida.'));
       };
     };
     

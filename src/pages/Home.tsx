@@ -1,25 +1,54 @@
-import { useState, lazy, Suspense, memo } from 'react';
+import { useState, lazy, Suspense, memo, useEffect } from 'react';
 import { PassportFormData } from '@/lib/validations';
 import { ArrowRight, QrCode, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 import { Header } from '@/components/layout/Header';
-import logo from '@/assets/logo-programa.png';
 
 // Lazy load components
 const PassportSplash = lazy(() => import('@/components/features/PassportSplash').then(module => ({ default: module.PassportSplash })));
 const PassportForm = lazy(() => import('@/components/forms/PassportForm').then(module => ({ default: module.PassportForm })));
+
+// Rate Limiting Simples no Frontend (Proteção contra bots básicos/spam de cliques)
+const RATE_LIMIT_TIME = 10000; // 10 segundos entre envios
+let lastSubmitTime = 0;
 
 function Home() {
   const [showPassportModal, setShowPassportModal] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
   const [passportData, setPassportData] = useState<PassportFormData | null>(null);
 
+  // Prevenir injeção via URL / Manipulação de estado de histórico
+  useEffect(() => {
+    if (window.location.search || window.location.hash) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
   const handleSubmit = async (data: PassportFormData) => {
-    // Apenas salva no estado local (sem vínculo com banco de dados)
-    setPassportData(data);
-    setShowPassportModal(false);
-    setShowSplash(true);
-    toast.success('Passaporte gerado com sucesso!');
+    // 1. Rate Limiting Check
+    const now = Date.now();
+    if (now - lastSubmitTime < RATE_LIMIT_TIME) {
+      toast.error('Aguarde alguns segundos antes de tentar novamente.');
+      return;
+    }
+    lastSubmitTime = now;
+
+    try {
+      // 2. Double Check dos dados vitais (Evita bypass do Zod modificando o state)
+      if (!data.photo.startsWith('data:image/') || data.firstName.includes('<script>')) {
+        throw new Error('Dados inválidos detectados pela segurança do sistema.');
+      }
+
+      // Apenas salva no estado local (sem vínculo com banco de dados)
+      setPassportData(data);
+      setShowPassportModal(false);
+      setShowSplash(true);
+      toast.success('Passaporte gerado com sucesso!');
+    } catch (error) {
+      console.error('Falha de segurança detectada:', error);
+      toast.error('Ação bloqueada. Dados inválidos.');
+      setShowPassportModal(false);
+    }
   };
 
   return (
