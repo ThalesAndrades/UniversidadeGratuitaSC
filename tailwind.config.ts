@@ -26,9 +26,10 @@ export default {
         foreground: 'hsl(var(--foreground))',
         brand: {
           blue: '#003366', // Governo SC Dark Blue
-          teal: '#00a39c', // Governo SC Teal
-          light: '#e6f4f1', // Light Teal background
-          accent: '#ffcc00', // Governo SC Yellow accent
+          teal: '#0fd1c3', // Background teal from official banner
+          light: '#e0fcf9', // Lighter version for backgrounds
+          accent: '#e30613', // Red from the graduation cap/flag
+          green: '#4caf50', // Green from the graduation cap
         },
         primary: {
           DEFAULT: 'hsl(var(--primary))',

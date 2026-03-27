@@ -22,57 +22,74 @@ function Home() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-brand-light text-gray-900 font-sans flex flex-col">
+    <div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-brand-teal to-[#0ab8ab] text-gray-900 font-sans flex flex-col">
       <Header />
       
       <main className="flex-1 flex items-center justify-center relative mt-16 p-4">
-        {/* Decorative Background Elements */}
-        <div className="absolute top-0 right-0 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-brand-teal/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-[30vw] h-[30vw] max-w-[400px] max-h-[400px] bg-brand-blue/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
+        {/* Decorative Background Elements based on official banner */}
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
+        <div className="absolute top-0 right-0 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute bottom-0 left-0 w-[30vw] h-[30vw] max-w-[400px] max-h-[400px] bg-black/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
         
-        <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-brand-teal/20 relative z-10 overflow-hidden flex flex-col">
-          {/* Card Header */}
-          <div className="bg-brand-blue p-6 sm:p-8 text-center border-b-4 border-brand-accent relative">
-             <div className="absolute top-4 right-4 bg-brand-teal/20 p-2 rounded-lg">
-                <QrCode className="w-6 h-6 text-brand-accent" />
+        <div className="w-full max-w-md bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/20 relative z-10 overflow-hidden flex flex-col transform transition-transform hover:scale-[1.01] duration-300">
+          {/* Card Header with official branding */}
+          <div className="bg-white p-6 sm:p-8 text-center border-b-4 border-brand-accent relative flex flex-col items-center justify-center">
+             <div className="absolute top-4 right-4 bg-brand-light p-2 rounded-lg border border-brand-teal/20 shadow-sm">
+                <QrCode className="w-6 h-6 text-brand-teal" />
              </div>
-             <img src={logo} alt="Universidade Gratuita" className="h-16 sm:h-20 mx-auto mb-4 object-contain filter brightness-0 invert" />
-             <h2 className="text-xl sm:text-2xl font-extrabold text-white uppercase tracking-wide leading-tight">
-               Passaporte Virtual
-             </h2>
-             <p className="text-brand-accent text-sm font-bold tracking-widest mt-1">SISTEMA ACAFE</p>
+             
+             {/* Official Logo Construction based on OCR */}
+             <div className="flex flex-col items-center mb-4 relative">
+                {/* Stylized Graduation Cap (Simulated with CSS/Icons) */}
+                <div className="relative w-24 h-20 flex flex-col items-center mb-2">
+                   {/* Top Red Bar */}
+                   <div className="w-20 h-4 bg-brand-accent rounded-sm absolute top-0 z-0 shadow-sm"></div>
+                   {/* Green Cap Body */}
+                   <div className="w-24 h-12 bg-brand-green absolute top-3 z-10" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }}></div>
+                   <div className="w-16 h-6 bg-brand-green absolute top-10 z-0 rounded-b-xl border-b-4 border-black/20"></div>
+                   {/* Red Ribbon */}
+                   <div className="w-3 h-8 bg-brand-accent absolute right-2 top-6 z-20 border-l border-white/30" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)' }}></div>
+                </div>
+                
+                <h2 className="text-2xl sm:text-3xl font-black text-black uppercase tracking-tight leading-none mt-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                  Universidade<br/>
+                  <span className="text-3xl sm:text-4xl">Gratuita</span>
+                </h2>
+             </div>
           </div>
 
           {/* Card Body */}
-          <div className="p-6 sm:p-8 flex-1 flex flex-col justify-center items-center text-center space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-700 rounded-full font-bold text-xs border border-green-200 uppercase tracking-wide">
+          <div className="p-6 sm:p-8 flex-1 flex flex-col justify-center items-center text-center space-y-6 bg-gradient-to-b from-gray-50 to-white">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-green/10 text-brand-green rounded-full font-bold text-xs border border-brand-green/20 uppercase tracking-wide shadow-inner">
               <ShieldCheck className="w-4 h-4" />
-              Acesso Oficial Verificado
+              Acesso Exclusivo
             </div>
 
             <div className="space-y-3">
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-blue leading-tight">
-                Bem-vindo(a) ao<br />
-                <span className="text-brand-teal">Universidade Gratuita</span>
-              </h3>
-              <p className="text-gray-600 text-sm sm:text-base font-medium max-w-sm mx-auto leading-relaxed">
-                Gere seu documento de identificação estudantil digital de forma rápida e segura para acesso aos benefícios do programa.
+              <p className="text-gray-500 text-xs font-bold tracking-widest uppercase">
+                Programa do Governo
               </p>
+              <h3 className="text-xl font-bold text-gray-800 leading-tight max-w-[250px] mx-auto">
+                Gere seu documento de identificação estudantil.
+              </h3>
             </div>
 
             <button
               onClick={() => setShowPassportModal(true)}
-              className="w-full max-w-xs px-6 py-4 mt-4 bg-brand-teal hover:bg-teal-600 active:bg-teal-700 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3 uppercase tracking-wide"
+              className="w-full px-6 py-4 mt-2 bg-brand-accent hover:bg-red-700 active:bg-red-800 text-white rounded-xl font-black text-lg shadow-[0_8px_20px_rgba(227,6,19,0.3)] hover:shadow-[0_12px_25px_rgba(227,6,19,0.4)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3 uppercase tracking-wide border-b-4 border-black/20"
             >
               Gerar Passaporte
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-5 h-5 stroke-[3px]" />
             </button>
           </div>
 
           {/* Card Footer */}
-          <div className="bg-gray-50 p-4 text-center border-t border-gray-100">
-            <p className="text-[10px] sm:text-xs text-gray-500 font-semibold uppercase tracking-wider">
-              Governo do Estado de Santa Catarina
+          <div className="bg-gray-100 p-4 text-center border-t border-gray-200 flex flex-col items-center justify-center space-y-1">
+            <p className="text-[10px] sm:text-xs text-black font-bold uppercase tracking-wider">
+              Governo de Santa Catarina
+            </p>
+            <p className="text-[9px] text-gray-500 uppercase tracking-widest">
+              Secretaria da Educação
             </p>
           </div>
         </div>
