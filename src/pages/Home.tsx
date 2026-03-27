@@ -58,7 +58,7 @@ function Home() {
         <Header />
       </Suspense>
       
-      <main className="flex-1 flex items-center justify-center relative mt-16 sm:mt-20 p-4 sm:p-6 w-full max-w-[480px] mx-auto">
+      <main className="flex-1 flex items-center justify-center relative mt-16 sm:mt-24 p-4 sm:p-8 w-full max-w-[480px] lg:max-w-[700px] mx-auto">
         {/* Decorative Background Elements based on official banner */}
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay" />
         <div className="absolute top-0 right-0 w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 opacity-70 animate-[pulse_8s_ease-in-out_infinite]" />
@@ -99,20 +99,20 @@ function Home() {
               <UniversityLogos />
             </Suspense>
 
-            <div className="space-y-4 w-full">
-              <p className="text-primary text-[10px] sm:text-xs font-black tracking-[0.2em] uppercase group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.8)] transition-all duration-300">
+            <div className="space-y-4 lg:space-y-6 w-full">
+              <p className="text-primary text-[10px] sm:text-xs lg:text-sm font-black tracking-[0.2em] uppercase group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.8)] transition-all duration-300">
                 Programa do Governo
               </p>
               <h3 className="text-foreground mx-auto flex justify-center w-full px-2 sm:px-0">
                 <div className="flex flex-col items-start font-sans tracking-tighter leading-[0.85] sm:leading-[0.9]">
-                  <span className="text-3xl sm:text-5xl font-black">A gente</span>
-                  <span className="text-4xl sm:text-6xl font-black relative flex items-end">
+                  <span className="text-3xl sm:text-5xl lg:text-6xl font-black">A gente</span>
+                  <span className="text-4xl sm:text-6xl lg:text-[5.5rem] font-black relative flex items-end">
                     ajuda a gent
                     <span className="relative inline-block">
                       e
                       <svg 
                         viewBox="0 0 100 100" 
-                        className="absolute -top-[0.6em] sm:-top-[0.7em] -right-1.5 sm:-right-2 w-8 h-8 sm:w-12 sm:h-12 rotate-[15deg] drop-shadow-md text-foreground fill-current"
+                        className="absolute -top-[0.6em] sm:-top-[0.7em] -right-1.5 sm:-right-2 lg:-right-3 w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rotate-[15deg] drop-shadow-md text-foreground fill-current"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path d="M50 25 L90 40 L50 55 L10 40 Z" />
@@ -128,7 +128,7 @@ function Home() {
 
             <button
               onClick={() => setShowPassportModal(true)}
-              className="w-full px-6 py-4 sm:py-5 mt-4 sm:mt-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl sm:rounded-2xl font-black text-lg sm:text-xl shadow-[0_8px_20px_hsl(var(--primary)/0.5)] hover:shadow-[0_12px_30px_hsl(var(--primary)/0.7)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-wide border-b-[5px] border-black/50 active:translate-y-0 active:border-b-0 active:mt-[9px] mb-1 relative overflow-hidden group/btn"
+              className="w-full px-6 py-4 sm:py-5 lg:py-6 mt-4 sm:mt-6 lg:mt-8 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl sm:rounded-2xl lg:rounded-3xl font-black text-lg sm:text-xl lg:text-2xl shadow-[0_8px_20px_hsl(var(--primary)/0.5)] hover:shadow-[0_12px_30px_hsl(var(--primary)/0.7)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-wide border-b-[5px] lg:border-b-[6px] border-black/50 active:translate-y-0 active:border-b-0 active:mt-[9px] lg:active:mt-[10px] mb-1 relative overflow-hidden group/btn"
             >
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite]"></div>
               Gerar Passaporte
