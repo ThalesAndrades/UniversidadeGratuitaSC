@@ -1,21 +1,21 @@
 import { memo } from 'react';
-import { Shield } from 'lucide-react';
 
 function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {/* SC Flag Colors indicator */}
-          <div className="flex h-10 w-10 overflow-hidden rounded-full border border-gray-200 shadow-sm">
-            <div className="w-1/3 h-full bg-brand-green"></div>
-            <div className="w-1/3 h-full bg-white flex items-center justify-center">
-              <Shield className="w-3 h-3 text-brand-accent" />
-            </div>
-            <div className="w-1/3 h-full bg-brand-accent"></div>
+          {/* Official SC Icon based on image */}
+          <div className="relative w-10 h-10 flex items-center justify-center">
+            {/* Red rounded square background */}
+            <div className="absolute inset-0 bg-[#e30613] rounded-lg"></div>
+            {/* Green gradient diamond */}
+            <div className="absolute inset-1 bg-gradient-to-br from-[#4caf50] to-[#8bc34a] rotate-45 rounded-sm"></div>
+            {/* SC Text */}
+            <span className="relative z-10 text-white font-black text-lg tracking-tighter" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>SC</span>
           </div>
           <div className="flex flex-col">
-            <h1 className="text-xs sm:text-sm font-black text-black leading-tight tracking-tight uppercase">Governo de</h1>
+            <h1 className="text-[10px] sm:text-xs font-bold text-gray-500 leading-tight tracking-widest uppercase">Governo de</h1>
             <p className="text-sm sm:text-base font-black text-black uppercase tracking-tight leading-none">Santa Catarina</p>
           </div>
         </div>
