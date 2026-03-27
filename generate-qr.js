@@ -7,68 +7,107 @@ import { createCanvas, loadImage } from 'canvas';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+function drawRoundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
 const generateQR = async () => {
   try {
     const url = 'https://teste.sbs';
-    const outputPath = path.join(__dirname, 'qrcode_vans_oficial.png');
+    const outputPath = path.join(__dirname, 'qrcode_passaporte_oficial.png');
     const logoPath = path.join(__dirname, 'src', 'assets', 'logo-programa.png');
 
-    // 1. Gera o QR Code base na memória (sem salvar no disco)
+    // 1. Gera o QR Code base na memória
     const qrBuffer = await QRCode.toBuffer(url, {
       color: {
-        dark: '#003366', // Azul Escuro Governo SC
-        light: '#FFFFFF' // Fundo branco
+        dark: '#002855', // Azul profundo elegante
+        light: '#FFFFFF'
       },
-      width: 1200, // Tamanho gigante para não perder qualidade na impressão
+      width: 2000,
       margin: 2,
-      errorCorrectionLevel: 'H' // Tolerância máxima a danos (30%) para podermos cobrir o centro
+      errorCorrectionLevel: 'H' // Tolerância máxima (30%) - essencial para embutir algo grande no meio
     });
 
-    // 2. Carrega as imagens no Canvas
+    // 2. Carrega as imagens
     const qrImage = await loadImage(qrBuffer);
     const logoImage = await loadImage(logoPath);
 
-    // 3. Configura o Canvas principal
-    const canvas = createCanvas(qrImage.width, qrImage.height);
+    // 3. Configura o Canvas principal estilo "Poster"
+    const canvasWidth = 2200;
+    const canvasHeight = 2200; // Alterado para ser quadrado (removendo a parte inferior do texto)
+    const canvas = createCanvas(canvasWidth, canvasHeight);
     const ctx = canvas.getContext('2d');
 
-    // 4. Desenha o QR Code
-    ctx.drawImage(qrImage, 0, 0, qrImage.width, qrImage.height);
+    // 4. Preenche o fundo com um gradiente super leve e sofisticado
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
+    gradient.addColorStop(0, '#ffffff');
+    gradient.addColorStop(1, '#f1f5f9'); // Slate-50
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 5. Calcula o tamanho e posição do logo no centro
-    // Como usamos correção 'H', podemos cobrir até 30% do QR code. Usaremos cerca de 20%.
-    const logoSize = qrImage.width * 0.22; 
-    const logoX = (qrImage.width - logoSize) / 2;
-    const logoY = (qrImage.height - logoSize) / 2;
+    // 5. Desenha o container do QR Code (Efeito Glass/Card elevado)
+    const cardMargin = 150;
+    const cardWidth = canvasWidth - (cardMargin * 2);
+    const cardHeight = cardWidth; 
+    const cardX = cardMargin;
+    const cardY = cardMargin + 50;
 
-    // 6. Desenha um fundo branco (moldura circular) por trás do logo para destacar
-    ctx.beginPath();
-    ctx.arc(
-      logoX + logoSize / 2, 
-      logoY + logoSize / 2, 
-      (logoSize / 2) + 15, // Raio um pouco maior que o logo
-      0, 
-      Math.PI * 2
-    );
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fill();
+    // Sombra do card principal
+    ctx.shadowColor = 'rgba(0, 40, 85, 0.15)';
+    ctx.shadowBlur = 60;
+    ctx.shadowOffsetY = 25;
     
-    // Adiciona uma borda sutil ao redor do circulo branco (Opcional, cor verde oficial)
-    ctx.lineWidth = 8;
-    ctx.strokeStyle = '#4caf50'; 
-    ctx.stroke();
+    ctx.fillStyle = '#FFFFFF';
+    drawRoundRect(ctx, cardX, cardY, cardWidth, cardHeight, 60);
+    ctx.fill();
 
-    // 7. Desenha a logo oficial no centro
-    ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+    ctx.shadowColor = 'transparent';
 
-    // 8. Salva o arquivo final fundido
+    // 6. Desenha o QR Code
+    const qrMargin = 60;
+    const qrDrawSize = cardWidth - (qrMargin * 2);
+    ctx.drawImage(qrImage, cardX + qrMargin, cardY + qrMargin, qrDrawSize, qrDrawSize);
+
+    // 7. Marca D'água Central Inteligente (Logo Original SEM sobreposições)
+    const centerBoxSize = qrDrawSize * 0.28; // 28% do tamanho do QR
+    const centerBoxX = cardX + qrMargin + (qrDrawSize - centerBoxSize) / 2;
+    const centerBoxY = cardY + qrMargin + (qrDrawSize - centerBoxSize) / 2;
+
+    // Desenha a Logo do Programa original diretamente sobre o QR Code
+    // SEM retângulo branco, SEM borda, apenas a logo pura
+    const logoRatio = logoImage.height / logoImage.width;
+    const logoDrawWidth = centerBoxSize * 0.90; // Ligeiramente maior para melhor visibilidade
+    const logoDrawHeight = logoDrawWidth * logoRatio;
+    const logoX = centerBoxX + (centerBoxSize - logoDrawWidth) / 2;
+    const logoY = centerBoxY + (centerBoxSize - logoDrawHeight) / 2;
+
+    ctx.globalAlpha = 0.98; // Quase opaco para máxima visibilidade
+    ctx.drawImage(logoImage, logoX, logoY, logoDrawWidth, logoDrawHeight);
+    ctx.globalAlpha = 1.0;
+
+    // 8. Salva o arquivo final
     const out = fs.createWriteStream(outputPath);
-    const stream = canvas.createPNGStream();
+    const stream = canvas.createPNGStream({
+      compressionLevel: 9,
+      filters: canvas.PNG_FILTER_NONE
+    });
+    
     stream.pipe(out);
     
     out.on('finish', () => {
-      console.log('✅ QR Code com Marca D\'água Oficial gerado com sucesso em:');
+      console.log('✨ QR Code Premium com CTA gerado com sucesso em:');
       console.log(outputPath);
+      console.log('🖼️  Verifique o arquivo qrcode_passaporte_oficial.png');
     });
 
   } catch (err) {

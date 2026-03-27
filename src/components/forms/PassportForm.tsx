@@ -138,13 +138,13 @@ function PassportForm({ onSubmit }: PassportFormProps) {
   }, [currentStep]);
 
   return (
-    <div className="flex flex-col h-full bg-white relative">
+    <div className="flex flex-col h-full bg-background relative">
       {/* Progress Bar */}
-      <div className="px-6 py-4 bg-white border-b border-gray-100 z-10 sticky top-0">
+      <div className="px-6 py-4 bg-card border-b border-border z-10 sticky top-0 shadow-sm">
         <div className="flex justify-between mb-2 relative">
-          <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 rounded-full z-0"></div>
+          <div className="absolute top-1/2 left-0 w-full h-1 bg-muted -translate-y-1/2 rounded-full z-0"></div>
           <div 
-            className="absolute top-1/2 left-0 h-1 bg-brand-teal -translate-y-1/2 rounded-full z-0 transition-all duration-500 ease-out"
+            className="absolute top-1/2 left-0 h-1 bg-primary -translate-y-1/2 rounded-full z-0 transition-all duration-500 ease-out"
             style={{ width: `${((currentStep - 1) / (TOTAL_STEPS - 1)) * 100}%` }}
           ></div>
           
@@ -153,10 +153,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               key={step} 
               className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 border-2 ${
                 step < currentStep 
-                  ? 'bg-brand-teal border-brand-teal text-white' 
+                  ? 'bg-primary border-primary text-primary-foreground shadow-[0_0_10px_hsl(var(--primary)/0.5)]' 
                   : step === currentStep 
-                    ? 'bg-white border-brand-teal text-brand-teal shadow-[0_0_0_4px_rgba(15,209,195,0.2)]'
-                    : 'bg-white border-gray-200 text-gray-400'
+                    ? 'bg-background border-primary text-primary ring-4 ring-primary/30 shadow-[0_0_15px_hsl(var(--primary)/0.3)]'
+                    : 'bg-background border-border text-muted-foreground'
               }`}
             >
               {step < currentStep ? <CheckCircle2 className="w-5 h-5" /> : step}
@@ -164,7 +164,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
           ))}
         </div>
         <div className="text-center mt-2">
-          <p className="text-xs font-bold text-brand-blue uppercase tracking-widest">
+          <p className="text-xs font-bold text-foreground uppercase tracking-widest">
             {currentStep === 1 && "Sua Foto"}
             {currentStep === 2 && "Dados Pessoais"}
             {currentStep === 3 && "Contato"}
@@ -183,15 +183,15 @@ function PassportForm({ onSubmit }: PassportFormProps) {
           {/* STEP 1: Photo */}
           <div className="min-w-full w-full flex-shrink-0 snap-center p-6 flex flex-col items-center justify-center space-y-6">
             <div className="text-center mb-4">
-              <h3 className="text-xl font-black text-brand-blue uppercase">Foto Oficial</h3>
-              <p className="text-sm text-gray-500">Adicione uma foto clara do seu rosto</p>
+              <h3 className="text-xl font-black text-foreground uppercase">Foto Oficial</h3>
+              <p className="text-sm text-muted-foreground">Adicione uma foto clara do seu rosto</p>
             </div>
             
             <div className="flex flex-col items-center">
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className={`relative w-48 h-48 rounded-full border-4 flex items-center justify-center cursor-pointer transition-all overflow-hidden bg-gray-50 shadow-inner group ${
-                  errors.photo ? 'border-brand-accent' : photoPreview ? 'border-brand-teal shadow-[0_0_20px_rgba(15,209,195,0.3)]' : 'border-dashed border-gray-300 hover:border-brand-teal'
+                className={`relative w-48 h-48 rounded-full border-4 flex items-center justify-center cursor-pointer transition-all overflow-hidden bg-card shadow-inner group ${
+                  errors.photo ? 'border-destructive' : photoPreview ? 'border-primary shadow-[0_0_30px_hsl(var(--primary)/0.4)]' : 'border-dashed border-border hover:border-primary/50'
                 }`}
               >
                 {photoPreview ? (
@@ -202,8 +202,8 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                     </div>
                   </>
                 ) : (
-                  <div className="flex flex-col items-center gap-3 text-gray-400 group-hover:text-brand-teal transition-colors">
-                    <div className="bg-white p-4 rounded-full shadow-sm">
+                  <div className="flex flex-col items-center gap-3 text-muted-foreground group-hover:text-primary transition-colors">
+                    <div className="bg-background border border-border p-4 rounded-full shadow-sm group-hover:border-primary/50 transition-colors">
                       <Camera className="w-10 h-10" />
                     </div>
                     <span className="text-sm font-bold uppercase tracking-wider">Tocar para abrir</span>
@@ -219,7 +219,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 className="hidden"
               />
               {errors.photo && (
-                <p className="text-brand-accent text-sm mt-4 font-bold bg-red-50 px-4 py-2 rounded-lg">{errors.photo.message}</p>
+                <p className="text-brand-accent text-sm mt-4 font-bold bg-destructive/10 px-4 py-2 rounded-lg">{errors.photo.message}</p>
               )}
             </div>
           </div>
@@ -227,36 +227,36 @@ function PassportForm({ onSubmit }: PassportFormProps) {
           {/* STEP 2: Personal Info */}
           <div className="min-w-full w-full flex-shrink-0 snap-center p-6 flex flex-col justify-center space-y-5">
             <div>
-              <Label htmlFor="firstName" className="text-xs font-bold text-gray-500 uppercase tracking-widest">Nome *</Label>
+              <Label htmlFor="firstName" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Nome *</Label>
               <Input
                 id="firstName"
                 {...register('firstName')}
                 placeholder="Ex: João"
-                className="mt-1 h-14 text-lg border-2 focus-visible:ring-0 focus-visible:border-brand-teal bg-gray-50 rounded-xl"
+                className="mt-1 h-14 text-lg border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-background rounded-xl shadow-sm hover:border-primary/50 transition-colors"
               />
-              {errors.firstName && <p className="text-brand-accent text-xs mt-1 font-bold">{errors.firstName.message}</p>}
+              {errors.firstName && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.firstName.message}</p>}
             </div>
             
             <div>
-              <Label htmlFor="lastName" className="text-xs font-bold text-gray-500 uppercase tracking-widest">Sobrenome *</Label>
+              <Label htmlFor="lastName" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Sobrenome *</Label>
               <Input
                 id="lastName"
                 {...register('lastName')}
                 placeholder="Ex: da Silva"
-                className="mt-1 h-14 text-lg border-2 focus-visible:ring-0 focus-visible:border-brand-teal bg-gray-50 rounded-xl"
+                className="mt-1 h-14 text-lg border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-background rounded-xl shadow-sm hover:border-primary/50 transition-colors"
               />
-              {errors.lastName && <p className="text-brand-accent text-xs mt-1 font-bold">{errors.lastName.message}</p>}
+              {errors.lastName && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.lastName.message}</p>}
             </div>
 
             <div>
-              <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Nascimento *</Label>
+              <Label className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Nascimento *</Label>
               <div className="grid grid-cols-3 gap-2 mt-1">
                 <Select onValueChange={(value) => handleDateChange(parseInt(value), selectedMonth, selectedYear)}>
-                  <SelectTrigger className="h-14 border-2 focus:ring-0 focus:border-brand-teal bg-gray-50 rounded-xl font-bold">
+                  <SelectTrigger className="h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
                     <SelectValue placeholder="Dia" />
                   </SelectTrigger>
                   <SelectContent>
-                    {currentDays.map((day) => (<SelectItem key={day} value={String(day)}>{day}</SelectItem>))}
+                    {currentDays.map((day) => (<SelectItem key={day} value={String(day)} className="focus:bg-primary/20">{day}</SelectItem>))}
                   </SelectContent>
                 </Select>
 
@@ -265,11 +265,11 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   setSelectedMonth(month);
                   handleDateChange(1, month, selectedYear);
                 }}>
-                  <SelectTrigger className="h-14 border-2 focus:ring-0 focus:border-brand-teal bg-gray-50 rounded-xl font-bold">
+                  <SelectTrigger className="h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
                     <SelectValue placeholder="Mês" />
                   </SelectTrigger>
                   <SelectContent>
-                    {months.map((month, index) => (<SelectItem key={index} value={String(index + 1)}>{month.substring(0, 3)}</SelectItem>))}
+                    {months.map((month, index) => (<SelectItem key={index} value={String(index + 1)} className="focus:bg-primary/20">{month.substring(0, 3)}</SelectItem>))}
                   </SelectContent>
                 </Select>
 
@@ -278,22 +278,22 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   setSelectedYear(year);
                   handleDateChange(1, selectedMonth, year);
                 }}>
-                  <SelectTrigger className="h-14 border-2 focus:ring-0 focus:border-brand-teal bg-gray-50 rounded-xl font-bold">
+                  <SelectTrigger className="h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
                     <SelectValue placeholder="Ano" />
                   </SelectTrigger>
                   <SelectContent>
-                    {years.map((year) => (<SelectItem key={year} value={String(year)}>{year}</SelectItem>))}
+                    {years.map((year) => (<SelectItem key={year} value={String(year)} className="focus:bg-primary/20">{year}</SelectItem>))}
                   </SelectContent>
                 </Select>
               </div>
-              {errors.birthDate && <p className="text-brand-accent text-xs mt-1 font-bold">{errors.birthDate.message}</p>}
+              {errors.birthDate && <p className="text-destructive text-xs mt-1 font-bold">{errors.birthDate.message}</p>}
             </div>
           </div>
 
           {/* STEP 3: Contact */}
           <div className="min-w-full w-full flex-shrink-0 snap-center p-6 flex flex-col justify-center space-y-6">
             <div>
-              <Label htmlFor="phone" className="text-xs font-bold text-gray-500 uppercase tracking-widest">WhatsApp *</Label>
+              <Label htmlFor="phone" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">WhatsApp *</Label>
               <Input
                 id="phone"
                 value={phoneValue}
@@ -301,76 +301,76 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 placeholder="(00) 00000-0000"
                 maxLength={15}
                 type="tel"
-                className="mt-1 h-14 text-lg border-2 focus-visible:ring-0 focus-visible:border-brand-teal bg-gray-50 rounded-xl font-bold"
+                className="mt-1 h-14 text-lg border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors"
               />
-              {errors.phone && <p className="text-brand-accent text-xs mt-1 font-bold">{errors.phone.message}</p>}
+              {errors.phone && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.phone.message}</p>}
             </div>
 
             <div>
-              <Label htmlFor="email" className="text-xs font-bold text-gray-500 uppercase tracking-widest">E-mail Oficial *</Label>
+              <Label htmlFor="email" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">E-mail Oficial *</Label>
               <Input
                 id="email"
                 type="email"
                 {...register('email')}
                 placeholder="aluno@email.com"
-                className="mt-1 h-14 text-lg border-2 focus-visible:ring-0 focus-visible:border-brand-teal bg-gray-50 rounded-xl font-bold"
+                className="mt-1 h-14 text-lg border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors"
               />
-              {errors.email && <p className="text-brand-accent text-xs mt-1 font-bold">{errors.email.message}</p>}
+              {errors.email && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.email.message}</p>}
             </div>
           </div>
 
           {/* STEP 4: University & Course */}
           <div className="min-w-full w-full flex-shrink-0 snap-center p-6 flex flex-col justify-center space-y-6">
             <div>
-              <Label htmlFor="university" className="text-xs font-bold text-gray-500 uppercase tracking-widest">Instituição ACAFE *</Label>
+              <Label htmlFor="university" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Instituição ACAFE *</Label>
               <Select onValueChange={(value) => {
                 setSelectedUniversity(value);
                 setValue('university', value, { shouldValidate: true });
                 setValue('course', '');
               }}>
-                <SelectTrigger className="mt-1 h-14 border-2 focus:ring-0 focus:border-brand-teal bg-gray-50 rounded-xl font-bold text-left whitespace-normal leading-tight">
+                <SelectTrigger className="mt-1 h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold text-left whitespace-normal leading-tight shadow-sm hover:border-primary/50 transition-colors">
                   <SelectValue placeholder="Selecione a universidade" />
                 </SelectTrigger>
                 <SelectContent className="max-h-[250px]">
                   {UNIVERSITIES.map((university) => (
-                    <SelectItem key={university.id} value={university.id} className="py-3 font-bold border-b border-gray-100 last:border-0">
+                    <SelectItem key={university.id} value={university.id} className="py-3 font-bold border-b border-border last:border-0 focus:bg-primary/20">
                       {university.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {errors.university && <p className="text-brand-accent text-xs mt-1 font-bold">{errors.university.message}</p>}
+              {errors.university && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.university.message}</p>}
             </div>
 
             {selectedUniversityData && (
               <div className="animate-fade-in">
-                <Label htmlFor="course" className="text-xs font-bold text-gray-500 uppercase tracking-widest">Curso Desejado *</Label>
+                <Label htmlFor="course" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Curso Desejado *</Label>
                 <Select onValueChange={(value) => setValue('course', value, { shouldValidate: true })}>
-                  <SelectTrigger className="mt-1 h-14 border-2 focus:ring-0 focus:border-brand-teal bg-gray-50 rounded-xl font-bold">
+                  <SelectTrigger className="mt-1 h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
                     <SelectValue placeholder="Selecione o curso" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[200px]">
                     {selectedUniversityData.courses.map((course) => (
-                      <SelectItem key={course} value={course} className="py-3 font-bold">
+                      <SelectItem key={course} value={course} className="py-3 font-bold focus:bg-primary/20">
                         {course}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.course && <p className="text-brand-accent text-xs mt-1 font-bold">{errors.course.message}</p>}
+                {errors.course && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.course.message}</p>}
               </div>
             )}
           </div>
         </div>
 
         {/* Navigation Footer */}
-        <div className="p-4 bg-white border-t border-gray-100 flex gap-3 z-10 sticky bottom-0">
+        <div className="p-4 bg-card border-t border-border flex gap-3 z-10 sticky bottom-0 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
           {currentStep > 1 && (
             <Button
               type="button"
               onClick={handlePrev}
               variant="outline"
-              className="h-14 w-14 rounded-xl border-2 border-gray-200 text-gray-600 flex-shrink-0"
+              className="h-14 w-14 rounded-xl border-2 border-border text-foreground hover:bg-muted flex-shrink-0 border-b-[4px] active:translate-y-0 active:border-b-2 active:mt-[2px]"
             >
               <ChevronLeft className="w-6 h-6" />
             </Button>
@@ -380,7 +380,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
             <Button
               type="button"
               onClick={handleNext}
-              className="flex-1 h-14 bg-brand-blue hover:bg-blue-900 text-white text-lg font-black uppercase tracking-widest rounded-xl shadow-lg transition-all"
+              className="flex-1 h-14 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-black uppercase tracking-widest rounded-xl shadow-[0_8px_20px_hsl(var(--primary)/0.4)] hover:shadow-[0_12px_25px_hsl(var(--primary)/0.6)] hover:-translate-y-1 transition-all duration-300 border-b-[5px] border-black/30 active:translate-y-0 active:border-b-0 active:mt-[5px] mb-1"
             >
               Avançar
               <ChevronRight className="w-5 h-5 ml-2" />
@@ -389,7 +389,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
             <Button
               type="submit"
               disabled={!isValid}
-              className="flex-1 h-14 bg-brand-accent hover:bg-red-700 text-white text-lg font-black uppercase tracking-widest rounded-xl shadow-[0_8px_20px_rgba(227,6,19,0.3)] transition-all disabled:opacity-50 disabled:shadow-none"
+              className="flex-1 h-14 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-black uppercase tracking-widest rounded-xl shadow-[0_8px_20px_hsl(var(--primary)/0.4)] hover:shadow-[0_12px_25px_hsl(var(--primary)/0.6)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:shadow-none border-b-[5px] border-black/30 active:translate-y-0 active:border-b-0 active:mt-[5px] mb-1"
             >
               <Upload className="w-5 h-5 mr-2 stroke-[3px]" />
               Gerar Oficial

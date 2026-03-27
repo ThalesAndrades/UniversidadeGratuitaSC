@@ -24,6 +24,38 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
+
+    /* V1 Brand Colors */
+    --brand-blue: 210 100% 20%;
+    --brand-teal: 175 91% 44%;
+    --brand-light: 173 82% 93%;
+    --brand-accent: 356 97% 46%;
+    --brand-green: 122 39% 49%;
+  }
+
+  .theme-v2 {
+    --background: 165 10% 8%; /* Darker background to make cards pop */
+    --foreground: 0 0% 100%;
+    --card: 165 12% 12%; /* Lighter card for contrast */
+    --card-foreground: 0 0% 100%;
+    --popover: 165 12% 12%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 84 90% 50%; /* Vibrant lime green */
+    --primary-foreground: 165 10% 8%;
+    --secondary: 165 12% 16%; /* Noticeable difference from background */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 165 12% 16%;
+    --muted-foreground: 165 5% 75%; /* Brighter muted text for readability */
+    --border: 165 12% 20%; /* More visible borders */
+    --input: 165 12% 18%;
+    --ring: 84 90% 50%;
+
+    /* V2 Brand Colors */
+    --brand-blue: 165 10% 8%; /* Very dark */
+    --brand-teal: 165 12% 16%; /* Card gradient start */
+    --brand-light: 165 12% 18%; /* Element background */
+    --brand-accent: 84 90% 50%; /* Action color */
+    --brand-green: 84 90% 50%; /* Action color */
   }
 }
 
