@@ -53,7 +53,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
 
         {/* Passport Card */}
         <div className="p-8 bg-muted overflow-y-auto max-h-[60vh]">
-          <div className="border-4 border-foreground rounded-2xl overflow-hidden bg-card shadow-2xl relative max-w-full">
+          <div ref={passportRef} className="border-4 border-foreground rounded-2xl overflow-hidden bg-card shadow-2xl relative max-w-full">
             
             {/* Watermark */}
             <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
