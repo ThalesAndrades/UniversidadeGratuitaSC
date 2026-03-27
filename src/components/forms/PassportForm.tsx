@@ -285,10 +285,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
 
       <Button
         type="submit"
-        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-6 text-lg font-semibold"
+        className="w-full bg-brand-teal hover:bg-teal-500 text-white py-6 text-lg font-bold shadow-md hover:shadow-lg transition-all"
       >
         <Upload className="w-5 h-5 mr-2" />
-        Criar Passaporte Virtual
+        Gerar Passaporte Virtual
       </Button>
     </form>
   );

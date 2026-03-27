@@ -24,6 +24,12 @@ export default {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        brand: {
+          blue: '#003366', // Governo SC Dark Blue
+          teal: '#00a39c', // Governo SC Teal
+          light: '#e6f4f1', // Light Teal background
+          accent: '#ffcc00', // Governo SC Yellow accent
+        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',

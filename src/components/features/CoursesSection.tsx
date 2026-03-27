@@ -95,18 +95,18 @@ function CoursesSection() {
           placeholder="Buscar curso..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-600 transition-colors"
+          className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent transition-all text-lg shadow-sm"
         />
       </div>
 
       {/* Area Filters */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 justify-center">
         <button
           onClick={() => setSelectedArea(null)}
-          className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+          className={`px-5 py-2.5 rounded-full font-bold text-sm transition-all ${
             selectedArea === null
-              ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              ? 'bg-brand-teal text-white shadow-md'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
           Todas as Áreas
@@ -117,15 +117,15 @@ function CoursesSection() {
             <button
               key={area}
               onClick={() => setSelectedArea(area)}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 ${
+              className={`px-5 py-2.5 rounded-full font-bold text-sm transition-all flex items-center gap-2 ${
                 selectedArea === area
-                  ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-brand-teal text-white shadow-md'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               <Icon className="w-4 h-4" />
               {area}
-              <span className="text-xs opacity-75">
+              <span className="text-[10px] opacity-75">
                 ({categorizedCourses[area].length})
               </span>
             </button>
@@ -134,13 +134,14 @@ function CoursesSection() {
       </div>
 
       {/* Courses Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[500px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-brand-teal/20 scrollbar-track-transparent">
         {filteredCourses.map((course) => (
           <div
             key={course}
-            className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 hover:shadow-md transition-all hover:scale-[1.02] border border-gray-200 hover:border-purple-300"
+            className="bg-white rounded-xl p-4 hover:shadow-md transition-all duration-200 border border-gray-100 hover:border-brand-teal/30 group flex items-center"
           >
-            <p className="font-semibold text-gray-900 text-sm leading-snug">
+            <div className="w-2 h-2 rounded-full bg-brand-teal/50 group-hover:bg-brand-teal mr-3 transition-colors" />
+            <p className="font-bold text-brand-blue group-hover:text-brand-teal text-sm leading-snug transition-colors">
               {course}
             </p>
           </div>
@@ -148,16 +149,16 @@ function CoursesSection() {
       </div>
 
       {filteredCourses.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">
+        <div className="text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+          <p className="text-gray-500 text-lg font-medium">
             Nenhum curso encontrado para "{searchTerm}"
           </p>
         </div>
       )}
 
-      <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-4 text-center">
-        <p className="text-sm text-gray-700">
-          💡 <strong>Dica:</strong> A disponibilidade de cursos pode variar por universidade. 
+      <div className="bg-brand-light border border-brand-teal/20 rounded-xl p-5 text-center">
+        <p className="text-sm text-brand-blue font-medium">
+          <span className="text-brand-teal font-bold mr-2">💡 Dica:</span> A disponibilidade de cursos pode variar por universidade. 
           Selecione sua universidade ao criar o passaporte para ver as opções específicas.
         </p>
       </div>
