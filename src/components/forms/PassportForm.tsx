@@ -53,7 +53,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
     if (selectedDay && selectedMonth && selectedYear) {
       const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
       if (dateStr !== birthDateValue) {
-        setValue('birthDate', dateStr, { shouldValidate: true });
+        setValue('birthDate', dateStr, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
       }
     }
   }, [selectedDay, selectedMonth, selectedYear, setValue, birthDateValue]);
@@ -106,6 +106,15 @@ function PassportForm({ onSubmit }: PassportFormProps) {
 
   const validateStep = async (step: number) => {
     let fieldsToValidate: any[] = [];
+    
+    // Explicitly validate date before triggering form validation if in step 2
+    if (step === 2) {
+      if (selectedDay && selectedMonth && selectedYear) {
+        const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+        setValue('birthDate', dateStr, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+      }
+    }
+
     switch (step) {
       case 1:
         fieldsToValidate = ['photo'];
