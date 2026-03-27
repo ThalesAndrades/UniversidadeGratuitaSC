@@ -1,10 +1,12 @@
 import { useRef, useCallback, memo } from 'react';
 import { CheckCircle2, Download, X } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { PassportFormData } from '@/lib/validations';
 import { formatDate } from '@/lib/utils';
 import { UNIVERSITIES } from '@/constants/universities';
 import { Button } from '@/components/ui/button';
 import logo from '@/assets/logo-programa.png';
+import logoQr from '@/assets/icons/logo-qr.svg';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
@@ -93,11 +95,32 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
 
                 {/* Info */}
                 <div className="flex-1 space-y-4 w-full min-w-0">
-                  <div className="bg-muted/50 p-3 rounded-lg border-l-4 border-primary">
-                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-1">Nome Completo</p>
-                    <p className="text-xl font-black text-foreground uppercase tracking-tight break-words">
-                      {data.firstName} {data.lastName}
-                    </p>
+                  <div className="bg-muted/50 p-3 rounded-lg border-l-4 border-primary flex justify-between items-start gap-2">
+                    <div className="min-w-0">
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-1">Nome Completo</p>
+                      <p className="text-xl font-black text-foreground uppercase tracking-tight break-words">
+                        {data.firstName} {data.lastName}
+                      </p>
+                    </div>
+                    {/* QR Code Validation */}
+                    <div className="flex-shrink-0 bg-white p-1 rounded-md shadow-sm border border-border">
+                      <QRCodeSVG 
+                        value={`https://universidade-gratuita-sc.vercel.app/validate?id=${btoa(data.email).substring(0, 10).toUpperCase()}`}
+                        size={64}
+                        bgColor={"#ffffff"}
+                        fgColor={"#000000"}
+                        level={"H"}
+                        includeMargin={false}
+                        imageSettings={{
+                          src: logoQr,
+                          x: undefined,
+                          y: undefined,
+                          height: 18,
+                          width: 18,
+                          excavate: true,
+                        }}
+                      />
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
