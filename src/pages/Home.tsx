@@ -58,13 +58,13 @@ function Home() {
         <Header />
       </Suspense>
       
-      <main className="flex-1 flex items-center justify-center relative mt-16 p-4">
+      <main className="flex-1 flex items-center justify-center relative mt-12 sm:mt-16 p-4 sm:p-6 w-full max-w-[520px] mx-auto">
         {/* Decorative Background Elements based on official banner */}
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay" />
         <div className="absolute top-0 right-0 w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 opacity-70 animate-[pulse_8s_ease-in-out_infinite]" />
         <div className="absolute bottom-0 left-0 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-primary/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3 animate-[pulse_10s_ease-in-out_infinite_reverse]" />
         
-        <div className="w-full max-w-md bg-card rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-border/40 relative z-10 overflow-hidden flex flex-col transform transition-all hover:scale-[1.02] hover:shadow-[0_25px_60px_rgba(0,0,0,0.6)] duration-300 ring-1 ring-white/5 group">
+        <div className="w-full bg-card rounded-[2rem] sm:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-border/40 relative z-10 overflow-hidden flex flex-col transform transition-all hover:scale-[1.01] hover:shadow-[0_25px_60px_rgba(0,0,0,0.6)] duration-300 ring-1 ring-white/5 group">
           {/* Card Header with official branding */}
           <div className="bg-card p-6 sm:p-8 text-center border-b-[6px] border-primary relative flex flex-col items-center justify-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] z-20">
              <div className="absolute top-4 right-4 bg-card p-2 rounded-lg border border-border shadow-sm group-hover:border-primary/50 transition-colors duration-300">
@@ -92,27 +92,27 @@ function Home() {
           </div>
 
           {/* Card Body */}
-          <div className="p-6 sm:p-8 flex-1 flex flex-col justify-center items-center text-center space-y-6 bg-gradient-to-b from-card to-background relative border-t border-border/10 z-10 shadow-[inset_0_20px_20px_-20px_rgba(0,0,0,0.8)] w-full">
+          <div className="p-6 sm:p-10 flex-1 flex flex-col justify-center items-center text-center space-y-6 sm:space-y-8 bg-gradient-to-b from-card to-background relative border-t border-border/10 z-10 shadow-[inset_0_20px_20px_-20px_rgba(0,0,0,0.8)] w-full">
             <div className="absolute inset-0 bg-primary/5 opacity-0 mix-blend-overlay pointer-events-none transition-opacity duration-500 group-hover:opacity-100"></div>
             
             <Suspense fallback={<div className="h-12 w-full animate-pulse bg-muted rounded-xl"></div>}>
               <UniversityLogos />
             </Suspense>
 
-            <div className="space-y-3 w-full">
-              <p className="text-primary text-xs font-black tracking-widest uppercase group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.8)] transition-all duration-300">
+            <div className="space-y-4 w-full">
+              <p className="text-primary text-[10px] sm:text-xs font-black tracking-[0.2em] uppercase group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.8)] transition-all duration-300">
                 Programa do Governo
               </p>
-              <h3 className="text-foreground mx-auto flex justify-center">
-                <div className="flex flex-col items-start font-sans tracking-tighter leading-[0.9]">
-                  <span className="text-3xl sm:text-4xl font-black">A gente</span>
-                  <span className="text-4xl sm:text-5xl font-black relative flex items-end">
+              <h3 className="text-foreground mx-auto flex justify-center w-full px-2 sm:px-0">
+                <div className="flex flex-col items-start font-sans tracking-tighter leading-[0.85] sm:leading-[0.9]">
+                  <span className="text-[2.2rem] sm:text-5xl font-black">A gente</span>
+                  <span className="text-[2.8rem] sm:text-6xl font-black relative flex items-end">
                     ajuda a gent
                     <span className="relative inline-block">
                       e
                       <svg 
                         viewBox="0 0 100 100" 
-                        className="absolute -top-[0.8em] -right-1 w-8 h-8 sm:w-10 sm:h-10 rotate-12 drop-shadow-sm text-foreground fill-current"
+                        className="absolute -top-[0.6em] sm:-top-[0.7em] -right-1 sm:-right-2 w-7 h-7 sm:w-12 sm:h-12 rotate-[15deg] drop-shadow-md text-foreground fill-current"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path d="M50 25 L90 40 L50 55 L10 40 Z" />
@@ -128,7 +128,7 @@ function Home() {
 
             <button
               onClick={() => setShowPassportModal(true)}
-              className="w-full px-6 py-4 mt-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-black text-lg shadow-[0_8px_20px_hsl(var(--primary)/0.5)] hover:shadow-[0_12px_30px_hsl(var(--primary)/0.7)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-wide border-b-[5px] border-black/50 active:translate-y-0 active:border-b-0 active:mt-[9px] mb-1 relative overflow-hidden group/btn"
+              className="w-full px-6 py-4 sm:py-5 mt-4 sm:mt-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl sm:rounded-2xl font-black text-lg sm:text-xl shadow-[0_8px_20px_hsl(var(--primary)/0.5)] hover:shadow-[0_12px_30px_hsl(var(--primary)/0.7)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-wide border-b-[5px] border-black/50 active:translate-y-0 active:border-b-0 active:mt-[9px] mb-1 relative overflow-hidden group/btn"
             >
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite]"></div>
               Gerar Passaporte
