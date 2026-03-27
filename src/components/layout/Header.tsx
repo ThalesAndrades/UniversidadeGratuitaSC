@@ -20,7 +20,7 @@ function Header() {
           </div>
         </div>
         <div className="hidden sm:flex items-center gap-2 px-4 py-1.5 bg-gray-100 text-gray-600 text-[10px] font-bold rounded-full border border-gray-200 uppercase tracking-widest">
-          Secretaria da Educação
+          teste.sbs
         </div>
       </div>
     </header>

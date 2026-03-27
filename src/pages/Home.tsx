@@ -15,6 +15,7 @@ function Home() {
   const [passportData, setPassportData] = useState<PassportFormData | null>(null);
 
   const handleSubmit = async (data: PassportFormData) => {
+    // Apenas salva no estado local (sem vínculo com banco de dados)
     setPassportData(data);
     setShowPassportModal(false);
     setShowSplash(true);
@@ -89,7 +90,7 @@ function Home() {
               Governo de Santa Catarina
             </p>
             <p className="text-[9px] text-gray-500 uppercase tracking-widest">
-              Secretaria da Educação
+              teste.sbs
             </p>
           </div>
         </div>
