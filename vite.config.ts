@@ -10,14 +10,15 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  base: './', // Fundamental para funcionar em subdiretórios no Hostinger (ex: meusite.com.br/passaporte)
   build: {
-    // Otimizações de build
     target: 'es2015',
     minify: 'esbuild',
+    outDir: 'dist',
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         manualChunks: {
-          // Separar vendor chunks para melhor cache
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
           'ui-vendor': ['lucide-react', 'sonner'],
@@ -25,17 +26,11 @@ export default defineConfig({
         },
       },
     },
-    // Otimizar assets
     assetsInlineLimit: 4096, // 4kb
     chunkSizeWarningLimit: 1000,
   },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
-  },
   server: {
-    // Melhorar performance em desenvolvimento
-    hmr: {
-      overlay: false,
-    },
+    port: 3000,
+    host: true,
   },
 });
