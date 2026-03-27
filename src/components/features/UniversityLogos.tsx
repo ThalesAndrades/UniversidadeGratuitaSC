@@ -40,10 +40,10 @@ function UniversityLogos() {
   const marqueeItems = [...LOGOS, ...LOGOS];
 
   return (
-    <div className="w-full overflow-hidden py-6 sm:py-8 relative flex items-center bg-transparent my-2 sm:my-4 [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+    <div className="w-full overflow-hidden py-4 sm:py-8 relative flex items-center bg-transparent my-1 sm:my-4 [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
       {/* Fallback gradient masks for older browsers */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none sm:hidden"></div>
-      <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none sm:hidden"></div>
+      <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none sm:hidden"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none sm:hidden"></div>
       
       <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
         {marqueeItems.map((logo, index) => {
@@ -51,12 +51,12 @@ function UniversityLogos() {
           return (
             <div 
               key={`${logo.name}-${index}`} 
-              className={`flex items-center justify-center gap-2 px-6 sm:px-10 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-110 cursor-default group`}
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-10 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-105 sm:hover:scale-110 cursor-default group`}
             >
-              <div className={`p-2.5 sm:p-3 rounded-2xl bg-transparent group-hover:bg-card/50 ${logo.color} transition-all duration-300`}>
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.5} fill={logo.name === 'UNO CHAPECÓ' || logo.name === 'Católica SC' || logo.name === 'IELUSC' ? 'currentColor' : 'none'} />
+              <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-transparent group-hover:bg-card/50 ${logo.color} transition-all duration-300`}>
+                <Icon className="w-4 h-4 sm:w-6 sm:h-6" strokeWidth={2.5} fill={logo.name === 'UNO CHAPECÓ' || logo.name === 'Católica SC' || logo.name === 'IELUSC' ? 'currentColor' : 'none'} />
               </div>
-              <span className={`text-xs sm:text-sm whitespace-nowrap text-foreground/80 group-hover:text-foreground ${logo.style}`}>
+              <span className={`text-[10px] sm:text-sm whitespace-nowrap text-foreground/80 group-hover:text-foreground ${logo.style}`}>
                 {logo.name}
               </span>
             </div>

@@ -58,35 +58,35 @@ function Home() {
         <Header />
       </Suspense>
       
-      <main className="flex-1 flex items-center justify-center relative mt-12 sm:mt-16 p-4 sm:p-6 w-full max-w-[520px] mx-auto">
+      <main className="flex-1 flex items-center justify-center relative mt-16 sm:mt-20 p-4 sm:p-6 w-full max-w-[480px] mx-auto">
         {/* Decorative Background Elements based on official banner */}
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay" />
         <div className="absolute top-0 right-0 w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 opacity-70 animate-[pulse_8s_ease-in-out_infinite]" />
         <div className="absolute bottom-0 left-0 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-primary/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3 animate-[pulse_10s_ease-in-out_infinite_reverse]" />
         
-        <div className="w-full bg-card rounded-[2rem] sm:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-border/40 relative z-10 overflow-hidden flex flex-col transform transition-all hover:scale-[1.01] hover:shadow-[0_25px_60px_rgba(0,0,0,0.6)] duration-300 ring-1 ring-white/5 group">
+        <div className="w-full bg-card rounded-[1.5rem] sm:rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.5)] border border-border/40 relative z-10 overflow-hidden flex flex-col transform transition-all hover:scale-[1.01] hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)] duration-300 ring-1 ring-white/5 group">
           {/* Card Header with official branding */}
-          <div className="bg-card p-6 sm:p-8 text-center border-b-[6px] border-primary relative flex flex-col items-center justify-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] z-20">
-             <div className="absolute top-4 right-4 bg-card p-2 rounded-lg border border-border shadow-sm group-hover:border-primary/50 transition-colors duration-300">
-                <QrCode className="w-6 h-6 text-primary drop-shadow-[0_0_12px_hsl(var(--primary)/0.8)] group-hover:scale-110 transition-transform duration-300" />
+          <div className="bg-card p-5 sm:p-8 text-center border-b-[5px] sm:border-b-[6px] border-primary relative flex flex-col items-center justify-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] z-20">
+             <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-card p-2 rounded-lg border border-border shadow-sm group-hover:border-primary/50 transition-colors duration-300">
+                <QrCode className="w-5 h-5 sm:w-6 sm:h-6 text-primary drop-shadow-[0_0_12px_hsl(var(--primary)/0.8)] group-hover:scale-110 transition-transform duration-300" />
              </div>
              
              {/* Official Logo Construction based on OCR */}
-             <div className="flex flex-col items-center mb-4 relative">
+             <div className="flex flex-col items-center mb-2 sm:mb-4 relative">
                 {/* Stylized Graduation Cap (Simulated with CSS/Icons) */}
-                <div className="relative w-24 h-20 flex flex-col items-center mb-2 group-hover:scale-105 transition-transform duration-500">
+                <div className="relative w-20 h-16 sm:w-24 sm:h-20 flex flex-col items-center mb-2 group-hover:scale-105 transition-transform duration-500">
                    {/* Top Red Bar */}
-                   <div className="w-20 h-4 bg-primary rounded-sm absolute top-0 z-0 shadow-[0_0_10px_hsl(var(--primary)/0.3)]"></div>
+                   <div className="w-16 sm:w-20 h-3 sm:h-4 bg-primary rounded-sm absolute top-0 z-0 shadow-[0_0_10px_hsl(var(--primary)/0.3)]"></div>
                    {/* Green Cap Body */}
-                   <div className="w-24 h-12 bg-foreground absolute top-3 z-10" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }}></div>
-                   <div className="w-16 h-6 bg-foreground absolute top-10 z-0 rounded-b-xl border-b-4 border-black/20"></div>
+                   <div className="w-20 sm:w-24 h-10 sm:h-12 bg-foreground absolute top-2.5 sm:top-3 z-10" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }}></div>
+                   <div className="w-14 sm:w-16 h-5 sm:h-6 bg-foreground absolute top-8 sm:top-10 z-0 rounded-b-xl border-b-4 border-black/20"></div>
                    {/* Red Ribbon */}
-                   <div className="w-3 h-8 bg-primary absolute right-2 top-6 z-20 border-l border-white/30" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)' }}></div>
+                   <div className="w-2 sm:w-3 h-7 sm:h-8 bg-primary absolute right-2 top-5 sm:top-6 z-20 border-l border-white/30" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)' }}></div>
                 </div>
                 
-                <h2 className="text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tight leading-none mt-2 group-hover:text-primary group-hover:drop-shadow-[0_0_15px_hsl(var(--primary)/0.5)] transition-all duration-300" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                <h2 className="text-[1.35rem] sm:text-3xl font-black text-foreground uppercase tracking-tight leading-none mt-1 sm:mt-2 group-hover:text-primary group-hover:drop-shadow-[0_0_15px_hsl(var(--primary)/0.5)] transition-all duration-300" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
                   Universidade<br/>
-                  <span className="text-3xl sm:text-4xl">Gratuita</span>
+                  <span className="text-[1.75rem] sm:text-4xl">Gratuita</span>
                 </h2>
              </div>
           </div>
@@ -105,14 +105,14 @@ function Home() {
               </p>
               <h3 className="text-foreground mx-auto flex justify-center w-full px-2 sm:px-0">
                 <div className="flex flex-col items-start font-sans tracking-tighter leading-[0.85] sm:leading-[0.9]">
-                  <span className="text-[2.2rem] sm:text-5xl font-black">A gente</span>
-                  <span className="text-[2.8rem] sm:text-6xl font-black relative flex items-end">
+                  <span className="text-3xl sm:text-5xl font-black">A gente</span>
+                  <span className="text-4xl sm:text-6xl font-black relative flex items-end">
                     ajuda a gent
                     <span className="relative inline-block">
                       e
                       <svg 
                         viewBox="0 0 100 100" 
-                        className="absolute -top-[0.6em] sm:-top-[0.7em] -right-1 sm:-right-2 w-7 h-7 sm:w-12 sm:h-12 rotate-[15deg] drop-shadow-md text-foreground fill-current"
+                        className="absolute -top-[0.6em] sm:-top-[0.7em] -right-1.5 sm:-right-2 w-8 h-8 sm:w-12 sm:h-12 rotate-[15deg] drop-shadow-md text-foreground fill-current"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path d="M50 25 L90 40 L50 55 L10 40 Z" />
