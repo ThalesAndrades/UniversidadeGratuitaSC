@@ -1,15 +1,20 @@
 import { useState, lazy, Suspense, memo } from 'react';
-import { Header } from '@/components/layout/Header';
-import { InfoCarousel } from '@/components/features/InfoCarousel';
-import { PassportForm } from '@/components/forms/PassportForm';
 import { PassportFormData } from '@/lib/validations';
-import { Sparkles } from 'lucide-react';
+import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import { toast } from 'sonner';
+import logo from '@/assets/logo-programa.png';
 
-// Lazy load do splash (só carrega quando necessário)
+// Lazy load components
 const PassportSplash = lazy(() => import('@/components/features/PassportSplash').then(module => ({ default: module.PassportSplash })));
+const PassportForm = lazy(() => import('@/components/forms/PassportForm').then(module => ({ default: module.PassportForm })));
+const AboutSection = lazy(() => import('@/components/features/AboutSection'));
+const UniversitiesSection = lazy(() => import('@/components/features/UniversitiesSection'));
+const CoursesSection = lazy(() => import('@/components/features/CoursesSection'));
+
+type ModalType = 'about' | 'passport' | 'universities' | 'courses' | null;
 
 function Home() {
+  const [activeModal, setActiveModal] = useState<ModalType>(null);
   const [showSplash, setShowSplash] = useState(false);
   const [passportData, setPassportData] = useState<PassportFormData | null>(null);
 
@@ -20,73 +25,130 @@ function Home() {
     // await api.post('/passports', data);
     
     setPassportData(data);
+    setActiveModal(null);
     setShowSplash(true);
     toast.success('Passaporte criado com sucesso!');
   };
 
+  const closeModal = () => setActiveModal(null);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      {/* Hero Section */}
-      <section className="pt-24 pb-12 px-4 bg-gradient-to-br from-purple-600 via-purple-700 to-blue-700 text-white">
-        <div className="container mx-auto text-center max-w-4xl">
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-semibold">Bem-vindo ao Programa</span>
+    <div className="fixed inset-0 bg-gradient-to-br from-purple-600 via-purple-700 to-blue-700 overflow-hidden">
+      {/* Central Hub */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative">
+          {/* Logo Central */}
+          <div className="relative z-10 bg-white rounded-full p-8 shadow-2xl animate-float">
+            <img src={logo} alt="Universidade Gratuita SC" className="h-32 w-32 sm:h-40 sm:w-40" />
+            <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+              <h1 className="text-white text-xl sm:text-2xl font-bold drop-shadow-lg">
+                Universidade Gratuita SC
+              </h1>
+              <p className="text-purple-200 text-sm sm:text-base drop-shadow-md">
+                Sistema ACAFE
+              </p>
+            </div>
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-            Seu Futuro Começa Aqui
-          </h1>
-          <p className="text-xl sm:text-2xl text-purple-100 mb-8 leading-relaxed">
-            Crie seu passaporte virtual e tenha acesso à educação superior gratuita em Santa Catarina
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-lg">
-              ✓ Totalmente Gratuito
+
+          {/* Arrow Buttons */}
+          {/* Top - Sobre o Programa */}
+          <button
+            onClick={() => setActiveModal('about')}
+            className="absolute -top-32 left-1/2 -translate-x-1/2 group"
+          >
+            <div className="flex flex-col items-center gap-2">
+              <div className="bg-white/20 backdrop-blur-md hover:bg-white/30 transition-all duration-300 rounded-full p-4 shadow-lg group-hover:scale-110">
+                <ArrowUp className="w-8 h-8 text-white" />
+              </div>
+              <span className="text-white font-semibold text-sm sm:text-base drop-shadow-lg whitespace-nowrap">
+                Sobre o Programa
+              </span>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-lg">
-              ✓ Mais de 50 Cursos
+          </button>
+
+          {/* Right - Criar Passaporte */}
+          <button
+            onClick={() => setActiveModal('passport')}
+            className="absolute top-1/2 -translate-y-1/2 -right-40 sm:-right-48 group"
+          >
+            <div className="flex flex-row-reverse items-center gap-3">
+              <div className="bg-white/20 backdrop-blur-md hover:bg-white/30 transition-all duration-300 rounded-full p-4 shadow-lg group-hover:scale-110">
+                <ArrowRight className="w-8 h-8 text-white" />
+              </div>
+              <span className="text-white font-semibold text-sm sm:text-base drop-shadow-lg whitespace-nowrap">
+                Criar Passaporte
+              </span>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-lg">
-              ✓ Certificado pelo MEC
+          </button>
+
+          {/* Bottom - Universidades */}
+          <button
+            onClick={() => setActiveModal('universities')}
+            className="absolute -bottom-32 left-1/2 -translate-x-1/2 group"
+          >
+            <div className="flex flex-col-reverse items-center gap-2">
+              <div className="bg-white/20 backdrop-blur-md hover:bg-white/30 transition-all duration-300 rounded-full p-4 shadow-lg group-hover:scale-110">
+                <ArrowDown className="w-8 h-8 text-white" />
+              </div>
+              <span className="text-white font-semibold text-sm sm:text-base drop-shadow-lg whitespace-nowrap">
+                Universidades
+              </span>
+            </div>
+          </button>
+
+          {/* Left - Cursos */}
+          <button
+            onClick={() => setActiveModal('courses')}
+            className="absolute top-1/2 -translate-y-1/2 -left-40 sm:-left-48 group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 backdrop-blur-md hover:bg-white/30 transition-all duration-300 rounded-full p-4 shadow-lg group-hover:scale-110">
+                <ArrowLeft className="w-8 h-8 text-white" />
+              </div>
+              <span className="text-white font-semibold text-sm sm:text-base drop-shadow-lg whitespace-nowrap">
+                Cursos Disponíveis
+              </span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Modal Overlay */}
+      {activeModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-slide-in">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-gradient-to-r from-purple-600 to-blue-600 p-6 flex items-center justify-between z-10">
+              <h2 className="text-2xl font-bold text-white">
+                {activeModal === 'about' && 'Sobre o Programa'}
+                {activeModal === 'passport' && 'Criar Passaporte Virtual'}
+                {activeModal === 'universities' && 'Universidades Participantes'}
+                {activeModal === 'courses' && 'Cursos Disponíveis'}
+              </h2>
+              <button
+                onClick={closeModal}
+                className="bg-white/20 hover:bg-white/30 rounded-full p-2 transition-colors"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 sm:p-8">
+              <Suspense fallback={
+                <div className="flex items-center justify-center py-12">
+                  <div className="w-12 h-12 border-4 border-purple-600/30 border-t-purple-600 rounded-full animate-spin" />
+                </div>
+              }>
+                {activeModal === 'about' && <AboutSection />}
+                {activeModal === 'passport' && <PassportForm onSubmit={handleSubmit} />}
+                {activeModal === 'universities' && <UniversitiesSection />}
+                {activeModal === 'courses' && <CoursesSection />}
+              </Suspense>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Info Carousel */}
-      <InfoCarousel />
-
-      {/* Form Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Crie seu Passaporte Virtual
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Preencha seus dados para gerar seu passaporte e começar sua jornada universitária
-            </p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-gray-50 to-purple-50 rounded-3xl p-6 sm:p-12 shadow-xl">
-            <PassportForm onSubmit={handleSubmit} />
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 px-4">
-        <div className="container mx-auto text-center">
-          <p className="text-gray-400 mb-2">
-            Programa Universidade Gratuita de Santa Catarina
-          </p>
-          <p className="text-sm text-gray-500">
-            Sistema ACAFE - Associação Catarinense das Fundações Educacionais
-          </p>
-        </div>
-      </footer>
+      )}
 
       {/* Splash Screen */}
       {showSplash && passportData && (

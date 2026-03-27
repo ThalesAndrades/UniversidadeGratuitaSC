@@ -84,6 +84,15 @@
     }
   }
   
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
   /* Touch optimization para mobile */
   @media (hover: none) and (pointer: coarse) {
     button, a, [role="button"] {
