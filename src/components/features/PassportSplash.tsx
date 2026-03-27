@@ -103,7 +103,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
                     {/* QR Code Validation */}
                     <div className="flex-shrink-0 bg-white p-1 rounded-md shadow-sm border border-border">
                       <QRCode 
-                        value={`https://universidade-gratuita-sc.vercel.app/validate?id=${btoa(data.email).substring(0, 10).toUpperCase()}`}
+                        value={`https://teste.sbs/validate?id=${btoa(data.email).substring(0, 10).toUpperCase()}`}
                         size={64}
                         bgColor="#ffffff"
                         fgColor="#000000"
