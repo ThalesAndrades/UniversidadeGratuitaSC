@@ -1,11 +1,10 @@
 import { useRef, useCallback, memo } from 'react';
 import { CheckCircle2, Download, X } from 'lucide-react';
-import { QRCodeSVG } from 'qrcode.react';
+import QRCode from '@/components/features/QRCode';
 import { PassportFormData } from '@/lib/validations';
 import { formatDate } from '@/lib/utils';
 import { UNIVERSITIES } from '@/constants/universities';
 import { Button } from '@/components/ui/button';
-import logoQr from '@/assets/icons/logo-qr.svg';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
@@ -103,21 +102,11 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
                     </div>
                     {/* QR Code Validation */}
                     <div className="flex-shrink-0 bg-white p-1 rounded-md shadow-sm border border-border">
-                      <QRCodeSVG 
+                      <QRCode 
                         value={`https://universidade-gratuita-sc.vercel.app/validate?id=${btoa(data.email).substring(0, 10).toUpperCase()}`}
                         size={64}
                         bgColor="#ffffff"
                         fgColor="#000000"
-                        level="H"
-                        includeMargin={false}
-                        imageSettings={{
-                          src: logoQr,
-                          x: undefined,
-                          y: undefined,
-                          height: 18,
-                          width: 18,
-                          excavate: true,
-                        }}
                       />
                     </div>
                   </div>
