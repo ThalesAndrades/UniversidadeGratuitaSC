@@ -103,8 +103,26 @@ function Home() {
               <p className="text-primary text-xs font-black tracking-widest uppercase group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.8)] transition-all duration-300">
                 Programa do Governo
               </p>
-              <h3 className="text-xl font-bold text-foreground leading-tight max-w-[250px] mx-auto">
-                Gere seu passaporte para o sonho universitário.
+              <h3 className="text-foreground mx-auto flex justify-center">
+                <div className="flex flex-col items-start font-sans tracking-tighter leading-[0.9]">
+                  <span className="text-3xl sm:text-4xl font-black">A gente</span>
+                  <span className="text-4xl sm:text-5xl font-black relative flex items-end">
+                    ajuda a gent
+                    <span className="relative inline-block">
+                      e
+                      <svg 
+                        viewBox="0 0 100 100" 
+                        className="absolute -top-[0.8em] -right-1 w-8 h-8 sm:w-10 sm:h-10 rotate-12 drop-shadow-sm text-foreground fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M50 25 L90 40 L50 55 L10 40 Z" />
+                        <path d="M70 38 L70 68 L65 75 L75 75 Z" />
+                        <path d="M30 50 L30 80 C30 85 40 88 50 88 C60 88 70 85 70 80 L70 50 Z" />
+                      </svg>
+                    </span>
+                    <span className="text-primary">.</span>
+                  </span>
+                </div>
               </h3>
             </div>
 
