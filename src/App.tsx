@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -17,19 +17,12 @@ function LoadingScreen() {
   );
 }
 
+// Apply V2 dark theme permanently at document level
+if (typeof document !== 'undefined') {
+  document.documentElement.classList.add('dark');
+}
+
 function App() {
-  const [version, setVersion] = useState<'v1' | 'v2'>('v1');
-
-  useEffect(() => {
-    if (version === 'v2') {
-      document.documentElement.classList.add('theme-v2');
-      document.documentElement.classList.add('dark'); // To apply any shadcn dark mode defaults
-    } else {
-      document.documentElement.classList.remove('theme-v2');
-      document.documentElement.classList.remove('dark');
-    }
-  }, [version]);
-
   return (
     <BrowserRouter>
       <Suspense fallback={<LoadingScreen />}>
@@ -39,22 +32,6 @@ function App() {
         </Routes>
       </Suspense>
       <Toaster position="top-center" />
-      
-      {/* Discreet Version Toggles */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 opacity-20 hover:opacity-100 transition-opacity z-[9999] bg-background/50 backdrop-blur-md p-1.5 rounded-full border border-border">
-        <button 
-          onClick={() => setVersion('v1')} 
-          className={`text-[11px] px-4 py-1.5 rounded-full transition-all duration-300 uppercase tracking-wider font-semibold ${version === 'v1' ? 'bg-foreground text-background shadow-md' : 'text-foreground/70 hover:text-foreground'}`}
-        >
-          Versão 1
-        </button>
-        <button 
-          onClick={() => setVersion('v2')} 
-          className={`text-[11px] px-4 py-1.5 rounded-full transition-all duration-300 uppercase tracking-wider font-semibold ${version === 'v2' ? 'bg-foreground text-background shadow-md' : 'text-foreground/70 hover:text-foreground'}`}
-        >
-          Versão 2
-        </button>
-      </div>
     </BrowserRouter>
   );
 }
