@@ -14,38 +14,41 @@ export const GraduationCapBrand = memo(function GraduationCapBrand({
   className = '',
   style,
 }: GraduationCapBrandProps) {
-  const height = Math.round(width * 0.7);
+  // Proporção fiel ao logo oficial: viewBox 300×222
+  const height = Math.round(width * (222 / 300));
   return (
     <svg
       width={width}
       height={height}
-      viewBox="0 0 280 196"
+      viewBox="0 0 300 222"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       style={style}
       aria-hidden="true"
     >
-      {/* Superfície superior do tabuleiro — largura total */}
-      <rect x="0" y="0" width="280" height="30" rx="3" fill={color} />
+      {/* ── Superfície superior do tabuleiro (borda arredondada) ── */}
+      <rect x="0" y="0" width="300" height="28" rx="3" fill={color} />
 
-      {/* Face frontal do tabuleiro (sobrepõe, cria profundidade 3-D) */}
-      <rect x="0" y="22" width="280" height="40" fill={color} />
+      {/* gap y=28..34 → linha escura de separação 3-D (fundo aparece) */}
 
-      {/* Gap natural y=62..76 — fundo aparece, dá profundidade */}
+      {/* ── Face frontal do tabuleiro ── */}
+      <rect x="0" y="34" width="300" height="44" fill={color} />
 
-      {/* Cúpula do capelo — 74% da largura do tabuleiro, centralizado */}
+      {/* gap y=78..94 → sombra de profundidade entre tabuleiro e cúpula */}
+
+      {/* ── Cúpula do capelo (71% da largura, lados retos + base arredondada) ── */}
       <path
-        d="M36 76 L244 76 L244 142 Q244 172 140 174 Q36 172 36 142 Z"
+        d="M44 94 L256 94 L256 152 Q256 200 150 200 Q44 200 44 152 Z"
         fill={color}
       />
 
-      {/* Cordão da borla — da borda do tabuleiro até a fita */}
-      <rect x="218" y="0" width="14" height="96" fill={color} />
+      {/* ── Cordão da borla — nasce no topo, atravessa o tabuleiro ── */}
+      <rect x="240" y="0" width="14" height="96" fill={color} />
 
-      {/* Borla/fita estilo marcador — V-notch na base */}
+      {/* ── Fita/borla estilo marcador de livro com V-notch ── */}
       <path
-        d="M204 76 L248 76 L248 138 L226 118 L204 138 Z"
+        d="M226 78 L272 78 L272 190 L249 162 L226 190 Z"
         fill={color}
       />
     </svg>
@@ -106,36 +109,48 @@ export const AcafeConstellation = memo(function AcafeConstellation({
   color = '#8FBE3F',
   className = '',
 }: AcafeConstellationProps) {
-  const cx = 30, cy = 30, r = 22;
-  const outerNodes = Array.from({ length: 6 }, (_, i) => {
-    const angle = (i * 60 - 90) * (Math.PI / 180);
-    return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
-  });
+  // Rede orgânica fiel ao logo oficial ACAFE:
+  // 5 nós de tamanhos variados + conexões irregulares (não hexagonal)
+  // N1=grande(direita-baixo), N2=médio(direita-cima), N3=médio(centro-cima),
+  // N4=médio(esquerda), N5=pequeno(esquerda-baixo)
+  const nodes = [
+    { x: 52, y: 44, r: 8.0 },  // N1 — grande, dominante (direita-baixo)
+    { x: 47, y: 16, r: 5.5 },  // N2 — médio (direita-cima)
+    { x: 28, y: 9,  r: 5.0 },  // N3 — médio (centro-cima)
+    { x: 9,  y: 25, r: 5.5 },  // N4 — médio (esquerda)
+    { x: 18, y: 43, r: 3.5 },  // N5 — pequeno (esquerda-baixo)
+  ];
+  const edges = [
+    [0, 1], // N1-N2
+    [1, 2], // N2-N3
+    [2, 3], // N3-N4
+    [3, 4], // N4-N5
+    [4, 0], // N5-N1 (base)
+    [1, 4], // N2-N5 (diagonal interna)
+  ];
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 60 60"
+      viewBox="0 0 62 56"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-hidden="true"
     >
-      {outerNodes.map((n, i) => (
-        <line key={`c${i}`} x1={cx} y1={cy} x2={n.x} y2={n.y}
-          stroke={color} strokeWidth="1.6" strokeLinecap="round" opacity="0.7" />
+      {/* Conexões */}
+      {edges.map(([a, b], i) => (
+        <line
+          key={i}
+          x1={nodes[a].x} y1={nodes[a].y}
+          x2={nodes[b].x} y2={nodes[b].y}
+          stroke={color} strokeWidth="1.8" strokeLinecap="round"
+        />
       ))}
-      {outerNodes.map((n, i) => {
-        const next = outerNodes[(i + 1) % 6];
-        return (
-          <line key={`e${i}`} x1={n.x} y1={n.y} x2={next.x} y2={next.y}
-            stroke={color} strokeWidth="1" strokeLinecap="round" opacity="0.35" />
-        );
-      })}
-      {outerNodes.map((n, i) => (
-        <circle key={`n${i}`} cx={n.x} cy={n.y} r="3.8" fill={color} />
+      {/* Nós */}
+      {nodes.map((n, i) => (
+        <circle key={i} cx={n.x} cy={n.y} r={n.r} fill={color} />
       ))}
-      <circle cx={cx} cy={cy} r="5.5" fill={color} />
     </svg>
   );
 });
