@@ -4,33 +4,52 @@
 
 @layer base {
   :root {
-    --background: 165 10% 8%;
-    --foreground: 0 0% 100%;
-    --card: 165 12% 12%;
-    --card-foreground: 0 0% 100%;
-    --popover: 165 12% 12%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 84 90% 50%;
-    --primary-foreground: 165 10% 8%;
-    --secondary: 165 12% 16%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 165 12% 16%;
-    --muted-foreground: 165 5% 75%;
-    --accent: 165 12% 16%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 165 12% 20%;
-    --input: 165 12% 18%;
-    --ring: 84 90% 50%;
+    /* ── Paleta oficial Universidade Gratuita SC ──
+       #272B20  background (verde mais escuro)
+       #8FBE3F  primary    (verde brilhante)
+       #63842C  secondary  (verde médio)
+       #3E5715  accent     (verde escuro)
+       #DDDEDC  foreground (cinza claro)
+       #A40006  destructive (vermelho SC)
+    */
+
+    --background: 82 15% 15%;
+    --foreground: 90 3% 87%;
+
+    --card: 82 15% 18%;
+    --card-foreground: 90 3% 87%;
+
+    --popover: 82 15% 18%;
+    --popover-foreground: 90 3% 87%;
+
+    --primary: 82 50% 50%;
+    --primary-foreground: 82 15% 12%;
+
+    --secondary: 83 50% 35%;
+    --secondary-foreground: 90 3% 87%;
+
+    --muted: 82 18% 21%;
+    --muted-foreground: 83 12% 58%;
+
+    --accent: 83 61% 21%;
+    --accent-foreground: 90 3% 87%;
+
+    --destructive: 358 100% 32%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 82 20% 24%;
+    --input: 82 18% 20%;
+    --ring: 82 50% 50%;
     --radius: 0.5rem;
 
-    /* Brand Colors */
-    --brand-blue: 165 10% 8%;
-    --brand-teal: 165 12% 16%;
-    --brand-light: 165 12% 18%;
-    --brand-accent: 84 90% 50%;
-    --brand-green: 84 90% 50%;
+    /* Brand tokens */
+    --brand-primary: 82 50% 50%;
+    --brand-mid: 83 50% 35%;
+    --brand-dark: 83 61% 21%;
+    --brand-darkest: 82 15% 15%;
+    --brand-light: 90 3% 87%;
+    --brand-red: 358 100% 32%;
+    --brand-yellow: 56 95% 49%;
   }
 }
 
@@ -51,7 +70,7 @@
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: hsl(84 90% 50% / 0.4);
+  background-color: hsl(82 50% 50% / 0.4);
   border-radius: 20px;
 }
 
@@ -64,7 +83,6 @@
     scrollbar-width: none;
   }
 
-  /* Otimizações de performance */
   .will-change-transform {
     will-change: transform;
   }
@@ -75,7 +93,6 @@
     perspective: 1000px;
   }
 
-  /* Animações otimizadas */
   .animate-fade-in {
     animation: fadeIn 0.2s ease-in;
   }
@@ -109,7 +126,6 @@
     animation: float 3s ease-in-out infinite;
   }
 
-  /* Touch optimization para mobile */
   @media (hover: none) and (pointer: coarse) {
     button, a, [role="button"] {
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);

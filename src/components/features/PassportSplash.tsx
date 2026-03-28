@@ -82,17 +82,17 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
-      <div className="bg-[#0f1a14] rounded-2xl max-w-lg w-full max-h-[95vh] overflow-hidden shadow-2xl animate-slide-in border border-[#84e650]/20 flex flex-col">
+      <div className="bg-[#272B20] rounded-2xl max-w-lg w-full max-h-[95vh] overflow-hidden shadow-2xl animate-slide-in border border-[#8FBE3F]/20 flex flex-col">
 
         {/* Success Header */}
         <div className="relative p-5 sm:p-6 text-center flex-shrink-0">
           {/* Glow ring */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-            <div className="w-48 h-48 rounded-full bg-[#84e650]/5 animate-ping" style={{ animationDuration: '2s' }} />
+            <div className="w-48 h-48 rounded-full bg-[#8FBE3F]/5 animate-ping" style={{ animationDuration: '2s' }} />
           </div>
           <div className="relative">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#84e650]/15 mb-3 ring-2 ring-[#84e650]/40">
-              <CheckCircle2 className="w-8 h-8 text-[#84e650]" strokeWidth={2.5} />
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#8FBE3F]/15 mb-3 ring-2 ring-[#8FBE3F]/40">
+              <CheckCircle2 className="w-8 h-8 text-[#8FBE3F]" strokeWidth={2.5} />
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
               Passaporte Gerado!
@@ -121,20 +121,20 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
             }}
           >
             {/* Document Header */}
-            <div style={{ backgroundColor: '#0d3320', padding: '20px 24px 16px', position: 'relative' }}>
+            <div style={{ backgroundColor: '#272B20', padding: '20px 24px 16px', position: 'relative' }}>
               {/* decorative top stripe */}
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #84e650 0%, #5cb832 50%, #84e650 100%)' }} />
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #8FBE3F 0%, #63842C 50%, #8FBE3F 100%)' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 {/* SC Shield */}
                 <div style={{
                   width: '44px', height: '44px', borderRadius: '50%',
-                  backgroundColor: '#84e650', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  backgroundColor: '#8FBE3F', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0,
                 }}>
-                  <span style={{ fontSize: '16px', fontWeight: '900', color: '#0d3320', letterSpacing: '-1px' }}>SC</span>
+                  <span style={{ fontSize: '16px', fontWeight: '900', color: '#272B20', letterSpacing: '-1px' }}>SC</span>
                 </div>
                 <div>
-                  <div style={{ fontSize: '10px', color: '#84e650', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                  <div style={{ fontSize: '10px', color: '#8FBE3F', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>
                     Governo de Santa Catarina
                   </div>
                   <div style={{ fontSize: '18px', fontWeight: '900', color: '#ffffff', letterSpacing: '1px', textTransform: 'uppercase', lineHeight: '1.1' }}>
@@ -148,11 +148,11 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
             </div>
 
             {/* Passport Number Banner */}
-            <div style={{ backgroundColor: '#84e650', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '9px', fontWeight: '800', color: '#0d3320', letterSpacing: '2px', textTransform: 'uppercase' }}>
+            <div style={{ backgroundColor: '#8FBE3F', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '9px', fontWeight: '800', color: '#272B20', letterSpacing: '2px', textTransform: 'uppercase' }}>
                 Nº {passportNumber}
               </span>
-              <span style={{ fontSize: '9px', fontWeight: '700', color: '#0d3320', letterSpacing: '1px' }}>
+              <span style={{ fontSize: '9px', fontWeight: '700', color: '#272B20', letterSpacing: '1px' }}>
                 Emissão: {issueDate}
               </span>
             </div>
@@ -166,7 +166,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
                     width: '96px', height: '116px',
                     borderRadius: '8px',
                     overflow: 'hidden',
-                    border: '3px solid #84e650',
+                    border: '3px solid #8FBE3F',
                     backgroundColor: '#e5e7e5',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                   }}>
@@ -186,26 +186,26 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
                 {/* Info Fields */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ marginBottom: '10px' }}>
-                    <div style={{ fontSize: '8px', color: '#84e650', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', backgroundColor: '#0d3320', display: 'inline-block', padding: '1px 6px', borderRadius: '3px', marginBottom: '3px' }}>
+                    <div style={{ fontSize: '8px', color: '#8FBE3F', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', backgroundColor: '#272B20', display: 'inline-block', padding: '1px 6px', borderRadius: '3px', marginBottom: '3px' }}>
                       Nome do Estudante
                     </div>
-                    <div style={{ fontSize: '17px', fontWeight: '900', color: '#0d3320', textTransform: 'uppercase', letterSpacing: '0.5px', lineHeight: '1.1' }}>
+                    <div style={{ fontSize: '17px', fontWeight: '900', color: '#272B20', textTransform: 'uppercase', letterSpacing: '0.5px', lineHeight: '1.1' }}>
                       {data.firstName} {data.lastName}
                     </div>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
-                    <div style={{ backgroundColor: '#ffffff', padding: '7px 10px', borderRadius: '6px', borderLeft: '3px solid #84e650' }}>
+                    <div style={{ backgroundColor: '#ffffff', padding: '7px 10px', borderRadius: '6px', borderLeft: '3px solid #8FBE3F' }}>
                       <div style={{ fontSize: '7px', color: '#888', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '2px' }}>Nascimento</div>
-                      <div style={{ fontSize: '12px', fontWeight: '800', color: '#0d3320' }}>{formatDate(data.birthDate)}</div>
+                      <div style={{ fontSize: '12px', fontWeight: '800', color: '#272B20' }}>{formatDate(data.birthDate)}</div>
                     </div>
-                    <div style={{ backgroundColor: '#ffffff', padding: '7px 10px', borderRadius: '6px', borderLeft: '3px solid #84e650' }}>
+                    <div style={{ backgroundColor: '#ffffff', padding: '7px 10px', borderRadius: '6px', borderLeft: '3px solid #8FBE3F' }}>
                       <div style={{ fontSize: '7px', color: '#888', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '2px' }}>Telefone</div>
-                      <div style={{ fontSize: '12px', fontWeight: '800', color: '#0d3320' }}>{data.phone}</div>
+                      <div style={{ fontSize: '12px', fontWeight: '800', color: '#272B20' }}>{data.phone}</div>
                     </div>
                   </div>
 
-                  <div style={{ backgroundColor: '#ffffff', padding: '7px 10px', borderRadius: '6px', borderLeft: '3px solid #0d3320' }}>
+                  <div style={{ backgroundColor: '#ffffff', padding: '7px 10px', borderRadius: '6px', borderLeft: '3px solid #272B20' }}>
                     <div style={{ fontSize: '7px', color: '#888', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '2px' }}>E-mail</div>
                     <div style={{ fontSize: '11px', fontWeight: '700', color: '#333', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{data.email}</div>
                   </div>
@@ -217,32 +217,32 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
 
               {/* University & Course */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
-                <div style={{ backgroundColor: '#0d3320', padding: '10px 12px', borderRadius: '8px' }}>
-                  <div style={{ fontSize: '7px', color: '#84e650', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Instituição</div>
+                <div style={{ backgroundColor: '#272B20', padding: '10px 12px', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '7px', color: '#8FBE3F', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Instituição</div>
                   <div style={{ fontSize: '11px', fontWeight: '800', color: '#ffffff', lineHeight: '1.3', textTransform: 'uppercase' }}>{university?.name.split(' - ')[0] || university?.name}</div>
                 </div>
-                <div style={{ backgroundColor: '#0d3320', padding: '10px 12px', borderRadius: '8px' }}>
-                  <div style={{ fontSize: '7px', color: '#84e650', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Curso</div>
+                <div style={{ backgroundColor: '#272B20', padding: '10px 12px', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '7px', color: '#8FBE3F', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Curso</div>
                   <div style={{ fontSize: '11px', fontWeight: '800', color: '#ffffff', lineHeight: '1.3', textTransform: 'uppercase' }}>{data.course}</div>
                 </div>
               </div>
 
               {/* QR Code Section */}
               <div style={{ backgroundColor: '#ffffff', borderRadius: '10px', border: '2px solid #e0ece0', padding: '16px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <div style={{ flexShrink: 0, padding: '8px', backgroundColor: '#fff', borderRadius: '8px', border: '2px solid #84e650', boxShadow: '0 2px 8px rgba(132,230,80,0.2)' }}>
+                <div style={{ flexShrink: 0, padding: '8px', backgroundColor: '#fff', borderRadius: '8px', border: '2px solid #8FBE3F', boxShadow: '0 2px 8px rgba(143,190,63,0.2)' }}>
                   <QRCode
                     value={qrValue}
                     size={100}
                     bgColor="#ffffff"
-                    fgColor="#0d3320"
+                    fgColor="#272B20"
                     level="M"
                   />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '8px', color: '#84e650', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px', backgroundColor: '#0d3320', display: 'inline-block', padding: '2px 6px', borderRadius: '3px' }}>
+                  <div style={{ fontSize: '8px', color: '#8FBE3F', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px', backgroundColor: '#272B20', display: 'inline-block', padding: '2px 6px', borderRadius: '3px' }}>
                     Código de Validação
                   </div>
-                  <div style={{ fontSize: '13px', fontWeight: '900', color: '#0d3320', letterSpacing: '1px', marginBottom: '4px', fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '13px', fontWeight: '900', color: '#272B20', letterSpacing: '1px', marginBottom: '4px', fontFamily: 'monospace' }}>
                     {passportNumber}
                   </div>
                   <div style={{ fontSize: '9px', color: '#666', lineHeight: '1.4' }}>
@@ -253,11 +253,11 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
             </div>
 
             {/* Document Footer */}
-            <div style={{ backgroundColor: '#0d3320', padding: '10px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ backgroundColor: '#272B20', padding: '10px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', textTransform: 'uppercase' }}>
                 Documento Estudantil Oficial · ACAFE
               </span>
-              <span style={{ fontSize: '8px', color: '#84e650', letterSpacing: '1px', fontWeight: '700' }}>
+              <span style={{ fontSize: '8px', color: '#8FBE3F', letterSpacing: '1px', fontWeight: '700' }}>
                 universidadegratuita.sc.gov.br
               </span>
             </div>
@@ -269,7 +269,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
           <Button
             onClick={handleDownloadPDF}
             disabled={isDownloading}
-            className="flex-1 bg-[#84e650] hover:bg-[#84e650]/90 text-[#0d3320] font-black uppercase tracking-wide h-12 sm:h-14 text-sm sm:text-base shadow-[0_4px_20px_rgba(132,230,80,0.35)] hover:shadow-[0_6px_28px_rgba(132,230,80,0.5)] transition-all touch-manipulation disabled:opacity-60"
+            className="flex-1 bg-[#8FBE3F] hover:bg-[#8FBE3F]/90 text-[#272B20] font-black uppercase tracking-wide h-12 sm:h-14 text-sm sm:text-base shadow-[0_4px_20px_rgba(143,190,63,0.35)] hover:shadow-[0_6px_28px_rgba(143,190,63,0.5)] transition-all touch-manipulation disabled:opacity-60"
           >
             {isDownloading ? (
               <span className="flex items-center gap-2">
