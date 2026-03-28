@@ -173,7 +173,14 @@ function PassportForm({ onSubmit }: PassportFormProps) {
 
       {/* Progress */}
       <div className="px-5 py-3 bg-card border-b border-border shrink-0">
-        <div className="flex items-center justify-between relative">
+        <div
+          role="progressbar"
+          aria-valuenow={currentStep}
+          aria-valuemin={1}
+          aria-valuemax={TOTAL_STEPS}
+          aria-label={`Passo ${currentStep} de ${TOTAL_STEPS}: ${STEP_LABELS[currentStep - 1]}`}
+          className="flex items-center justify-between relative"
+        >
           <div className="absolute top-4 left-4 right-4 h-0.5 bg-border z-0" />
           <div
             className="absolute top-4 left-4 h-0.5 bg-primary z-0 transition-all duration-500 ease-out"
@@ -192,7 +199,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 }`}>
                   {done ? <CheckCircle2 className="w-4 h-4" /> : step}
                 </div>
-                <span className={`text-[9px] font-bold uppercase tracking-wide ${active ? 'text-primary' : 'text-muted-foreground/60'}`}>
+                <span className={`text-[10px] font-bold uppercase tracking-wide ${active ? 'text-primary' : 'text-muted-foreground/60'}`}>
                   {label}
                 </span>
               </div>
@@ -204,7 +211,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
       <div className="flex-1 flex flex-col min-h-0">
 
         {/* Apenas o step ativo é renderizado */}
-        <div key={currentStep} className="flex-1 overflow-y-auto animate-fade-in">
+        <div key={currentStep} aria-live="polite" aria-atomic="false" className="flex-1 overflow-y-auto animate-fade-in">
 
           {/* ── STEP 1: Foto ── */}
           {currentStep === 1 && (
@@ -268,7 +275,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 <p className="text-xs text-muted-foreground mt-1">Nome completo e data de nascimento</p>
               </div>
               <div>
-                <Label htmlFor="firstName" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Nome *</Label>
+                <Label htmlFor="firstName" className="text-xs font-black text-muted-foreground uppercase tracking-widest">Nome *</Label>
                 <Input
                   id="firstName"
                   value={form.firstName}
@@ -282,7 +289,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               </div>
 
               <div>
-                <Label htmlFor="lastName" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Sobrenome *</Label>
+                <Label htmlFor="lastName" className="text-xs font-black text-muted-foreground uppercase tracking-widest">Sobrenome *</Label>
                 <Input
                   id="lastName"
                   value={form.lastName}
@@ -296,7 +303,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               </div>
 
               <div>
-                <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Data de Nascimento *</Label>
+                <Label className="text-xs font-black text-muted-foreground uppercase tracking-widest">Data de Nascimento *</Label>
                 <div className="grid grid-cols-3 gap-2 mt-1">
                   <Select
                     value={selectedDay ? String(selectedDay) : undefined}
@@ -350,7 +357,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 <p className="text-xs text-muted-foreground mt-1">WhatsApp e e-mail para comunicação</p>
               </div>
               <div>
-                <Label htmlFor="phone" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">WhatsApp *</Label>
+                <Label htmlFor="phone" className="text-xs font-black text-muted-foreground uppercase tracking-widest">WhatsApp *</Label>
                 <Input
                   id="phone"
                   value={form.phone}
@@ -368,7 +375,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">E-mail *</Label>
+                <Label htmlFor="email" className="text-xs font-black text-muted-foreground uppercase tracking-widest">E-mail *</Label>
                 <Input
                   id="email"
                   value={form.email}
@@ -393,7 +400,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 <p className="text-xs text-muted-foreground mt-1">Universidade e curso desejados</p>
               </div>
               <div>
-                <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Instituição ACAFE *</Label>
+                <Label className="text-xs font-black text-muted-foreground uppercase tracking-widest">Instituição ACAFE *</Label>
                 <Select
                   value={form.university || undefined}
                   onValueChange={(v) => {
@@ -415,7 +422,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
 
               {selectedUniversityData ? (
                 <div className="animate-fade-in">
-                  <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Curso Desejado *</Label>
+                  <Label className="text-xs font-black text-muted-foreground uppercase tracking-widest">Curso Desejado *</Label>
                   <Select
                     key={selectedUniversity}
                     value={form.course || undefined}

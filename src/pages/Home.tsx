@@ -68,8 +68,8 @@ function Home() {
 
       {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div className="absolute top-0 right-0 w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/3 translate-x-1/4" />
-        <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] max-w-[500px] max-h-[500px] bg-primary/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
+        <div className="absolute top-0 right-0 w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/3 translate-x-1/4" style={{ willChange: 'transform' }} />
+        <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] max-w-[500px] max-h-[500px] bg-primary/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" style={{ willChange: 'transform' }} />
       </div>
 
       <main className="flex-1 flex items-center justify-center px-4 py-6 pt-[4.8rem] sm:pt-28 relative z-10">
@@ -77,10 +77,14 @@ function Home() {
           <div className="bg-card rounded-2xl sm:rounded-3xl border border-border/50 shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden relative">
 
             {/* Bracket corner decorations */}
-            <BracketCorner size={20} color="#8FBE3F" className="absolute top-3 left-3 opacity-40" rotate={0} />
-            <BracketCorner size={20} color="#8FBE3F" className="absolute top-3 right-3 opacity-40" rotate={90} />
-            <BracketCorner size={20} color="#8FBE3F" className="absolute bottom-3 left-3 opacity-40" rotate={270} />
-            <BracketCorner size={20} color="#8FBE3F" className="absolute bottom-3 right-3 opacity-40" rotate={180} />
+            {([
+              { pos: 'top-3 left-3',    rot: 0   },
+              { pos: 'top-3 right-3',   rot: 90  },
+              { pos: 'bottom-3 left-3', rot: 270 },
+              { pos: 'bottom-3 right-3',rot: 180 },
+            ] as const).map(({ pos, rot }) => (
+              <BracketCorner key={rot} size={20} color="#8FBE3F" className={`absolute ${pos} opacity-40`} rotate={rot} />
+            ))}
 
             {/* Card Header */}
             <div className="relative px-6 pt-7 pb-5 border-b border-border/50 flex flex-col items-center text-center overflow-hidden"
@@ -160,13 +164,11 @@ function Home() {
                            text-primary-foreground uppercase tracking-wide select-none touch-manipulation
                            flex items-center justify-center gap-3
                            active:scale-[0.98] active:opacity-90 transition-all duration-200
-                           hover:-translate-y-0.5"
+                           hover:-translate-y-0.5 hover:brightness-110"
                 style={{
                   background: 'linear-gradient(135deg, #8FBE3F 0%, #6FA030 100%)',
                   boxShadow: '0 8px 28px rgba(143,190,63,0.42), inset 0 1px 0 rgba(255,255,255,0.15)',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 12px 36px rgba(143,190,63,0.58), inset 0 1px 0 rgba(255,255,255,0.15)')}
-                onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 8px 28px rgba(143,190,63,0.42), inset 0 1px 0 rgba(255,255,255,0.15)')}
               >
                 Gerar Passaporte
                 <ArrowRight className="w-5 h-5 stroke-[3px] shrink-0" />
@@ -181,27 +183,27 @@ function Home() {
 
                 {/* ACAFE */}
                 <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
-                  <AcafeConstellation size={20} color="#8FBE3F" />
+                  <AcafeConstellation size={22} color="#8FBE3F" />
                   <div className="text-center leading-none">
-                    <span className="text-[9px] font-black text-primary lowercase tracking-[0.14em] block">acafe</span>
-                    <span className="text-[7px] text-muted-foreground/38 block mt-[2px] hidden sm:block">Rede de Universidades</span>
+                    <span className="text-[10px] font-black text-primary lowercase tracking-[0.14em] block">acafe</span>
+                    <span className="text-[9px] text-muted-foreground/50 block mt-[2px] hidden sm:block">Rede de Universidades</span>
                   </div>
                 </div>
 
                 {/* SED */}
                 <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
-                  <ScStateSeal size={20} />
+                  <ScStateSeal size={22} />
                   <div className="text-center leading-none">
-                    <span className="text-[9px] font-black text-foreground/70 uppercase tracking-wider block">SED</span>
-                    <span className="text-[7px] text-muted-foreground/38 block mt-[2px] hidden sm:block">Secretaria de Educação</span>
+                    <span className="text-[10px] font-black text-foreground/70 uppercase tracking-wider block">SED</span>
+                    <span className="text-[9px] text-muted-foreground/50 block mt-[2px] hidden sm:block">Secretaria de Educação</span>
                   </div>
                 </div>
 
                 {/* Universidade Gratuita */}
                 <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
-                  <GraduationCapLogo size={20} color="#8FBE3F" />
+                  <GraduationCapLogo size={22} color="#8FBE3F" />
                   <div className="text-center leading-none">
-                    <span className="text-[7px] font-black text-foreground/70 uppercase tracking-tight leading-[1.15] block">
+                    <span className="text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.15] block">
                       Universidade<br />Gratuita
                     </span>
                   </div>
@@ -210,8 +212,8 @@ function Home() {
               </div>
 
               {/* Linha legal */}
-              <div className="border-t border-border/20 bg-background/40 py-1.5 px-4 text-center">
-                <p className="text-[7px] text-muted-foreground/28 uppercase tracking-[0.24em] leading-none">
+              <div className="border-t border-border/20 bg-background/40 py-2 px-4 text-center">
+                <p className="text-[9px] text-muted-foreground/40 uppercase tracking-[0.18em] leading-none">
                   Governo do Estado de Santa Catarina · Secretaria de Estado da Educação
                 </p>
               </div>
@@ -224,6 +226,9 @@ function Home() {
       {/* Form Modal */}
       {showPassportModal && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="passport-modal-title"
           className="fixed inset-0 bg-background/95 backdrop-blur-xl z-50 flex flex-col sm:items-center sm:justify-center sm:p-4 animate-fade-in"
           onClick={(e) => { if (e.target === e.currentTarget) setShowPassportModal(false); }}
         >
@@ -232,14 +237,14 @@ function Home() {
               <div className="flex items-center gap-2.5">
                 <InfinityLogo size={22} color="#8FBE3F" />
                 <div>
-                  <h2 className="text-lg sm:text-xl font-black text-foreground uppercase tracking-tight">Criar Passaporte</h2>
+                  <h2 id="passport-modal-title" className="text-lg sm:text-xl font-black text-foreground uppercase tracking-tight">Criar Passaporte</h2>
                   <p className="text-xs text-muted-foreground font-medium mt-0.5">Preencha seus dados oficiais</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowPassportModal(false)}
                 aria-label="Fechar formulário"
-                className="w-9 h-9 rounded-full border border-border bg-background hover:bg-destructive/10 hover:border-destructive/40 hover:text-destructive text-muted-foreground flex items-center justify-center transition-all duration-200 shrink-0 active:scale-95 touch-manipulation"
+                className="w-11 h-11 rounded-full border border-border bg-background hover:bg-destructive/10 hover:border-destructive/40 hover:text-destructive text-muted-foreground flex items-center justify-center transition-all duration-200 shrink-0 active:scale-95 touch-manipulation"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                   <path d="M18 6 6 18M6 6l12 12"/>
