@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+
+    /* V1 Brand Colors */
+    --brand-blue: 210 100% 20%;
+    --brand-teal: 175 91% 44%;
+    --brand-light: 173 82% 93%;
+    --brand-accent: 356 97% 46%;
+    --brand-green: 122 39% 49%;
+  }
+
+  .theme-v2 {
+    --background: 165 10% 8%; /* Darker background to make cards pop */
+    --foreground: 0 0% 100%;
+    --card: 165 12% 12%; /* Lighter card for contrast */
+    --card-foreground: 0 0% 100%;
+    --popover: 165 12% 12%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 84 90% 50%; /* Vibrant lime green */
+    --primary-foreground: 165 10% 8%;
+    --secondary: 165 12% 16%; /* Noticeable difference from background */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 165 12% 16%;
+    --muted-foreground: 165 5% 75%; /* Brighter muted text for readability */
+    --border: 165 12% 20%; /* More visible borders */
+    --input: 165 12% 18%;
+    --ring: 84 90% 50%;
+
+    /* V2 Brand Colors */
+    --brand-blue: 165 10% 8%; /* Very dark */
+    --brand-teal: 165 12% 16%; /* Card gradient start */
+    --brand-light: 165 12% 18%; /* Element background */
+    --brand-accent: 84 90% 50%; /* Action color */
+    --brand-green: 84 90% 50%; /* Action color */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* Custom Scrollbar for the Form Modal */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #00a39c; /* brand-teal */
+  border-radius: 20px;
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  /* Otimizações de performance */
+  .will-change-transform {
+    will-change: transform;
+  }
+  
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  /* Animações otimizadas */
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-in;
+  }
+  
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* Touch optimization para mobile */
+  @media (hover: none) and (pointer: coarse) {
+    button, a, [role="button"] {
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
