@@ -308,7 +308,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
           </div>
 
           {/* ── STEP 3: Contact ── */}
-          <div className="min-w-full flex-shrink-0 flex flex-col justify-center gap-5 p-6">
+          <div className="min-w-full flex-shrink-0 flex flex-col justify-center gap-5 p-6 overflow-y-auto">
             <div>
               <Label htmlFor="phone" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">WhatsApp *</Label>
               <Input
@@ -409,7 +409,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               <Button
                 type="button"
                 onClick={handleNext}
-                className="flex-1 h-12 bg-primary hover:bg-primary/90 active:bg-primary/80 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_6px_20px_hsl(var(--primary)/0.4)] border-b-4 border-black/30 active:border-b-0 active:mt-1 transition-all duration-150 touch-manipulation"
+                className="flex-1 h-12 bg-primary hover:bg-primary/90 active:scale-[0.97] active:opacity-90 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_6px_20px_hsl(var(--primary)/0.4)] transition-all duration-150 touch-manipulation select-none"
               >
                 Avançar
                 <ChevronRight className="w-4 h-4 ml-2 shrink-0" />
@@ -418,7 +418,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               <Button
                 type="submit"
                 disabled={!isValid}
-                className="flex-1 h-12 bg-primary hover:bg-primary/90 active:bg-primary/80 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_6px_20px_hsl(var(--primary)/0.4)] border-b-4 border-black/30 active:border-b-0 active:mt-1 disabled:opacity-40 disabled:shadow-none disabled:pointer-events-none transition-all duration-150 touch-manipulation"
+                className="flex-1 h-12 bg-primary hover:bg-primary/90 active:scale-[0.97] active:opacity-90 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_6px_20px_hsl(var(--primary)/0.4)] disabled:opacity-40 disabled:shadow-none disabled:pointer-events-none transition-all duration-150 touch-manipulation select-none"
               >
                 <Upload className="w-4 h-4 mr-2 shrink-0" />
                 Gerar Passaporte
