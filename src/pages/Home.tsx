@@ -2,7 +2,7 @@ import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { InfinityLogo, OverlapSquares, BracketCorner, GraduationCapLogo, AcafeConstellation } from '@/components/features/BrandElements';
+import { InfinityLogo, OverlapSquares, BracketCorner, GraduationCapLogo, AcafeConstellation, ScStateSeal } from '@/components/features/BrandElements';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -152,13 +152,52 @@ function Home() {
               </button>
             </div>
 
-            {/* Footer */}
-            <div className="px-6 py-3 border-t border-border/30 text-center bg-background/20 flex items-center justify-center gap-3">
-              <BracketCorner size={10} color="#8FBE3F" className="opacity-50" rotate={0} />
-              <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
-                Governo de Santa Catarina · Rede ACAFE
+            {/* Footer institucional — ACAFE · SED · Universidade Gratuita */}
+            <div className="border-t border-border/30 bg-background/30 px-3 pt-2.5 pb-3">
+              <p className="text-[8px] font-bold text-muted-foreground/40 uppercase tracking-[0.25em] text-center mb-2">
+                Realização
               </p>
-              <BracketCorner size={10} color="#8FBE3F" className="opacity-50" rotate={180} />
+              <div className="flex items-center justify-center">
+
+                {/* ACAFE */}
+                <div className="flex-1 flex flex-col items-center gap-1.5 px-2 py-1 group cursor-default">
+                  <AcafeConstellation size={22} color="#8FBE3F" className="opacity-80 group-hover:opacity-100 transition-opacity" />
+                  <span className="text-[10px] font-black text-primary/80 group-hover:text-primary lowercase tracking-[0.18em] transition-colors leading-none">
+                    acafe
+                  </span>
+                </div>
+
+                <div className="w-px h-10 bg-border/50 shrink-0" />
+
+                {/* SED — Secretaria de Estado da Educação */}
+                <div className="flex-1 flex flex-col items-center gap-1 px-2 py-1 group cursor-default">
+                  <ScStateSeal size={22} className="opacity-90 group-hover:opacity-100 transition-opacity" />
+                  <div className="text-center leading-none">
+                    <span className="text-[10px] font-black text-foreground/80 group-hover:text-foreground tracking-wider block transition-colors">
+                      SED
+                    </span>
+                    <span className="text-[7px] text-muted-foreground/50 uppercase tracking-wide block hidden sm:block">
+                      Educação SC
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-px h-10 bg-border/50 shrink-0" />
+
+                {/* Universidade Gratuita */}
+                <div className="flex-1 flex flex-col items-center gap-1 px-2 py-1 group cursor-default">
+                  <GraduationCapLogo size={22} color="#8FBE3F" className="opacity-80 group-hover:opacity-100 transition-opacity" />
+                  <div className="text-center leading-none">
+                    <span className="text-[8px] font-black text-foreground/70 group-hover:text-foreground uppercase tracking-tight block transition-colors">
+                      Univ.
+                    </span>
+                    <span className="text-[8px] font-black text-primary/80 group-hover:text-primary uppercase tracking-tight block transition-colors">
+                      Gratuita
+                    </span>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>

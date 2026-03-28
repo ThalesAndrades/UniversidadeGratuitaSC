@@ -98,6 +98,76 @@ export const AcafeConstellation = memo(function AcafeConstellation({
   );
 });
 
+// ── Escudo SED / Bandeira de Santa Catarina ─────────────────────────────────
+interface ScStateSealProps {
+  size?: number;
+  className?: string;
+}
+
+export const ScStateSeal = memo(function ScStateSeal({
+  size = 36,
+  className = '',
+}: ScStateSealProps) {
+  const w = size;
+  const h = Math.round(size * 1.18);
+  return (
+    <svg
+      width={w}
+      height={h}
+      viewBox="0 0 40 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <defs>
+        <clipPath id="sc-shield-clip">
+          {/* Forma de escudo heráldico */}
+          <path d="M2 2 L38 2 L38 28 Q38 44 20 47 Q2 44 2 28 Z" />
+        </clipPath>
+      </defs>
+
+      {/* Contorno do escudo */}
+      <path
+        d="M2 2 L38 2 L38 28 Q38 44 20 47 Q2 44 2 28 Z"
+        fill="white"
+        stroke="#A40006"
+        strokeWidth="1.8"
+      />
+
+      {/* Conteúdo recortado ao escudo */}
+      <g clipPath="url(#sc-shield-clip)">
+        {/* Fundo branco base */}
+        <rect x="0" y="0" width="40" height="48" fill="white" />
+        {/* Listras vermelhas alternadas (topo) */}
+        <rect x="0" y="2"  width="40" height="5"  fill="#A40006" />
+        <rect x="0" y="12" width="40" height="5"  fill="#A40006" />
+        <rect x="0" y="22" width="40" height="2"  fill="#A40006" />
+        {/* Seção verde (base do escudo) */}
+        <rect x="0" y="24" width="40" height="26" fill="#006B3C" />
+        {/* Estrela dourada centrada */}
+        <text
+          x="20"
+          y="41"
+          textAnchor="middle"
+          fill="#F5E306"
+          fontSize="15"
+          fontWeight="900"
+          fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        >★</text>
+      </g>
+
+      {/* Borda do escudo por cima (para cobrir bordas do clip) */}
+      <path
+        d="M2 2 L38 2 L38 28 Q38 44 20 47 Q2 44 2 28 Z"
+        fill="none"
+        stroke="#A40006"
+        strokeWidth="1.8"
+      />
+    </svg>
+  );
+});
+
 // ── Logo infinito da marca (figura-8 vertical) ──────────────────────────────
 interface InfinityLogoProps {
   size?: number;
