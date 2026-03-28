@@ -28,29 +28,30 @@ export const GraduationCapBrand = memo(function GraduationCapBrand({
       aria-hidden="true"
     >
       {/* ── Superfície superior do tabuleiro (topo com cantos arredondados) ── */}
-      <rect x="0" y="0" width="300" height="28" rx="3" fill={color} />
+      <rect x="0" y="0" width="300" height="34" rx="4" fill={color} />
 
-      {/* gap y=28..34 → linha escura de separação 3-D (fundo aparece) */}
+      {/* gap y=34..42 → linha escura de separação 3-D */}
 
-      {/* ── Face frontal do tabuleiro (trapézio — borda esq. diagonal = perspectiva 3-D)
-           A borda esq. vai de (0,34) até (28,78), criando triângulo escuro
-           no canto inf-esq que revela a profundidade real do tabuleiro ── */}
-      <path d="M0 34 L300 34 L300 78 L28 78 Z" fill={color} />
+      {/* ── Face frontal do tabuleiro (trapézio — borda esq. diagonal = profundidade 3-D)
+           Borda esq. vai de (0,42) até (26,74) criando triângulo escuro de perspectiva ── */}
+      <path d="M0 42 L300 42 L300 74 L26 74 Z" fill={color} />
 
-      {/* gap y=78..94 → sombra de profundidade entre tabuleiro e cúpula */}
+      {/* gap y=74..90 → sombra entre tabuleiro e cúpula */}
 
-      {/* ── Cúpula do capelo (82% da largura, começa em x=28 — alinhada com face) ── */}
+      {/* ── Cúpula do capelo — forma em ARCO curvado (Q-bezier nos cantos superiores)
+           Cantos sup arredondados: a cúpula flui como meia-elipse, não como retângulo
+           Topo: x=54..246 (64% da largura), flares para x=36..264 no máx ── */}
       <path
-        d="M28 94 L264 94 L264 148 Q264 202 150 202 Q28 202 28 148 Z"
+        d="M54 90 L246 90 Q264 90 264 128 Q264 206 150 206 Q36 206 36 128 Q36 90 54 90 Z"
         fill={color}
       />
 
-      {/* ── Cordão da borla — nasce no topo, atravessa o tabuleiro e cúpula ── */}
-      <rect x="246" y="0" width="12" height="98" fill={color} />
+      {/* ── Cordão da borla — nasce no topo, atravessa o tabuleiro ── */}
+      <rect x="242" y="0" width="12" height="96" fill={color} />
 
-      {/* ── Fita/borla estilo marcador de livro com V-notch ── */}
+      {/* ── Fita/borla com V-notch ── */}
       <path
-        d="M230 78 L268 78 L268 192 L249 166 L230 192 Z"
+        d="M224 74 L262 74 L262 192 L243 168 L224 192 Z"
         fill={color}
       />
     </svg>
