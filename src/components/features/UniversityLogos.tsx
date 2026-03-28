@@ -1,67 +1,281 @@
 import { memo } from 'react';
-import { 
-  Shield, 
-  Leaf, 
-  Square, 
-  Clover, 
-  Network, 
-  Sun, 
-  BarChart, 
-  User, 
-  Orbit, 
-  ShieldPlus, 
-  Hexagon, 
-  RefreshCw, 
-  Layers, 
-  GraduationCap, 
-  Award 
-} from 'lucide-react';
 
-const LOGOS = [
-  { name: 'UNIVALI', icon: Shield, color: 'text-[#004a8f]', style: 'uppercase font-bold' },
-  { name: 'unesc', icon: Leaf, color: 'text-[#00a859]', style: 'lowercase font-bold tracking-tight' },
-  { name: 'UNIPLAC', icon: Square, color: 'text-[#003b73]', style: 'uppercase font-bold' },
-  { name: 'univille', icon: Clover, color: 'text-[#419448]', style: 'lowercase font-bold' },
-  { name: 'UNIFEBE', icon: Network, color: 'text-[#00529b]', style: 'uppercase font-bold' },
-  { name: 'UNO CHAPECÓ', icon: Sun, color: 'text-[#0033a0]', style: 'uppercase font-black leading-none text-center' },
-  { name: 'FURB', icon: BarChart, color: 'text-[#004b87]', style: 'uppercase font-bold tracking-widest' },
-  { name: 'UNOESC', icon: User, color: 'text-[#00a94f]', style: 'uppercase font-bold' },
-  { name: 'UNIDAVI', icon: Orbit, color: 'text-[#003882]', style: 'uppercase font-black' },
-  { name: 'Católica SC', icon: ShieldPlus, color: 'text-[#cc0000]', style: 'font-bold' },
-  { name: 'UNISATC', icon: Hexagon, color: 'text-[#509e2f]', style: 'uppercase font-bold' },
-  { name: 'unibave', icon: RefreshCw, color: 'text-[#008c4a]', style: 'lowercase font-bold' },
-  { name: 'Uniarp', icon: Layers, color: 'text-[#f37021]', style: 'font-bold' },
-  { name: 'UnC', icon: GraduationCap, color: 'text-[#004c97]', style: 'font-black' },
-  { name: 'IELUSC', icon: Award, color: 'text-[#003876]', style: 'uppercase font-black' },
+interface University {
+  name: string;
+  full: string;
+  region: string;
+  mark: string;
+  color: string;
+  accent: string;
+  special?: 'cross' | 'lutheran' | 'bars' | 'wave' | 'leaf';
+}
+
+const UNIVERSITIES: University[] = [
+  {
+    name: 'UNIVALI',
+    full: 'Univ. do Vale do Itajaí',
+    region: 'Itajaí · SC',
+    mark: 'UV',
+    color: '#003E7E',
+    accent: '#0055B3',
+    special: 'wave',
+  },
+  {
+    name: 'UNESC',
+    full: 'Univ. do Extremo Sul Catarinense',
+    region: 'Criciúma · SC',
+    mark: 'UE',
+    color: '#005C33',
+    accent: '#008C4F',
+    special: 'leaf',
+  },
+  {
+    name: 'UNIPLAC',
+    full: 'Univ. do Planalto Catarinense',
+    region: 'Lages · SC',
+    mark: 'UP',
+    color: '#1B2F6E',
+    accent: '#2B48A8',
+  },
+  {
+    name: 'univille',
+    full: 'Univ. da Região de Joinville',
+    region: 'Joinville · SC',
+    mark: 'UVL',
+    color: '#256B25',
+    accent: '#389638',
+  },
+  {
+    name: 'UNIFEBE',
+    full: 'Centro Universitário de Brusque',
+    region: 'Brusque · SC',
+    mark: 'UF',
+    color: '#003D82',
+    accent: '#005ABF',
+  },
+  {
+    name: 'UNOCHAPECÓ',
+    full: 'Univ. Comunitária da Região de Chapecó',
+    region: 'Chapecó · SC',
+    mark: 'UNO',
+    color: '#002070',
+    accent: '#0033A0',
+  },
+  {
+    name: 'FURB',
+    full: 'Univ. Regional de Blumenau',
+    region: 'Blumenau · SC',
+    mark: 'FURB',
+    color: '#003C70',
+    accent: '#004B87',
+    special: 'bars',
+  },
+  {
+    name: 'UNOESC',
+    full: 'Univ. do Oeste de Santa Catarina',
+    region: 'Joaçaba · SC',
+    mark: 'UO',
+    color: '#006830',
+    accent: '#009646',
+  },
+  {
+    name: 'UNIDAVI',
+    full: 'Centro Univ. para o Desenvolvimento do Alto Vale',
+    region: 'Rio do Sul · SC',
+    mark: 'UD',
+    color: '#002860',
+    accent: '#003882',
+  },
+  {
+    name: 'Católica SC',
+    full: 'Centro Univ. Católica de Santa Catarina',
+    region: 'Joinville · SC',
+    mark: 'CSC',
+    color: '#8B0000',
+    accent: '#C00000',
+    special: 'cross',
+  },
+  {
+    name: 'UNISATC',
+    full: 'Centro Universitário Satc',
+    region: 'Criciúma · SC',
+    mark: 'US',
+    color: '#2A6010',
+    accent: '#509E2F',
+  },
+  {
+    name: 'unibave',
+    full: 'Centro Univ. Barriga Verde',
+    region: 'Orleans · SC',
+    mark: 'UB',
+    color: '#005530',
+    accent: '#007A45',
+  },
+  {
+    name: 'Uniarp',
+    full: 'Univ. Alto Vale do Rio do Peixe',
+    region: 'Caçador · SC',
+    mark: 'UA',
+    color: '#B04000',
+    accent: '#E05010',
+  },
+  {
+    name: 'UnC',
+    full: 'Universidade do Contestado',
+    region: 'Concórdia · SC',
+    mark: 'UC',
+    color: '#003870',
+    accent: '#004C97',
+  },
+  {
+    name: 'IELUSC',
+    full: 'Centro Univ. Luterano de Joinville',
+    region: 'Joinville · SC',
+    mark: 'IE',
+    color: '#002050',
+    accent: '#003070',
+    special: 'lutheran',
+  },
 ];
 
-function UniversityLogos() {
-  // Duplicating the array to create a seamless infinite scroll effect
-  const marqueeItems = [...LOGOS, ...LOGOS];
+// Special SVG marks for universities with distinctive visual identities
+function SpecialMark({ type }: { type: University['special'] }) {
+  if (type === 'cross') {
+    return (
+      <>
+        <line x1="28" y1="15" x2="28" y2="41" stroke="white" strokeWidth="4" strokeLinecap="round" />
+        <line x1="18" y1="25" x2="38" y2="25" stroke="white" strokeWidth="4" strokeLinecap="round" />
+      </>
+    );
+  }
+  if (type === 'lutheran') {
+    return (
+      <>
+        <line x1="28" y1="14" x2="28" y2="42" stroke="white" strokeWidth="3.5" strokeLinecap="round" />
+        <line x1="19" y1="24" x2="37" y2="24" stroke="white" strokeWidth="3.5" strokeLinecap="round" />
+        <circle cx="28" cy="28" r="4.5" fill="none" stroke="white" strokeWidth="1.5" opacity="0.7" />
+      </>
+    );
+  }
+  if (type === 'bars') {
+    return (
+      <>
+        <rect x="12" y="17" width="32" height="5" rx="2.5" fill="white" fillOpacity="0.95" />
+        <rect x="12" y="25.5" width="24" height="5" rx="2.5" fill="white" fillOpacity="0.70" />
+        <rect x="12" y="34" width="17" height="5" rx="2.5" fill="white" fillOpacity="0.50" />
+      </>
+    );
+  }
+  if (type === 'wave') {
+    return (
+      <>
+        <text x="28" y="30" textAnchor="middle" fill="white" fontWeight="900" fontSize="17"
+          fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">UV</text>
+        <path d="M10 40 Q19 35 28 39 Q37 43 46 38"
+          stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" opacity="0.65" />
+      </>
+    );
+  }
+  if (type === 'leaf') {
+    return (
+      <>
+        <text x="28" y="30" textAnchor="middle" fill="white" fontWeight="900" fontSize="17"
+          fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">UE</text>
+        <path d="M28 40 Q20 36 20 30 Q20 22 28 19 Q36 22 36 30 Q36 36 28 40Z"
+          fill="white" fillOpacity="0.12" />
+      </>
+    );
+  }
+  return null;
+}
+
+function UniversityBadge({ u, index }: { u: University; index: number }) {
+  const gradId = `ug-${index}`;
+  const hasSpecial = u.special && u.special !== 'wave' && u.special !== 'leaf';
+  const fontSize = u.mark.length >= 4 ? 12 : u.mark.length === 3 ? 14 : 17;
 
   return (
-    <div className="w-full overflow-hidden py-4 sm:py-8 relative flex items-center bg-transparent my-1 sm:my-4 [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-      {/* Fallback gradient masks for older browsers */}
-      <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none sm:hidden"></div>
-      <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none sm:hidden"></div>
-      
-      <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-        {marqueeItems.map((logo, index) => {
-          const Icon = logo.icon;
-          return (
-            <div 
-              key={`${logo.name}-${index}`} 
-              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-10 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-105 sm:hover:scale-110 cursor-default group`}
+    <div className="flex flex-col items-center gap-2 px-3 sm:px-4 shrink-0 cursor-default group">
+      {/* Badge */}
+      <div
+        className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-[14px] sm:rounded-2xl overflow-hidden
+                   shadow-lg group-hover:scale-110 transition-all duration-300"
+        style={{
+          boxShadow: `0 4px 14px ${u.color}60`,
+        }}
+      >
+        <svg width="100%" height="100%" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor={u.color} />
+              <stop offset="100%" stopColor={u.accent} />
+            </linearGradient>
+          </defs>
+
+          {/* Background */}
+          <rect width="56" height="56" rx="0" fill={`url(#${gradId})`} />
+
+          {/* Depth circles */}
+          <circle cx="52" cy="4" r="24" fill="white" fillOpacity="0.07" />
+          <circle cx="4" cy="52" r="18" fill="white" fillOpacity="0.05" />
+
+          {/* Top gloss highlight */}
+          <rect x="6" y="4" width="44" height="16" rx="8"
+            fill="white" fillOpacity="0.10" />
+
+          {/* Mark */}
+          {u.special ? (
+            <SpecialMark type={u.special} />
+          ) : (
+            <text
+              x="28"
+              y="33"
+              textAnchor="middle"
+              dominantBaseline="auto"
+              fill="white"
+              fontWeight="900"
+              fontSize={fontSize}
+              fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+              letterSpacing={u.mark.length >= 3 ? '-0.5' : '0.5'}
             >
-              <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-transparent group-hover:bg-card/50 ${logo.color} transition-all duration-300`}>
-                <Icon className="w-4 h-4 sm:w-6 sm:h-6" strokeWidth={2.5} fill={logo.name === 'UNO CHAPECÓ' || logo.name === 'Católica SC' || logo.name === 'IELUSC' ? 'currentColor' : 'none'} />
-              </div>
-              <span className={`text-[10px] sm:text-sm whitespace-nowrap text-foreground/80 group-hover:text-foreground ${logo.style}`}>
-                {logo.name}
-              </span>
-            </div>
-          );
-        })}
+              {u.mark}
+            </text>
+          )}
+
+          {/* Bottom accent line */}
+          <rect x="14" y="48" width="28" height="2.5" rx="1.25" fill="white" fillOpacity="0.25" />
+        </svg>
+      </div>
+
+      {/* Label */}
+      <div className="flex flex-col items-center gap-0">
+        <span className="text-[10px] sm:text-[11px] font-black text-foreground/75 group-hover:text-foreground
+                         transition-colors duration-300 select-none whitespace-nowrap tracking-tight leading-tight">
+          {u.name}
+        </span>
+        <span className="text-[8px] sm:text-[9px] text-muted-foreground/45 select-none whitespace-nowrap
+                         leading-tight hidden sm:block">
+          {u.region}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const MemoizedBadge = memo(UniversityBadge);
+
+function UniversityLogos() {
+  const items = [...UNIVERSITIES, ...UNIVERSITIES];
+
+  return (
+    <div
+      className="w-full overflow-hidden py-3 sm:py-4 flex items-center
+                 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
+    >
+      <div className="flex w-max animate-marquee hover:[animation-play-state:paused] items-end">
+        {items.map((u, i) => (
+          <MemoizedBadge key={`${u.name}-${i}`} u={u} index={i} />
+        ))}
       </div>
     </div>
   );

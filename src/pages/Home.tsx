@@ -111,12 +111,16 @@ function Home() {
             {/* University logos strip */}
             <div className="border-b border-border/30 bg-background/20">
               {/* ACAFE brand header */}
-              <div className="flex items-center justify-center gap-2 pt-3 pb-0">
-                <AcafeConstellation size={16} color="#8FBE3F" />
-                <span className="text-[11px] font-black tracking-[0.22em] text-primary lowercase">acafe</span>
-                <span className="text-[9px] font-semibold text-muted-foreground/70 uppercase tracking-wider">· Rede de Universidades Catarinenses</span>
+              <div className="flex items-center justify-center gap-2 pt-3 px-4">
+                <div className="flex-1 h-px bg-border/40" />
+                <div className="flex items-center gap-1.5">
+                  <AcafeConstellation size={14} color="#8FBE3F" />
+                  <span className="text-[10px] font-black tracking-[0.28em] text-primary/90 lowercase">acafe</span>
+                  <span className="text-[9px] font-medium text-muted-foreground/50 uppercase tracking-wider hidden sm:inline">· 15 universidades</span>
+                </div>
+                <div className="flex-1 h-px bg-border/40" />
               </div>
-              <Suspense fallback={<div className="h-12 animate-pulse bg-muted/20 rounded" />}>
+              <Suspense fallback={<div className="h-20 animate-pulse bg-muted/20 rounded mx-4 my-3" />}>
                 <UniversityLogos />
               </Suspense>
             </div>
