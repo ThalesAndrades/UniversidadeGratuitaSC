@@ -143,33 +143,28 @@ function Home() {
 
             {/* Body */}
             <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
-              {/* Tagline — "ajuda a gente." com chapéu acima do último "e" */}
+              {/* Tagline — chapéu micro acima do "e" final, apenas personalizando a vogal */}
               <div className="flex flex-col items-start w-full" style={{ lineHeight: 0.88, letterSpacing: '-0.03em' }}>
                 <span className="text-[2.15rem] sm:text-[2.6rem] font-black text-foreground/90">
                   A gente
                 </span>
-                {/* mt cria espaço para o chapéu flutuar acima do "e" */}
-                <div className="relative mt-7 sm:mt-8">
+                {/* mt reserva espaço para o micro-chapéu acima do "e" */}
+                <div className="relative mt-5 sm:mt-6">
                   <p className="text-[2.35rem] sm:text-[2.75rem] font-black leading-none m-0 p-0">
                     <span>ajuda a gent</span>
                     <span className="relative inline-block">
-                      {/* Chapéu de formatura flutuando acima do "e" */}
+                      {/* Micro-chapéu: tamanho proporcional ao "e", só personaliza a vogal */}
                       <span
                         aria-hidden="true"
                         className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
-                        style={{ bottom: '100%', marginBottom: '0.06em', width: '1.55em', height: '1.05em', display: 'inline-flex' }}
+                        style={{ bottom: '100%', marginBottom: '0.04em', width: '1.05em', height: '0.68em', display: 'inline-flex' }}
                       >
-                        <svg viewBox="0 0 46 30" fill="currentColor" width="100%" height="100%">
-                          {/* Tabuleiro — superfície superior */}
-                          <rect x="1" y="0" width="44" height="8" rx="2" />
-                          {/* Face frontal (profundidade 3-D) */}
-                          <rect x="1" y="5" width="44" height="9" />
-                          {/* Cúpula do capelo */}
-                          <path d="M7 16 L39 16 L39 24 Q39 30 23 30 Q7 30 7 24 Z" />
-                          {/* Cordão da borla */}
-                          <rect x="35" y="0" width="4" height="18" />
-                          {/* Borla/marcador — V-notch */}
-                          <path d="M31 16 L43 16 L43 28 L37 23 L31 28 Z" />
+                        <svg viewBox="0 0 300 222" fill="currentColor" width="100%" height="100%">
+                          <rect x="0" y="0" width="300" height="28" rx="3" />
+                          <rect x="0" y="34" width="300" height="44" />
+                          <path d="M44 94 L256 94 L256 152 Q256 200 150 200 Q44 200 44 152 Z" />
+                          <rect x="240" y="0" width="14" height="96" />
+                          <path d="M226 78 L272 78 L272 190 L249 162 L226 190 Z" />
                         </svg>
                       </span>
                       <span>e</span>
