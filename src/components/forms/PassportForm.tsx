@@ -1,6 +1,4 @@
-import { useState, useRef, useCallback, useMemo, memo, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useState, useRef, useCallback, useMemo, memo } from 'react';
 import { Camera, Upload, ChevronRight, ChevronLeft, CheckCircle2, Loader2, ImagePlus } from 'lucide-react';
 import { passportSchema, PassportFormData } from '@/lib/validations';
 import { formatPhone, generateYears, getDaysInMonth } from '@/lib/utils';
@@ -20,27 +18,26 @@ interface PassportFormProps {
 const TOTAL_STEPS = 4;
 const STEP_LABELS = ['Foto', 'Dados', 'Contato', 'Curso'];
 
-// Validações inline por step — sem trigger/resolver intermediando a navegação
-function validateStep(step: number, values: Record<string, string>): Record<string, string> {
+function validateStep(step: number, data: FormState): Record<string, string> {
   const errs: Record<string, string> = {};
 
   if (step === 1) {
-    if (!values.photo || !values.photo.startsWith('data:image/'))
+    if (!data.photo || !data.photo.startsWith('data:image/'))
       errs.photo = 'Foto é obrigatória';
   }
 
   if (step === 2) {
-    if (!values.firstName || values.firstName.trim().length < 2)
+    if (!data.firstName || data.firstName.trim().length < 2)
       errs.firstName = 'Nome deve ter pelo menos 2 caracteres';
-    if (!values.lastName || values.lastName.trim().length < 2)
+    if (!data.lastName || data.lastName.trim().length < 2)
       errs.lastName = 'Sobrenome deve ter pelo menos 2 caracteres';
-    if (!values.birthDate || !/^\d{4}-\d{2}-\d{2}$/.test(values.birthDate))
-      errs.birthDate = 'Selecione data de nascimento completa';
+    if (!data.birthDate || !/^\d{4}-\d{2}-\d{2}$/.test(data.birthDate))
+      errs.birthDate = 'Selecione dia, mês e ano';
   }
 
   if (step === 3) {
-    const phone = values.phone || '';
-    const email = (values.email || '').trim();
+    const phone = data.phone.trim();
+    const email = data.email.trim();
     if (!/^\(\d{2}\) \d{4,5}-\d{4}$/.test(phone))
       errs.phone = 'Formato inválido. Ex: (48) 99999-9999';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
@@ -48,97 +45,109 @@ function validateStep(step: number, values: Record<string, string>): Record<stri
   }
 
   if (step === 4) {
-    if (!values.university) errs.university = 'Selecione uma instituição';
-    if (!values.course) errs.course = 'Selecione um curso';
+    if (!data.university) errs.university = 'Selecione uma instituição';
+    if (!data.course) errs.course = 'Selecione um curso';
   }
 
   return errs;
 }
 
+interface FormState {
+  photo: string;
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  phone: string;
+  email: string;
+  university: string;
+  course: string;
+}
+
+const EMPTY_FORM: FormState = {
+  photo: '', firstName: '', lastName: '', birthDate: '',
+  phone: '', email: '', university: '', course: '',
+};
+
 function PassportForm({ onSubmit }: PassportFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [photoPreview, setPhotoPreview] = useState<string>('');
+  const [form, setForm] = useState<FormState>(EMPTY_FORM);
+  const [stepErrors, setStepErrors] = useState<Record<string, string>>({});
   const [isUploading, setIsUploading] = useState(false);
   const [selectedUniversity, setSelectedUniversity] = useState<string>('');
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  // Step-local errors (substituem trigger/resolver para navegação)
-  const [stepErrors, setStepErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    watch,
-    control,
-    formState: { isValid },
-  } = useForm<PassportFormData>({
-    resolver: zodResolver(passportSchema),
-    mode: 'onChange',
-  });
+  const set = (field: keyof FormState) => (value: string) =>
+    setForm(prev => ({ ...prev, [field]: value }));
 
-  const birthDateValue = watch('birthDate');
+  const buildBirthDate = (day: number | null, month: number | null, year: number | null): string => {
+    if (!day || !month || !year) return '';
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  };
 
-  // Sync date selects → form value
-  useEffect(() => {
-    if (selectedDay && selectedMonth && selectedYear) {
-      const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
-      if (dateStr !== birthDateValue) {
-        setValue('birthDate', dateStr, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
-      }
-    }
-  }, [selectedDay, selectedMonth, selectedYear, setValue, birthDateValue]);
-
-  // Avançar: validação síncrona direta, sem trigger/resolver
   const handleNext = useCallback((overrideStep?: number) => {
     const step = overrideStep ?? currentStep;
 
-    // Garante que a data está setada antes de validar step 2
-    if (step === 2 && selectedDay && selectedMonth && selectedYear) {
-      const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
-      setValue('birthDate', dateStr, { shouldValidate: true });
+    // Snapshot atual do form + data calculada
+    const snapshot = { ...form };
+    if (step === 2) {
+      snapshot.birthDate = buildBirthDate(selectedDay, selectedMonth, selectedYear);
     }
 
-    const currentValues = getValues() as unknown as Record<string, string>;
-    const errs = validateStep(step, currentValues);
+    const errs = validateStep(step, snapshot);
     setStepErrors(errs);
 
-    if (Object.keys(errs).length === 0 && step < TOTAL_STEPS) {
-      setCurrentStep(step + 1);
+    if (Object.keys(errs).length === 0) {
+      if (step === 2) {
+        setForm(prev => ({ ...prev, birthDate: snapshot.birthDate }));
+      }
+      if (step < TOTAL_STEPS) {
+        setCurrentStep(step + 1);
+      }
     }
-  }, [currentStep, getValues, setValue, selectedDay, selectedMonth, selectedYear]);
+  }, [currentStep, form, selectedDay, selectedMonth, selectedYear]);
+
+  const handlePrev = useCallback(() => {
+    setStepErrors({});
+    setCurrentStep(prev => Math.max(1, prev - 1));
+  }, []);
+
+  const handleFinalSubmit = useCallback(() => {
+    const step = 4;
+    const errs = validateStep(step, form);
+    setStepErrors(errs);
+    if (Object.keys(errs).length > 0) return;
+
+    try {
+      const parsed = passportSchema.parse(form);
+      onSubmit(parsed);
+    } catch {
+      onSubmit(form as unknown as PassportFormData);
+    }
+  }, [form, onSubmit]);
 
   const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    if (file.size > 10 * 1024 * 1024) {
-      alert('Arquivo muito grande. Máximo 10MB.');
-      return;
-    }
+    if (file.size > 10 * 1024 * 1024) { alert('Arquivo muito grande. Máximo 10MB.'); return; }
 
     setIsUploading(true);
     try {
       const compressed = await compressImage(file, 0.5, 800);
-      setPhotoPreview(compressed);
-      setValue('photo', compressed, { shouldValidate: true });
-      // Avança automaticamente para step 2 após foto ser processada
-      setTimeout(() => handleNext(1), 400);
+      setForm(prev => ({ ...prev, photo: compressed }));
+      setTimeout(() => {
+        setStepErrors({});
+        setCurrentStep(2);
+      }, 400);
     } catch {
       alert('Erro ao processar imagem. Tente outra foto.');
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
-  }, [setValue, handleNext]);
-
-  const handlePrev = useCallback(() => {
-    setStepErrors({});
-    if (currentStep > 1) setCurrentStep(prev => prev - 1);
-  }, [currentStep]);
+  }, []);
 
   const currentDays = useMemo(() => getDaysInMonth(selectedMonth || 1, selectedYear || 2000), [selectedMonth, selectedYear]);
   const years = useMemo(() => generateYears(), []);
@@ -183,9 +192,9 @@ function PassportForm({ onSubmit }: PassportFormProps) {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col min-h-0">
+      <div className="flex-1 flex flex-col min-h-0">
 
-        {/* Apenas o step ativo é renderizado — sem overflow-hidden lateral */}
+        {/* Apenas o step ativo é renderizado */}
         <div key={currentStep} className="flex-1 overflow-y-auto animate-fade-in">
 
           {/* ── STEP 1: Foto ── */}
@@ -203,7 +212,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 className={`relative w-44 h-44 rounded-full border-4 flex items-center justify-center overflow-hidden transition-all duration-300 touch-manipulation select-none ${
                   isUploading ? 'border-primary/50 cursor-wait' :
                   err('photo') ? 'border-destructive' :
-                  photoPreview ? 'border-primary shadow-[0_0_32px_hsl(var(--primary)/0.3)]' :
+                  form.photo ? 'border-primary shadow-[0_0_32px_hsl(var(--primary)/0.3)]' :
                   'border-dashed border-border hover:border-primary/60 active:border-primary'
                 } bg-card`}
                 aria-label="Selecionar foto"
@@ -213,9 +222,9 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                     <Loader2 className="w-10 h-10 animate-spin" />
                     <span className="text-xs font-bold uppercase">Processando…</span>
                   </div>
-                ) : photoPreview ? (
+                ) : form.photo ? (
                   <>
-                    <img src={photoPreview} alt="Sua foto" className="w-full h-full object-cover" />
+                    <img src={form.photo} alt="Sua foto" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 active:opacity-100 transition-opacity gap-2">
                       <Camera className="w-9 h-9 text-white" />
                       <span className="text-white text-xs font-bold uppercase">Trocar</span>
@@ -233,7 +242,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
 
               <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" aria-hidden="true" />
 
-              {photoPreview && !isUploading && (
+              {form.photo && !isUploading && (
                 <p className="text-xs text-primary font-semibold flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Foto adicionada — avançando…
                 </p>
@@ -249,11 +258,12 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 <Label htmlFor="firstName" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Nome *</Label>
                 <Input
                   id="firstName"
-                  {...register('firstName')}
+                  value={form.firstName}
+                  onChange={e => set('firstName')(e.target.value)}
                   placeholder="Ex: João"
                   autoComplete="given-name"
                   autoCapitalize="words"
-                  className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl"
+                  className={`mt-1 h-12 text-base border-2 focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl ${err('firstName') ? 'border-destructive' : 'border-border'}`}
                 />
                 {err('firstName') && <p className="text-destructive text-xs mt-1 font-semibold">{err('firstName')}</p>}
               </div>
@@ -262,11 +272,12 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 <Label htmlFor="lastName" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Sobrenome *</Label>
                 <Input
                   id="lastName"
-                  {...register('lastName')}
+                  value={form.lastName}
+                  onChange={e => set('lastName')(e.target.value)}
                   placeholder="Ex: da Silva"
                   autoComplete="family-name"
                   autoCapitalize="words"
-                  className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl"
+                  className={`mt-1 h-12 text-base border-2 focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl ${err('lastName') ? 'border-destructive' : 'border-border'}`}
                 />
                 {err('lastName') && <p className="text-destructive text-xs mt-1 font-semibold">{err('lastName')}</p>}
               </div>
@@ -301,9 +312,9 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                     </SelectContent>
                   </Select>
                 </div>
-                {!selectedDay || !selectedMonth || !selectedYear
-                  ? <p className="text-muted-foreground text-xs mt-1.5 font-medium">Selecione dia, mês e ano.</p>
-                  : null}
+                {(!selectedDay || !selectedMonth || !selectedYear) && (
+                  <p className="text-muted-foreground text-xs mt-1.5 font-medium">Selecione dia, mês e ano.</p>
+                )}
                 {err('birthDate') && <p className="text-destructive text-xs mt-1.5 font-semibold">{err('birthDate')}</p>}
               </div>
             </div>
@@ -314,25 +325,16 @@ function PassportForm({ onSubmit }: PassportFormProps) {
             <div className="flex flex-col justify-center gap-5 p-6 min-h-full">
               <div>
                 <Label htmlFor="phone" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">WhatsApp *</Label>
-                <Controller
-                  name="phone"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <Input
-                      id="phone"
-                      value={field.value}
-                      onChange={(e) => field.onChange(formatPhone(e.target.value))}
-                      onBlur={field.onBlur}
-                      ref={field.ref}
-                      placeholder="(00) 00000-0000"
-                      maxLength={15}
-                      type="tel"
-                      inputMode="numeric"
-                      autoComplete="tel"
-                      className={`mt-1 h-12 text-base border-2 focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl font-semibold ${err('phone') ? 'border-destructive' : 'border-border'}`}
-                    />
-                  )}
+                <Input
+                  id="phone"
+                  value={form.phone}
+                  onChange={e => set('phone')(formatPhone(e.target.value))}
+                  placeholder="(00) 00000-0000"
+                  maxLength={15}
+                  type="tel"
+                  inputMode="numeric"
+                  autoComplete="tel"
+                  className={`mt-1 h-12 text-base border-2 focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl font-semibold ${err('phone') ? 'border-destructive' : 'border-border'}`}
                 />
                 {err('phone') && <p className="text-destructive text-xs mt-1.5 font-semibold">{err('phone')}</p>}
               </div>
@@ -341,11 +343,12 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 <Label htmlFor="email" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">E-mail *</Label>
                 <Input
                   id="email"
+                  value={form.email}
+                  onChange={e => set('email')(e.target.value)}
                   type="email"
                   inputMode="email"
                   autoComplete="email"
                   autoCapitalize="none"
-                  {...register('email')}
                   placeholder="aluno@email.com"
                   className={`mt-1 h-12 text-base border-2 focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl ${err('email') ? 'border-destructive' : 'border-border'}`}
                 />
@@ -361,8 +364,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Instituição ACAFE *</Label>
                 <Select onValueChange={(v) => {
                   setSelectedUniversity(v);
-                  setValue('university', v, { shouldValidate: true });
-                  setValue('course', '', { shouldValidate: false });
+                  setForm(prev => ({ ...prev, university: v, course: '' }));
                 }}>
                   <SelectTrigger className="mt-1 h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm text-left">
                     <SelectValue placeholder="Selecione a universidade" />
@@ -379,7 +381,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               {selectedUniversityData ? (
                 <div className="animate-fade-in">
                   <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Curso Desejado *</Label>
-                  <Select onValueChange={(v) => setValue('course', v, { shouldValidate: true })}>
+                  <Select onValueChange={(v) => setForm(prev => ({ ...prev, course: v }))}>
                     <SelectTrigger className="mt-1 h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
                       <SelectValue placeholder="Selecione o curso" />
                     </SelectTrigger>
@@ -401,41 +403,40 @@ function PassportForm({ onSubmit }: PassportFormProps) {
           )}
         </div>
 
-        {/* Rodapé de navegação — sempre no fluxo normal, nunca sobreposto */}
+        {/* Rodapé de navegação */}
         <div className="px-4 py-3 bg-card border-t border-border shrink-0 flex gap-2">
           {currentStep > 1 && (
-            <Button
+            <button
               type="button"
               onClick={handlePrev}
-              variant="outline"
-              className="h-12 w-12 rounded-xl border-2 border-border text-foreground hover:bg-muted active:scale-95 shrink-0 touch-manipulation select-none"
+              className="h-12 w-12 rounded-xl border-2 border-border text-foreground bg-transparent hover:bg-muted active:scale-95 shrink-0 touch-manipulation select-none flex items-center justify-center"
               aria-label="Voltar"
             >
               <ChevronLeft className="w-5 h-5" />
-            </Button>
+            </button>
           )}
 
           {currentStep < TOTAL_STEPS ? (
-            <Button
+            <button
               type="button"
               onClick={() => handleNext()}
-              className="flex-1 h-12 bg-primary hover:bg-primary/90 active:scale-[0.97] active:opacity-90 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_4px_16px_hsl(var(--primary)/0.4)] transition-all duration-150 touch-manipulation select-none"
+              className="flex-1 h-12 bg-primary hover:bg-primary/90 active:opacity-80 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_4px_16px_hsl(var(--primary)/0.4)] transition-opacity duration-100 touch-manipulation select-none flex items-center justify-center gap-2"
             >
               Avançar
-              <ChevronRight className="w-4 h-4 ml-2 shrink-0" />
-            </Button>
+              <ChevronRight className="w-4 h-4 shrink-0" />
+            </button>
           ) : (
-            <Button
-              type="submit"
-              disabled={!isValid}
-              className="flex-1 h-12 bg-primary hover:bg-primary/90 active:scale-[0.97] active:opacity-90 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_4px_16px_hsl(var(--primary)/0.4)] disabled:opacity-40 disabled:shadow-none disabled:pointer-events-none transition-all duration-150 touch-manipulation select-none"
+            <button
+              type="button"
+              onClick={handleFinalSubmit}
+              className="flex-1 h-12 bg-primary hover:bg-primary/90 active:opacity-80 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_4px_16px_hsl(var(--primary)/0.4)] transition-opacity duration-100 touch-manipulation select-none flex items-center justify-center gap-2"
             >
-              <Upload className="w-4 h-4 mr-2 shrink-0" />
+              <Upload className="w-4 h-4 shrink-0" />
               Gerar Passaporte
-            </Button>
+            </button>
           )}
         </div>
-      </form>
+      </div>
     </div>
   );
 }
