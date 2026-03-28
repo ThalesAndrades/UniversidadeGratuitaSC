@@ -156,10 +156,10 @@ function Home() {
                   >
                     <svg viewBox="0 0 300 222" fill="currentColor" width="100%" height="100%">
                       <rect x="0" y="0" width="300" height="28" rx="3" />
-                      <rect x="0" y="34" width="300" height="44" />
-                      <path d="M44 94 L256 94 L256 152 Q256 200 150 200 Q44 200 44 152 Z" />
-                      <rect x="240" y="0" width="14" height="96" />
-                      <path d="M226 78 L272 78 L272 190 L249 162 L226 190 Z" />
+                      <path d="M0 34 L300 34 L300 78 L28 78 Z" />
+                      <path d="M28 94 L264 94 L264 148 Q264 202 150 202 Q28 202 28 148 Z" />
+                      <rect x="246" y="0" width="12" height="98" />
+                      <path d="M230 78 L268 78 L268 192 L249 166 L230 192 Z" />
                     </svg>
                   </span>
                   <span className="text-primary">.</span>

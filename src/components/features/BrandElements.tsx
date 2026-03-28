@@ -27,28 +27,30 @@ export const GraduationCapBrand = memo(function GraduationCapBrand({
       style={style}
       aria-hidden="true"
     >
-      {/* ── Superfície superior do tabuleiro (borda arredondada) ── */}
+      {/* ── Superfície superior do tabuleiro (topo com cantos arredondados) ── */}
       <rect x="0" y="0" width="300" height="28" rx="3" fill={color} />
 
       {/* gap y=28..34 → linha escura de separação 3-D (fundo aparece) */}
 
-      {/* ── Face frontal do tabuleiro ── */}
-      <rect x="0" y="34" width="300" height="44" fill={color} />
+      {/* ── Face frontal do tabuleiro (trapézio — borda esq. diagonal = perspectiva 3-D)
+           A borda esq. vai de (0,34) até (28,78), criando triângulo escuro
+           no canto inf-esq que revela a profundidade real do tabuleiro ── */}
+      <path d="M0 34 L300 34 L300 78 L28 78 Z" fill={color} />
 
       {/* gap y=78..94 → sombra de profundidade entre tabuleiro e cúpula */}
 
-      {/* ── Cúpula do capelo (71% da largura, lados retos + base arredondada) ── */}
+      {/* ── Cúpula do capelo (82% da largura, começa em x=28 — alinhada com face) ── */}
       <path
-        d="M44 94 L256 94 L256 152 Q256 200 150 200 Q44 200 44 152 Z"
+        d="M28 94 L264 94 L264 148 Q264 202 150 202 Q28 202 28 148 Z"
         fill={color}
       />
 
-      {/* ── Cordão da borla — nasce no topo, atravessa o tabuleiro ── */}
-      <rect x="240" y="0" width="14" height="96" fill={color} />
+      {/* ── Cordão da borla — nasce no topo, atravessa o tabuleiro e cúpula ── */}
+      <rect x="246" y="0" width="12" height="98" fill={color} />
 
       {/* ── Fita/borla estilo marcador de livro com V-notch ── */}
       <path
-        d="M226 78 L272 78 L272 190 L249 162 L226 190 Z"
+        d="M230 78 L268 78 L268 192 L249 166 L230 192 Z"
         fill={color}
       />
     </svg>
