@@ -55,7 +55,13 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-background text-foreground font-sans flex flex-col">
+    <div
+      className="min-h-screen w-full bg-background text-foreground font-sans flex flex-col"
+      style={{
+        backgroundImage: 'radial-gradient(circle, rgba(143,190,63,0.065) 1px, transparent 1px)',
+        backgroundSize: '28px 28px',
+      }}
+    >
       <Suspense fallback={<div className="h-16 w-full bg-card/50" />}>
         <Header />
       </Suspense>
@@ -77,7 +83,12 @@ function Home() {
             <BracketCorner size={20} color="#8FBE3F" className="absolute bottom-3 right-3 opacity-40" rotate={180} />
 
             {/* Card Header */}
-            <div className="relative bg-card px-6 pt-7 pb-5 border-b border-border/50 flex flex-col items-center text-center">
+            <div className="relative px-6 pt-7 pb-5 border-b border-border/50 flex flex-col items-center text-center overflow-hidden"
+              style={{ background: 'linear-gradient(160deg, hsl(82,30%,22%) 0%, hsl(82,15%,18%) 55%)' }}
+            >
+              {/* Decorative arc background */}
+              <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-20 pointer-events-none"
+                style={{ background: 'radial-gradient(circle, #8FBE3F 0%, transparent 70%)' }} />
 
               {/* OverlapSquares decoration — top right corner */}
               <div className="absolute top-4 right-4 opacity-60">
@@ -103,7 +114,7 @@ function Home() {
                 <div className="h-[3px] w-5 rounded-full" style={{ backgroundColor: '#A40006' }} />
                 <div className="h-[3px] w-3 rounded-full" style={{ backgroundColor: '#F5E306' }} />
               </div>
-              <p className="text-[10px] text-muted-foreground font-black tracking-[0.2em] uppercase">
+              <p className="text-[10px] text-muted-foreground/70 font-bold tracking-[0.22em] uppercase">
                 Programa do Governo de SC
               </p>
             </div>
@@ -126,26 +137,35 @@ function Home() {
             </div>
 
             {/* Body */}
-            <div className="px-6 py-6 sm:px-8 sm:py-8 flex flex-col items-center text-center gap-5">
+            <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
               {/* Tagline */}
               <div className="flex flex-col items-start font-sans tracking-tighter leading-[0.82] w-full">
-                <span className="text-3xl sm:text-4xl font-black">A gente</span>
+                <span className="text-3xl sm:text-4xl font-black text-foreground/80">A gente</span>
                 <div className="flex items-end gap-3">
                   <span className="text-[2.6rem] sm:text-5xl font-black">
                     ajuda a gente<span className="text-primary">.</span>
                   </span>
-                  {/* OverlapSquares inline decoration */}
                   <OverlapSquares size={16} colorA="#3E5715" colorB="#8FBE3F" className="mb-1 opacity-70 shrink-0" />
                 </div>
               </div>
 
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground/80 leading-relaxed w-full text-left">
                 Gere seu passaporte estudantil e acesse as universidades da rede ACAFE gratuitamente.
               </p>
 
               <button
                 onClick={() => setShowPassportModal(true)}
-                className="w-full py-4 sm:py-5 bg-primary hover:bg-primary/90 active:scale-[0.98] active:opacity-90 text-primary-foreground rounded-xl font-black text-lg sm:text-xl shadow-[0_8px_24px_hsl(var(--primary)/0.4)] hover:shadow-[0_12px_32px_hsl(var(--primary)/0.6)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3 uppercase tracking-wide select-none touch-manipulation"
+                className="w-full py-4 sm:py-5 rounded-xl font-black text-lg sm:text-xl
+                           text-primary-foreground uppercase tracking-wide select-none touch-manipulation
+                           flex items-center justify-center gap-3
+                           active:scale-[0.98] active:opacity-90 transition-all duration-200
+                           hover:-translate-y-0.5"
+                style={{
+                  background: 'linear-gradient(135deg, #8FBE3F 0%, #6FA030 100%)',
+                  boxShadow: '0 8px 28px rgba(143,190,63,0.42), inset 0 1px 0 rgba(255,255,255,0.15)',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 12px 36px rgba(143,190,63,0.58), inset 0 1px 0 rgba(255,255,255,0.15)')}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 8px 28px rgba(143,190,63,0.42), inset 0 1px 0 rgba(255,255,255,0.15)')}
               >
                 Gerar Passaporte
                 <ArrowRight className="w-5 h-5 stroke-[3px] shrink-0" />
@@ -154,8 +174,8 @@ function Home() {
 
             {/* Footer institucional — ACAFE · SED · Universidade Gratuita */}
             <div className="border-t border-border/30 bg-background/30 px-3 pt-2.5 pb-3">
-              <p className="text-[8px] font-bold text-muted-foreground/40 uppercase tracking-[0.25em] text-center mb-2">
-                Realização
+              <p className="text-[8px] font-bold text-muted-foreground/35 uppercase tracking-[0.28em] text-center mb-2">
+                Parceria
               </p>
               <div className="flex items-center justify-center">
 
