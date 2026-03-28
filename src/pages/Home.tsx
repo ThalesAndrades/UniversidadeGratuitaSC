@@ -143,35 +143,27 @@ function Home() {
 
             {/* Body */}
             <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
-              {/* Tagline — chapéu micro acima do "e" final, apenas personalizando a vogal */}
-              <div className="flex flex-col items-start w-full" style={{ lineHeight: 0.88, letterSpacing: '-0.03em' }}>
-                <span className="text-[2.15rem] sm:text-[2.6rem] font-black text-foreground/90">
+              {/* Tagline — chapéu sobrescrito após "gente", personalizando a última vogal */}
+              <div className="flex flex-col items-start w-full" style={{ letterSpacing: '-0.03em' }}>
+                <span className="text-[2.2rem] sm:text-[2.65rem] font-black text-foreground/90 leading-none">
                   A gente
                 </span>
-                {/* mt reserva espaço para o micro-chapéu acima do "e" */}
-                <div className="relative mt-5 sm:mt-6">
-                  <p className="text-[2.35rem] sm:text-[2.75rem] font-black leading-none m-0 p-0">
-                    <span>ajuda a gent</span>
-                    <span className="relative inline-block">
-                      {/* Micro-chapéu: tamanho proporcional ao "e", só personaliza a vogal */}
-                      <span
-                        aria-hidden="true"
-                        className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
-                        style={{ bottom: '100%', marginBottom: '0.04em', width: '1.05em', height: '0.68em', display: 'inline-flex' }}
-                      >
-                        <svg viewBox="0 0 300 222" fill="currentColor" width="100%" height="100%">
-                          <rect x="0" y="0" width="300" height="28" rx="3" />
-                          <rect x="0" y="34" width="300" height="44" />
-                          <path d="M44 94 L256 94 L256 152 Q256 200 150 200 Q44 200 44 152 Z" />
-                          <rect x="240" y="0" width="14" height="96" />
-                          <path d="M226 78 L272 78 L272 190 L249 162 L226 190 Z" />
-                        </svg>
-                      </span>
-                      <span>e</span>
-                    </span>
-                    <span className="text-primary">.</span>
-                  </p>
-                </div>
+                <p className="text-[2.35rem] sm:text-[2.75rem] font-black m-0 mt-1 leading-[1.25]">
+                  ajuda a gente
+                  <span
+                    aria-hidden="true"
+                    style={{ display: 'inline-block', verticalAlign: 'super', width: '0.62em', height: '0.46em', marginLeft: '0.06em' }}
+                  >
+                    <svg viewBox="0 0 300 222" fill="currentColor" width="100%" height="100%">
+                      <rect x="0" y="0" width="300" height="28" rx="3" />
+                      <rect x="0" y="34" width="300" height="44" />
+                      <path d="M44 94 L256 94 L256 152 Q256 200 150 200 Q44 200 44 152 Z" />
+                      <rect x="240" y="0" width="14" height="96" />
+                      <path d="M226 78 L272 78 L272 190 L249 162 L226 190 Z" />
+                    </svg>
+                  </span>
+                  <span className="text-primary">.</span>
+                </p>
               </div>
 
               <p className="text-sm text-muted-foreground/80 leading-relaxed w-full text-left">
@@ -182,12 +174,11 @@ function Home() {
                 onClick={() => setShowPassportModal(true)}
                 className="w-full py-4 sm:py-5 rounded-xl font-black text-lg sm:text-xl
                            text-primary-foreground uppercase tracking-wide select-none touch-manipulation
-                           flex items-center justify-center gap-3
+                           flex items-center justify-center gap-3 cta-pulse
                            active:scale-[0.98] active:opacity-90 transition-all duration-200
-                           hover:-translate-y-0.5 hover:brightness-110"
+                           hover:-translate-y-0.5 hover:brightness-110 hover:[animation-play-state:paused]"
                 style={{
                   background: 'linear-gradient(135deg, #8FBE3F 0%, #6FA030 100%)',
-                  boxShadow: '0 8px 28px rgba(143,190,63,0.42), inset 0 1px 0 rgba(255,255,255,0.15)',
                 }}
               >
                 Gerar Passaporte
