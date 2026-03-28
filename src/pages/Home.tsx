@@ -1,7 +1,8 @@
 import { useState, lazy, Suspense, memo, useEffect } from 'react';
 import { PassportFormData } from '@/lib/validations';
-import { ArrowRight, QrCode } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { InfinityLogo, OverlapSquares, BracketCorner } from '@/components/features/BrandElements';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -58,24 +59,29 @@ function Home() {
 
       <main className="flex-1 flex items-center justify-center px-4 py-6 pt-20 sm:pt-28 relative z-10">
         <div className="w-full max-w-sm sm:max-w-md">
-          <div className="bg-card rounded-2xl sm:rounded-3xl border border-border/50 shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden">
+          <div className="bg-card rounded-2xl sm:rounded-3xl border border-border/50 shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden relative">
 
-            {/* Header */}
+            {/* Bracket corner decorations */}
+            <BracketCorner size={20} color="#8FBE3F" className="absolute top-3 left-3 opacity-40" rotate={0} />
+            <BracketCorner size={20} color="#8FBE3F" className="absolute top-3 right-3 opacity-40" rotate={90} />
+            <BracketCorner size={20} color="#8FBE3F" className="absolute bottom-3 left-3 opacity-40" rotate={270} />
+            <BracketCorner size={20} color="#8FBE3F" className="absolute bottom-3 right-3 opacity-40" rotate={180} />
+
+            {/* Card Header */}
             <div className="relative bg-card px-6 pt-7 pb-5 border-b border-border/50 flex flex-col items-center text-center">
-              <div className="absolute top-4 right-4">
-                <div className="bg-background/50 p-1.5 rounded-lg border border-border/50">
-                  <QrCode className="w-4 h-4 text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.7)]" />
-                </div>
+
+              {/* OverlapSquares decoration — top right corner */}
+              <div className="absolute top-4 right-4 opacity-60">
+                <OverlapSquares size={18} colorA="#3E5715" colorB="#8FBE3F" />
               </div>
 
-              {/* Graduation cap logo */}
-              <div className="relative w-14 h-12 mb-3 shrink-0">
-                <div className="w-10 h-2 bg-primary rounded-sm absolute top-0 left-1/2 -translate-x-1/2" />
-                <div className="w-14 h-7 bg-foreground absolute top-1.5 left-1/2 -translate-x-1/2"
-                  style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
-                <div className="w-9 h-3.5 bg-foreground absolute top-5 left-1/2 -translate-x-1/2 rounded-b-lg" />
-                <div className="w-1.5 h-4 bg-primary absolute right-2 top-3.5"
-                  style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)' }} />
+              {/* Brand infinity logomark */}
+              <div className="mb-4 relative">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <InfinityLogo size={44} color="#8FBE3F" />
+                </div>
+                {/* glow pulse ring */}
+                <div className="absolute inset-0 rounded-2xl bg-primary/5 animate-ping" style={{ animationDuration: '3s' }} />
               </div>
 
               <h2 className="text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tight leading-none">
@@ -87,7 +93,7 @@ function Home() {
               </p>
             </div>
 
-            {/* Logos */}
+            {/* University logos strip */}
             <div className="border-b border-border/30 bg-background/20">
               <Suspense fallback={<div className="h-12 animate-pulse bg-muted/20 rounded" />}>
                 <UniversityLogos />
@@ -96,18 +102,16 @@ function Home() {
 
             {/* Body */}
             <div className="px-6 py-6 sm:px-8 sm:py-8 flex flex-col items-center text-center gap-5">
-              <div className="flex flex-col items-start font-sans tracking-tighter leading-[0.82]">
+              {/* Tagline */}
+              <div className="flex flex-col items-start font-sans tracking-tighter leading-[0.82] w-full">
                 <span className="text-3xl sm:text-4xl font-black">A gente</span>
-                <span className="text-[2.6rem] sm:text-5xl font-black relative">
-                  ajuda a gente<span className="text-primary">.</span>
-                  <svg viewBox="0 0 100 100"
-                    className="absolute -top-5 -right-7 w-7 h-7 sm:w-9 sm:h-9 rotate-[15deg] fill-current opacity-80"
-                    aria-hidden="true">
-                    <path d="M50 25 L90 40 L50 55 L10 40 Z" />
-                    <path d="M70 38 L70 68 L65 75 L75 75 Z" />
-                    <path d="M30 50 L30 80 C30 85 40 88 50 88 C60 88 70 85 70 80 L70 50 Z" />
-                  </svg>
-                </span>
+                <div className="flex items-end gap-3">
+                  <span className="text-[2.6rem] sm:text-5xl font-black">
+                    ajuda a gente<span className="text-primary">.</span>
+                  </span>
+                  {/* OverlapSquares inline decoration */}
+                  <OverlapSquares size={16} colorA="#3E5715" colorB="#8FBE3F" className="mb-1 opacity-70 shrink-0" />
+                </div>
               </div>
 
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -116,7 +120,7 @@ function Home() {
 
               <button
                 onClick={() => setShowPassportModal(true)}
-                className="w-full py-4 sm:py-5 bg-primary hover:bg-primary/90 active:bg-primary/80 text-primary-foreground rounded-xl font-black text-lg sm:text-xl shadow-[0_8px_24px_hsl(var(--primary)/0.4)] hover:shadow-[0_12px_32px_hsl(var(--primary)/0.6)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-3 uppercase tracking-wide border-b-4 border-black/40 active:border-b-0 active:mt-1 select-none touch-manipulation"
+                className="w-full py-4 sm:py-5 bg-primary hover:bg-primary/90 active:scale-[0.98] active:opacity-90 text-primary-foreground rounded-xl font-black text-lg sm:text-xl shadow-[0_8px_24px_hsl(var(--primary)/0.4)] hover:shadow-[0_12px_32px_hsl(var(--primary)/0.6)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3 uppercase tracking-wide select-none touch-manipulation"
               >
                 Gerar Passaporte
                 <ArrowRight className="w-5 h-5 stroke-[3px] shrink-0" />
@@ -124,10 +128,12 @@ function Home() {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-3 border-t border-border/30 text-center bg-background/20">
+            <div className="px-6 py-3 border-t border-border/30 text-center bg-background/20 flex items-center justify-center gap-3">
+              <BracketCorner size={10} color="#8FBE3F" className="opacity-50" rotate={0} />
               <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
                 Governo de Santa Catarina · Rede ACAFE
               </p>
+              <BracketCorner size={10} color="#8FBE3F" className="opacity-50" rotate={180} />
             </div>
           </div>
         </div>
@@ -138,9 +144,12 @@ function Home() {
         <div className="fixed inset-0 bg-background/95 backdrop-blur-xl z-50 flex flex-col sm:items-center sm:justify-center sm:p-4 animate-fade-in">
           <div className="bg-card w-full h-full sm:h-auto sm:max-h-[92vh] sm:rounded-3xl sm:max-w-md shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col border-0 sm:border sm:border-border/50 animate-slide-in overflow-hidden">
             <div className="bg-card border-b border-border px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between shrink-0">
-              <div>
-                <h2 className="text-lg sm:text-xl font-black text-foreground uppercase tracking-tight">Criar Passaporte</h2>
-                <p className="text-xs text-muted-foreground font-medium mt-0.5">Preencha seus dados oficiais</p>
+              <div className="flex items-center gap-2.5">
+                <InfinityLogo size={22} color="#8FBE3F" />
+                <div>
+                  <h2 className="text-lg sm:text-xl font-black text-foreground uppercase tracking-tight">Criar Passaporte</h2>
+                  <p className="text-xs text-muted-foreground font-medium mt-0.5">Preencha seus dados oficiais</p>
+                </div>
               </div>
               <button
                 onClick={() => setShowPassportModal(false)}

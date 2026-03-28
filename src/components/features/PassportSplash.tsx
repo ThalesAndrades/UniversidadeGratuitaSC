@@ -1,6 +1,7 @@
 import { useRef, useCallback, useMemo, useState, memo } from 'react';
 import { Download, X, CheckCircle2, Share2 } from 'lucide-react';
 import QRCode from '@/components/features/QRCode';
+import { InfinityLogo } from '@/components/features/BrandElements';
 import { PassportFormData } from '@/lib/validations';
 import { formatDate } from '@/lib/utils';
 import { UNIVERSITIES } from '@/constants/universities';
@@ -91,8 +92,9 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
             <div className="w-48 h-48 rounded-full bg-[#8FBE3F]/5 animate-ping" style={{ animationDuration: '2s' }} />
           </div>
           <div className="relative">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#8FBE3F]/15 mb-3 ring-2 ring-[#8FBE3F]/40">
-              <CheckCircle2 className="w-8 h-8 text-[#8FBE3F]" strokeWidth={2.5} />
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#8FBE3F]/15 mb-3 ring-2 ring-[#8FBE3F]/30 relative">
+              <InfinityLogo size={36} color="#8FBE3F" />
+              <CheckCircle2 className="w-4 h-4 text-[#8FBE3F] absolute -bottom-1 -right-1 bg-[#272B20] rounded-full" strokeWidth={2.5} />
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
               Passaporte Gerado!
@@ -125,13 +127,14 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
               {/* decorative top stripe */}
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #8FBE3F 0%, #63842C 50%, #8FBE3F 100%)' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                {/* SC Shield */}
+                {/* Brand infinity logomark */}
                 <div style={{
-                  width: '44px', height: '44px', borderRadius: '50%',
-                  backgroundColor: '#8FBE3F', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: '44px', height: '44px', borderRadius: '10px',
+                  backgroundColor: 'rgba(143,190,63,0.15)', border: '1.5px solid rgba(143,190,63,0.3)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0,
                 }}>
-                  <span style={{ fontSize: '16px', fontWeight: '900', color: '#272B20', letterSpacing: '-1px' }}>SC</span>
+                  <InfinityLogo size={30} color="#8FBE3F" />
                 </div>
                 <div>
                   <div style={{ fontSize: '10px', color: '#8FBE3F', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>
