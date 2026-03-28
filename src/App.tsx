@@ -1,11 +1,8 @@
-import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 
-// Lazy load para reduzir bundle inicial
 const Home = lazy(() => import('@/pages/Home'));
 
-// Loading screen minimalista
 function LoadingScreen() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
@@ -17,22 +14,18 @@ function LoadingScreen() {
   );
 }
 
-// Apply V2 dark theme permanently at document level
-if (typeof document !== 'undefined') {
-  document.documentElement.classList.add('dark');
-}
-
 function App() {
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
+
   return (
-    <BrowserRouter>
+    <>
       <Suspense fallback={<LoadingScreen />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="*" element={<Home />} />
-        </Routes>
+        <Home />
       </Suspense>
       <Toaster position="top-center" />
-    </BrowserRouter>
+    </>
   );
 }
 

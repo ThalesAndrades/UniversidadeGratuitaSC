@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -10,24 +9,35 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: './', // Fundamental para funcionar em subdiretórios no Hostinger (ex: meusite.com.br/passaporte)
+  base: './',
   build: {
     target: 'es2015',
     minify: 'esbuild',
     outDir: 'dist',
     emptyOutDir: true,
+    assetsInlineLimit: 4096,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          'ui-vendor': ['lucide-react', 'sonner'],
-          'pdf-vendor': ['html2canvas', 'jspdf'],
+        manualChunks(id) {
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
+            return 'react-vendor';
+          }
+          if (id.includes('node_modules/@radix-ui/')) {
+            return 'radix-vendor';
+          }
+          if (id.includes('node_modules/lucide-react/') || id.includes('node_modules/sonner/')) {
+            return 'ui-vendor';
+          }
+          if (id.includes('node_modules/html2canvas/') || id.includes('node_modules/jspdf/')) {
+            return 'pdf-vendor';
+          }
+          if (id.includes('node_modules/zod/') || id.includes('node_modules/dompurify/') || id.includes('node_modules/@hookform/')) {
+            return 'validation-vendor';
+          }
         },
       },
     },
-    assetsInlineLimit: 4096, // 4kb
-    chunkSizeWarningLimit: 1000,
   },
   server: {
     port: 3000,

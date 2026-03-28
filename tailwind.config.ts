@@ -24,13 +24,6 @@ export default {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-        brand: {
-          blue: '#003366', // Governo SC Dark Blue
-          teal: '#0fd1c3', // Background teal from official banner
-          light: '#e0fcf9', // Lighter version for backgrounds
-          accent: '#e30613', // Red from the graduation cap/flag
-          green: '#4caf50', // Green from the graduation cap
-        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
@@ -82,6 +75,10 @@ export default {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
         'shimmer': {
           '100%': { transform: 'translateX(100%)' },
         },
@@ -94,7 +91,8 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'slide-in': 'slide-in 0.3s ease-out',
-        'fade-in': 'fade-in 0.5s ease-out',
+        'fade-in': 'fade-in 0.2s ease-in',
+        'float': 'float 3s ease-in-out infinite',
         'shimmer': 'shimmer 2s infinite',
         'marquee': 'marquee 30s linear infinite',
       },

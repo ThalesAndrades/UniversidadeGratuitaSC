@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, memo, useEffect } from 'react';
+import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
@@ -10,9 +10,9 @@ const PassportSplash = lazy(() => import('@/components/features/PassportSplash')
 const PassportForm = lazy(() => import('@/components/forms/PassportForm').then(m => ({ default: m.PassportForm })));
 
 const RATE_LIMIT_TIME = 10000;
-let lastSubmitTime = 0;
 
 function Home() {
+  const lastSubmitTimeRef = useRef(0);
   const [showPassportModal, setShowPassportModal] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
   const [passportData, setPassportData] = useState<PassportFormData | null>(null);
@@ -25,11 +25,11 @@ function Home() {
 
   const handleSubmit = async (data: PassportFormData) => {
     const now = Date.now();
-    if (now - lastSubmitTime < RATE_LIMIT_TIME) {
+    if (now - lastSubmitTimeRef.current < RATE_LIMIT_TIME) {
       toast.error('Aguarde alguns segundos antes de tentar novamente.');
       return;
     }
-    lastSubmitTime = now;
+    lastSubmitTimeRef.current = now;
 
     try {
       if (!data.photo.startsWith('data:image/') || data.firstName.includes('<script>')) {

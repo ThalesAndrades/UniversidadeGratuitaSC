@@ -6,8 +6,7 @@ import { PassportFormData } from '@/lib/validations';
 import { formatDate } from '@/lib/utils';
 import { UNIVERSITIES } from '@/constants/universities';
 import { Button } from '@/components/ui/button';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { toast } from 'sonner';
 
 interface PassportSplashProps {
   data: PassportFormData;
@@ -44,6 +43,11 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
     if (!passportRef.current) return;
     setIsDownloading(true);
     try {
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ]);
+
       const canvas = await html2canvas(passportRef.current, {
         scale: 3,
         backgroundColor: '#ffffff',
@@ -56,13 +60,12 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgData = canvas.toDataURL('image/png');
 
-      // Centralizar na página
       const pageHeight = 297;
       const yOffset = Math.max(0, (pageHeight - imgHeight) / 2);
       pdf.addImage(imgData, 'PNG', 0, yOffset, imgWidth, imgHeight);
       pdf.save(`passaporte-universitario-${data.firstName.toLowerCase()}-${data.lastName.toLowerCase()}.pdf`);
     } catch {
-      alert('Erro ao gerar PDF. Tente novamente.');
+      toast.error('Erro ao gerar PDF. Tente novamente.');
     } finally {
       setIsDownloading(false);
     }

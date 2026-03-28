@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useMemo, memo } from 'react';
+import { toast } from 'sonner';
 import { Camera, Upload, ChevronRight, ChevronLeft, CheckCircle2, Loader2, ImagePlus } from 'lucide-react';
 import { passportSchema, PassportFormData } from '@/lib/validations';
 import { formatPhone, generateYears, getDaysInMonth } from '@/lib/utils';
@@ -124,14 +125,14 @@ function PassportForm({ onSubmit }: PassportFormProps) {
       const parsed = passportSchema.parse(form);
       onSubmit(parsed);
     } catch {
-      onSubmit(form as unknown as PassportFormData);
+      toast.error('Dados inválidos. Verifique o formulário.');
     }
   }, [form, onSubmit]);
 
   const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 10 * 1024 * 1024) { alert('Arquivo muito grande. Máximo 10MB.'); return; }
+    if (file.size > 10 * 1024 * 1024) { toast.error('Arquivo muito grande. Máximo 10MB.'); return; }
 
     setIsUploading(true);
     try {
@@ -142,7 +143,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
         setCurrentStep(2);
       }, 400);
     } catch {
-      alert('Erro ao processar imagem. Tente outra foto.');
+      toast.error('Erro ao processar imagem. Tente outra foto.');
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
