@@ -152,14 +152,14 @@ function Home() {
                   ajuda a gente
                   <span
                     aria-hidden="true"
-                    style={{ display: 'inline-block', verticalAlign: 'super', width: '0.62em', height: '0.46em', marginLeft: '0.06em' }}
+                    style={{ display: 'inline-block', verticalAlign: 'super', width: '0.50em', height: '0.37em', marginLeft: '0.05em' }}
                   >
                     <svg viewBox="0 0 300 222" fill="currentColor" width="100%" height="100%">
-                      <rect x="0" y="0" width="300" height="28" rx="3" />
-                      <path d="M0 34 L300 34 L300 78 L28 78 Z" />
-                      <path d="M28 94 L264 94 L264 148 Q264 202 150 202 Q28 202 28 148 Z" />
-                      <rect x="246" y="0" width="12" height="98" />
-                      <path d="M230 78 L268 78 L268 192 L249 166 L230 192 Z" />
+                      <rect x="0" y="0" width="300" height="34" rx="4" />
+                      <path d="M0 42 L300 42 L300 74 L26 74 Z" />
+                      <path d="M54 90 L246 90 Q264 90 264 128 Q264 206 150 206 Q36 206 36 128 Q36 90 54 90 Z" />
+                      <rect x="242" y="0" width="12" height="96" />
+                      <path d="M224 74 L262 74 L262 192 L243 168 L224 192 Z" />
                     </svg>
                   </span>
                   <span className="text-primary">.</span>
