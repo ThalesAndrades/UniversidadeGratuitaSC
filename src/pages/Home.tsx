@@ -2,7 +2,7 @@ import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { InfinityLogo, OverlapSquares, BracketCorner } from '@/components/features/BrandElements';
+import { InfinityLogo, OverlapSquares, BracketCorner, GraduationCapLogo, AcafeConstellation } from '@/components/features/BrandElements';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -22,6 +22,15 @@ function Home() {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, []);
+
+  useEffect(() => {
+    if (!showPassportModal) return;
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowPassportModal(false);
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [showPassportModal]);
 
   const handleSubmit = async (data: PassportFormData) => {
     const now = Date.now();
@@ -75,10 +84,10 @@ function Home() {
                 <OverlapSquares size={18} colorA="#3E5715" colorB="#8FBE3F" />
               </div>
 
-              {/* Brand infinity logomark */}
+              {/* Graduation cap logomark */}
               <div className="mb-4 relative">
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                  <InfinityLogo size={44} color="#8FBE3F" />
+                  <GraduationCapLogo size={42} color="#8FBE3F" />
                 </div>
                 {/* glow pulse ring */}
                 <div className="absolute inset-0 rounded-2xl bg-primary/5 animate-ping" style={{ animationDuration: '3s' }} />
@@ -88,13 +97,25 @@ function Home() {
                 Universidade<br />
                 <span className="text-primary">Gratuita</span>
               </h2>
-              <p className="text-[10px] text-muted-foreground font-black tracking-[0.2em] uppercase mt-2">
+              {/* SC flag accent stripe under title */}
+              <div className="flex gap-[3px] mt-2 mb-1" aria-hidden="true">
+                <div className="h-[3px] w-8 rounded-full" style={{ backgroundColor: '#8FBE3F' }} />
+                <div className="h-[3px] w-5 rounded-full" style={{ backgroundColor: '#A40006' }} />
+                <div className="h-[3px] w-3 rounded-full" style={{ backgroundColor: '#F5E306' }} />
+              </div>
+              <p className="text-[10px] text-muted-foreground font-black tracking-[0.2em] uppercase">
                 Programa do Governo de SC
               </p>
             </div>
 
             {/* University logos strip */}
             <div className="border-b border-border/30 bg-background/20">
+              {/* ACAFE brand header */}
+              <div className="flex items-center justify-center gap-2 pt-3 pb-0">
+                <AcafeConstellation size={16} color="#8FBE3F" />
+                <span className="text-[11px] font-black tracking-[0.22em] text-primary lowercase">acafe</span>
+                <span className="text-[9px] font-semibold text-muted-foreground/70 uppercase tracking-wider">· Rede de Universidades Catarinenses</span>
+              </div>
               <Suspense fallback={<div className="h-12 animate-pulse bg-muted/20 rounded" />}>
                 <UniversityLogos />
               </Suspense>

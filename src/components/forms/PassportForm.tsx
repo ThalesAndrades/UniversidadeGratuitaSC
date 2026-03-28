@@ -32,8 +32,16 @@ function validateStep(step: number, data: FormState): Record<string, string> {
       errs.firstName = 'Nome deve ter pelo menos 2 caracteres';
     if (!data.lastName || data.lastName.trim().length < 2)
       errs.lastName = 'Sobrenome deve ter pelo menos 2 caracteres';
-    if (!data.birthDate || !/^\d{4}-\d{2}-\d{2}$/.test(data.birthDate))
+    if (!data.birthDate || !/^\d{4}-\d{2}-\d{2}$/.test(data.birthDate)) {
       errs.birthDate = 'Selecione dia, mês e ano';
+    } else {
+      const [y, m, d] = data.birthDate.split('-').map(Number);
+      const today = new Date();
+      const age = today.getFullYear() - y -
+        (today < new Date(today.getFullYear(), m - 1, d) ? 1 : 0);
+      if (age < 16) errs.birthDate = 'Você deve ter no mínimo 16 anos para se inscrever';
+      else if (age > 100) errs.birthDate = 'Data de nascimento inválida';
+    }
   }
 
   if (step === 3) {
@@ -347,11 +355,13 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   id="phone"
                   value={form.phone}
                   onChange={e => set('phone')(formatPhone(e.target.value))}
-                  placeholder="(00) 00000-0000"
+                  placeholder="(48) 99999-9999"
                   maxLength={15}
                   type="tel"
                   inputMode="numeric"
                   autoComplete="tel"
+                  aria-required="true"
+                  aria-describedby={err('phone') ? 'phone-error' : undefined}
                   className={`mt-1 h-12 text-base border-2 focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl font-semibold ${err('phone') ? 'border-destructive' : 'border-border'}`}
                 />
                 {err('phone') && <p className="text-destructive text-xs mt-1.5 font-semibold">{err('phone')}</p>}
