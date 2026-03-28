@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useMemo, memo, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Camera, Upload, ChevronRight, ChevronLeft, CheckCircle2, Loader2, ImagePlus } from 'lucide-react';
 import { passportSchema, PassportFormData } from '@/lib/validations';
@@ -36,13 +36,13 @@ function PassportForm({ onSubmit }: PassportFormProps) {
     setValue,
     watch,
     trigger,
+    control,
     formState: { errors, isValid },
   } = useForm<PassportFormData>({
     resolver: zodResolver(passportSchema),
     mode: 'onChange',
   });
 
-  const phoneValue = watch('phone') || '';
   const birthDateValue = watch('birthDate');
 
   // Sync date selects → form value
@@ -296,17 +296,25 @@ function PassportForm({ onSubmit }: PassportFormProps) {
             <div className="flex flex-col justify-center gap-5 p-6 min-h-full">
               <div>
                 <Label htmlFor="phone" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">WhatsApp *</Label>
-                <Input
-                  id="phone"
-                  {...register('phone')}
-                  value={phoneValue}
-                  onChange={(e) => setValue('phone', formatPhone(e.target.value), { shouldValidate: true })}
-                  placeholder="(00) 00000-0000"
-                  maxLength={15}
-                  type="tel"
-                  inputMode="numeric"
-                  autoComplete="tel"
-                  className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl font-semibold"
+                <Controller
+                  name="phone"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <Input
+                      id="phone"
+                      value={field.value}
+                      onChange={(e) => field.onChange(formatPhone(e.target.value))}
+                      onBlur={field.onBlur}
+                      ref={field.ref}
+                      placeholder="(00) 00000-0000"
+                      maxLength={15}
+                      type="tel"
+                      inputMode="numeric"
+                      autoComplete="tel"
+                      className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl font-semibold"
+                    />
+                  )}
                 />
                 {errors.phone && <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.phone.message}</p>}
               </div>
