@@ -132,7 +132,7 @@ function Home() {
                 <div className="flex items-center gap-1.5">
                   <AcafeConstellation size={14} color="#8FBE3F" />
                   <span className="text-[10px] font-black tracking-[0.28em] text-primary/90 lowercase">acafe</span>
-                  <span className="text-[9px] font-medium text-muted-foreground/50 uppercase tracking-wider hidden sm:inline">· 15 universidades</span>
+                  <span className="text-[9px] font-medium text-muted-foreground/50 uppercase tracking-wider hidden sm:inline">· 13 universidades</span>
                 </div>
                 <div className="flex-1 h-px bg-border/40" />
               </div>
@@ -143,14 +143,39 @@ function Home() {
 
             {/* Body */}
             <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
-              {/* Tagline */}
-              <div className="flex flex-col items-start font-sans tracking-tighter leading-[0.82] w-full">
-                <span className="text-3xl sm:text-4xl font-black text-foreground/80">A gente</span>
-                <div className="flex items-end gap-3">
-                  <span className="text-[2.6rem] sm:text-5xl font-black">
-                    ajuda a gente<span className="text-primary">.</span>
-                  </span>
-                  <OverlapSquares size={16} colorA="#3E5715" colorB="#8FBE3F" className="mb-1 opacity-70 shrink-0" />
+              {/* Tagline — "ajuda a gente." com chapéu acima do último "e" */}
+              <div className="flex flex-col items-start w-full" style={{ lineHeight: 0.88, letterSpacing: '-0.03em' }}>
+                <span className="text-[2.15rem] sm:text-[2.6rem] font-black text-foreground/90">
+                  A gente
+                </span>
+                {/* mt cria espaço para o chapéu flutuar acima do "e" */}
+                <div className="relative mt-7 sm:mt-8">
+                  <p className="text-[2.35rem] sm:text-[2.75rem] font-black leading-none m-0 p-0">
+                    <span>ajuda a gent</span>
+                    <span className="relative inline-block">
+                      {/* Chapéu de formatura flutuando acima do "e" */}
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
+                        style={{ bottom: '100%', marginBottom: '0.06em', width: '1.55em', height: '1.05em', display: 'inline-flex' }}
+                      >
+                        <svg viewBox="0 0 46 30" fill="currentColor" width="100%" height="100%">
+                          {/* Tabuleiro — superfície superior */}
+                          <rect x="1" y="0" width="44" height="8" rx="2" />
+                          {/* Face frontal (profundidade 3-D) */}
+                          <rect x="1" y="5" width="44" height="9" />
+                          {/* Cúpula do capelo */}
+                          <path d="M7 16 L39 16 L39 24 Q39 30 23 30 Q7 30 7 24 Z" />
+                          {/* Cordão da borla */}
+                          <rect x="35" y="0" width="4" height="18" />
+                          {/* Borla/marcador — V-notch */}
+                          <path d="M31 16 L43 16 L43 28 L37 23 L31 28 Z" />
+                        </svg>
+                      </span>
+                      <span>e</span>
+                    </span>
+                    <span className="text-primary">.</span>
+                  </p>
                 </div>
               </div>
 
@@ -181,16 +206,24 @@ function Home() {
               {/* Trio de logos — grid com divisórias */}
               <div className="grid grid-cols-3 divide-x divide-border/30">
 
-                {/* ACAFE */}
-                <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
+                {/* ACAFE — link para Instagram */}
+                <a
+                  href="https://www.instagram.com/acafeoficial"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center gap-1.5 py-3 px-2 group hover:bg-primary/5 transition-colors duration-200 active:bg-primary/10"
+                  aria-label="ACAFE no Instagram"
+                >
                   <AcafeConstellation size={22} color="#8FBE3F" />
                   <div className="text-center leading-none">
                     <span className="text-[10px] font-black text-primary lowercase tracking-[0.14em] block">acafe</span>
-                    <span className="text-[9px] text-muted-foreground/50 block mt-[2px] hidden sm:block">Rede de Universidades</span>
+                    <span className="text-[8px] text-muted-foreground/45 block mt-[2px] group-hover:text-primary/60 transition-colors">
+                      @acafeoficial
+                    </span>
                   </div>
-                </div>
+                </a>
 
-                {/* SED */}
+                {/* SED — Brasão oficial SC */}
                 <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
                   <ScStateSeal size={22} />
                   <div className="text-center leading-none">
@@ -199,15 +232,25 @@ function Home() {
                   </div>
                 </div>
 
-                {/* Universidade Gratuita */}
-                <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
-                  <GraduationCapLogo size={22} color="#8FBE3F" />
-                  <div className="text-center leading-none">
-                    <span className="text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.15] block">
-                      Universidade<br />Gratuita
+                {/* Universidade Gratuita — logo oficial + link Instagram */}
+                <a
+                  href="https://www.instagram.com/universidadegratuita.oficial"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center gap-1.5 py-3 px-2 group hover:bg-primary/5 transition-colors duration-200 active:bg-primary/10"
+                  aria-label="Universidade Gratuita no Instagram"
+                >
+                  {/* Logo oficial do programa em versão compacta */}
+                  <GraduationCapBrand width={34} color="#8FBE3F" />
+                  <div className="text-center leading-none mt-0.5">
+                    <span className="text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.2] block">
+                      Univ.<br />Gratuita
+                    </span>
+                    <span className="text-[8px] text-muted-foreground/45 block mt-[2px] group-hover:text-primary/60 transition-colors hidden sm:block">
+                      @univ.gratuita
                     </span>
                   </div>
-                </div>
+                </a>
 
               </div>
 

@@ -1,6 +1,6 @@
 import { memo, type CSSProperties } from 'react';
 
-// ── Marca Universidade Gratuita (chapéu frontal — referência oficial) ────────
+// ── Marca Universidade Gratuita (chapéu oficial — referência do programa) ─────
 interface GraduationCapBrandProps {
   width?: number;
   color?: string;
@@ -14,38 +14,38 @@ export const GraduationCapBrand = memo(function GraduationCapBrand({
   className = '',
   style,
 }: GraduationCapBrandProps) {
-  const height = Math.round(width * 0.66);
+  const height = Math.round(width * 0.7);
   return (
     <svg
       width={width}
       height={height}
-      viewBox="0 0 280 185"
+      viewBox="0 0 280 196"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       style={style}
       aria-hidden="true"
     >
-      {/* ── Borda superior do tabuleiro (visão levemente superior) ── */}
-      <rect x="1" y="0" width="278" height="33" rx="3" fill={color} />
+      {/* Superfície superior do tabuleiro — largura total */}
+      <rect x="0" y="0" width="280" height="30" rx="3" fill={color} />
 
-      {/* ── Face frontal do tabuleiro (sobrepõe, cria profundidade) ── */}
-      <rect x="1" y="25" width="278" height="34" fill={color} />
+      {/* Face frontal do tabuleiro (sobrepõe, cria profundidade 3-D) */}
+      <rect x="0" y="22" width="280" height="40" fill={color} />
 
-      {/* Fundo visível como gap em y=59..72 → efeito 3-D natural */}
+      {/* Gap natural y=62..76 — fundo aparece, dá profundidade */}
 
-      {/* ── Corpo do capelo (mais estreito, base arredondada) ── */}
+      {/* Cúpula do capelo — 74% da largura do tabuleiro, centralizado */}
       <path
-        d="M 50 72 L 222 72 L 222 136 Q 222 162 136 162 Q 50 162 50 136 Z"
+        d="M36 76 L244 76 L244 142 Q244 172 140 174 Q36 172 36 142 Z"
         fill={color}
       />
 
-      {/* ── Cordão da borla (une tabuleiro ao pendão sem quebra) ── */}
-      <rect x="213" y="1" width="16" height="90" fill={color} />
+      {/* Cordão da borla — da borda do tabuleiro até a fita */}
+      <rect x="218" y="0" width="14" height="96" fill={color} />
 
-      {/* ── Pendão / borla (fita com ponta em V — estilo marcador) ── */}
+      {/* Borla/fita estilo marcador — V-notch na base */}
       <path
-        d="M 200 72 L 244 72 L 244 122 L 222 108 L 200 122 Z"
+        d="M204 76 L248 76 L248 138 L226 118 L204 138 Z"
         fill={color}
       />
     </svg>
@@ -74,11 +74,8 @@ export const GraduationCapLogo = memo(function GraduationCapLogo({
       className={className}
       aria-hidden="true"
     >
-      {/* Tabuleiro (diamond) */}
       <polygon points="40,4 76,20 40,36 4,20" fill={color} />
-      {/* Destaque central no tabuleiro */}
       <polygon points="40,10 68,22 40,34 12,22" fill={color} fillOpacity="0.25" />
-      {/* Corpo do capelo */}
       <path
         d="M14 24 L14 44 Q14 54 40 54 Q66 54 66 44 L66 24"
         fill={color}
@@ -88,9 +85,7 @@ export const GraduationCapLogo = memo(function GraduationCapLogo({
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {/* Cordão do borla */}
       <path d="M76 20 L76 38" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
-      {/* Borla */}
       <circle cx="76" cy="42" r="4.5" fill={color} />
       <line x1="74" y1="46" x2="71" y2="57" stroke={color} strokeWidth="2" strokeLinecap="round" />
       <line x1="76" y1="46.5" x2="76" y2="59" stroke={color} strokeWidth="2" strokeLinecap="round" />
@@ -111,7 +106,6 @@ export const AcafeConstellation = memo(function AcafeConstellation({
   color = '#8FBE3F',
   className = '',
 }: AcafeConstellationProps) {
-  // Hexagonal network — 1 nó central + 6 externos (universidades da rede)
   const cx = 30, cy = 30, r = 22;
   const outerNodes = Array.from({ length: 6 }, (_, i) => {
     const angle = (i * 60 - 90) * (Math.PI / 180);
@@ -127,12 +121,10 @@ export const AcafeConstellation = memo(function AcafeConstellation({
       className={className}
       aria-hidden="true"
     >
-      {/* Linhas do centro para os nós externos */}
       {outerNodes.map((n, i) => (
         <line key={`c${i}`} x1={cx} y1={cy} x2={n.x} y2={n.y}
           stroke={color} strokeWidth="1.6" strokeLinecap="round" opacity="0.7" />
       ))}
-      {/* Linhas entre nós externos adjacentes */}
       {outerNodes.map((n, i) => {
         const next = outerNodes[(i + 1) % 6];
         return (
@@ -140,17 +132,16 @@ export const AcafeConstellation = memo(function AcafeConstellation({
             stroke={color} strokeWidth="1" strokeLinecap="round" opacity="0.35" />
         );
       })}
-      {/* Nós externos */}
       {outerNodes.map((n, i) => (
         <circle key={`n${i}`} cx={n.x} cy={n.y} r="3.8" fill={color} />
       ))}
-      {/* Nó central (maior) */}
       <circle cx={cx} cy={cy} r="5.5" fill={color} />
     </svg>
   );
 });
 
-// ── Escudo SED / Bandeira de Santa Catarina ─────────────────────────────────
+// ── Escudo do Estado de Santa Catarina (Brasão / SED) ──────────────────────
+// Fiel ao brasão oficial: listras vermelhas + fundo verde + estrela dourada
 interface ScStateSealProps {
   size?: number;
   className?: string;
@@ -161,60 +152,47 @@ export const ScStateSeal = memo(function ScStateSeal({
   className = '',
 }: ScStateSealProps) {
   const w = size;
-  const h = Math.round(size * 1.18);
+  const h = Math.round(size * 1.22);
   return (
     <svg
       width={w}
       height={h}
-      viewBox="0 0 40 48"
+      viewBox="0 0 44 54"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-hidden="true"
     >
       <defs>
-        <clipPath id="sc-shield-clip">
-          {/* Forma de escudo heráldico */}
-          <path d="M2 2 L38 2 L38 28 Q38 44 20 47 Q2 44 2 28 Z" />
+        <clipPath id="sc-shield">
+          <path d="M2 2 L42 2 L42 32 Q42 50 22 54 Q2 50 2 32 Z" />
         </clipPath>
       </defs>
 
-      {/* Contorno do escudo */}
-      <path
-        d="M2 2 L38 2 L38 28 Q38 44 20 47 Q2 44 2 28 Z"
-        fill="white"
-        stroke="#A40006"
-        strokeWidth="1.8"
-      />
-
       {/* Conteúdo recortado ao escudo */}
-      <g clipPath="url(#sc-shield-clip)">
-        {/* Fundo branco base */}
-        <rect x="0" y="0" width="40" height="48" fill="white" />
-        {/* Listras vermelhas alternadas (topo) */}
-        <rect x="0" y="2"  width="40" height="5"  fill="#A40006" />
-        <rect x="0" y="12" width="40" height="5"  fill="#A40006" />
-        <rect x="0" y="22" width="40" height="2"  fill="#A40006" />
-        {/* Seção verde (base do escudo) */}
-        <rect x="0" y="24" width="40" height="26" fill="#006B3C" />
-        {/* Estrela dourada centrada */}
-        <text
-          x="20"
-          y="41"
-          textAnchor="middle"
+      <g clipPath="url(#sc-shield)">
+        {/* Base branca */}
+        <rect x="0" y="0" width="44" height="54" fill="white" />
+        {/* Listras vermelhas horizontais — 4 bandas (porção superior) */}
+        <rect x="0" y="2"  width="44" height="6"  fill="#A40006" />
+        <rect x="0" y="11" width="44" height="5"  fill="#A40006" />
+        <rect x="0" y="20" width="44" height="4"  fill="#A40006" />
+        <rect x="0" y="28" width="44" height="3"  fill="#A40006" />
+        {/* Seção verde (porção inferior) */}
+        <rect x="0" y="30" width="44" height="26" fill="#006B3C" />
+        {/* Estrela de 5 pontas dourada */}
+        <polygon
+          points="22,34 23.9,40.2 30.4,40.2 25.1,44.4 27.0,50.6 22,46.6 17.0,50.6 18.9,44.4 13.6,40.2 20.1,40.2"
           fill="#F5E306"
-          fontSize="15"
-          fontWeight="900"
-          fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-        >★</text>
+        />
       </g>
 
-      {/* Borda do escudo por cima (para cobrir bordas do clip) */}
+      {/* Borda dourada do escudo */}
       <path
-        d="M2 2 L38 2 L38 28 Q38 44 20 47 Q2 44 2 28 Z"
+        d="M2 2 L42 2 L42 32 Q42 50 22 54 Q2 50 2 32 Z"
         fill="none"
-        stroke="#A40006"
-        strokeWidth="1.8"
+        stroke="#C8A000"
+        strokeWidth="2"
       />
     </svg>
   );
@@ -232,7 +210,6 @@ export const InfinityLogo = memo(function InfinityLogo({
   color = '#8FBE3F',
   className = '',
 }: InfinityLogoProps) {
-  // viewBox 60×110 — dois laços simétricos conectados no centro
   return (
     <svg
       width={size * (60 / 110)}
@@ -285,20 +262,8 @@ export const OverlapSquares = memo(function OverlapSquares({
       style={{ width: sq + offset, height: sq + offset }}
       aria-hidden="true"
     >
-      <div
-        className="absolute top-0 left-0 rounded-sm"
-        style={{ width: sq, height: sq, backgroundColor: colorA }}
-      />
-      <div
-        className="absolute rounded-sm"
-        style={{
-          width: sq,
-          height: sq,
-          top: offset,
-          left: offset,
-          backgroundColor: colorB,
-        }}
-      />
+      <div className="absolute top-0 left-0 rounded-sm" style={{ width: sq, height: sq, backgroundColor: colorA }} />
+      <div className="absolute rounded-sm" style={{ width: sq, height: sq, top: offset, left: offset, backgroundColor: colorB }} />
     </div>
   );
 });
@@ -317,42 +282,15 @@ export const BracketCorner = memo(function BracketCorner({
   className = '',
   rotate = 0,
 }: BracketCornerProps) {
-  const t = Math.round(size * 0.22); // espessura do traço
+  const t = Math.round(size * 0.22);
   return (
     <div
       className={`flex-shrink-0 ${className}`}
-      style={{
-        width: size,
-        height: size,
-        position: 'relative',
-        transform: `rotate(${rotate}deg)`,
-      }}
+      style={{ width: size, height: size, position: 'relative', transform: `rotate(${rotate}deg)` }}
       aria-hidden="true"
     >
-      {/* traço horizontal superior */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: t,
-          backgroundColor: color,
-          borderRadius: 2,
-        }}
-      />
-      {/* traço vertical esquerdo */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: t,
-          height: '100%',
-          backgroundColor: color,
-          borderRadius: 2,
-        }}
-      />
+      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: t, backgroundColor: color, borderRadius: 2 }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, width: t, height: '100%', backgroundColor: color, borderRadius: 2 }} />
     </div>
   );
 });
