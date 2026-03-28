@@ -50,6 +50,11 @@
     --brand-light: 90 3% 87%;
     --brand-red: 358 100% 32%;
     --brand-yellow: 56 95% 49%;
+
+    /* SC flag colors (hex for direct use in gradients / box-shadow) */
+    --sc-green: #8FBE3F;
+    --sc-red: #A40006;
+    --sc-yellow: #F5E306;
   }
 }
 
@@ -98,6 +103,16 @@
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
     }
   }
+}
+
+/* CTA idle pulse — gentle glow breathing animation */
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 0 8px 28px rgba(143,190,63,0.42), inset 0 1px 0 rgba(255,255,255,0.15); }
+  50%       { box-shadow: 0 10px 38px rgba(143,190,63,0.65), inset 0 1px 0 rgba(255,255,255,0.20); }
+}
+
+.cta-pulse {
+  animation: cta-pulse 2.8s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
