@@ -1,6 +1,58 @@
-import { memo } from 'react';
+import { memo, type CSSProperties } from 'react';
 
-// ── Chapéu de formatura (Universidade Gratuita) ─────────────────────────────
+// ── Marca Universidade Gratuita (chapéu frontal — referência oficial) ────────
+interface GraduationCapBrandProps {
+  width?: number;
+  color?: string;
+  className?: string;
+  style?: CSSProperties;
+}
+
+export const GraduationCapBrand = memo(function GraduationCapBrand({
+  width = 180,
+  color = '#ffffff',
+  className = '',
+  style,
+}: GraduationCapBrandProps) {
+  const height = Math.round(width * 0.66);
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 280 185"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      {/* ── Borda superior do tabuleiro (visão levemente superior) ── */}
+      <rect x="1" y="0" width="278" height="33" rx="3" fill={color} />
+
+      {/* ── Face frontal do tabuleiro (sobrepõe, cria profundidade) ── */}
+      <rect x="1" y="25" width="278" height="34" fill={color} />
+
+      {/* Fundo visível como gap em y=59..72 → efeito 3-D natural */}
+
+      {/* ── Corpo do capelo (mais estreito, base arredondada) ── */}
+      <path
+        d="M 50 72 L 222 72 L 222 136 Q 222 162 136 162 Q 50 162 50 136 Z"
+        fill={color}
+      />
+
+      {/* ── Cordão da borla (une tabuleiro ao pendão sem quebra) ── */}
+      <rect x="213" y="1" width="16" height="90" fill={color} />
+
+      {/* ── Pendão / borla (fita com ponta em V — estilo marcador) ── */}
+      <path
+        d="M 200 72 L 244 72 L 244 122 L 222 108 L 200 122 Z"
+        fill={color}
+      />
+    </svg>
+  );
+});
+
+// ── Chapéu de formatura (ícone compacto) ────────────────────────────────────
 interface GraduationCapLogoProps {
   size?: number;
   color?: string;

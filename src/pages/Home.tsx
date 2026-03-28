@@ -2,7 +2,7 @@ import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { InfinityLogo, OverlapSquares, BracketCorner, GraduationCapLogo, AcafeConstellation, ScStateSeal } from '@/components/features/BrandElements';
+import { InfinityLogo, OverlapSquares, BracketCorner, GraduationCapLogo, GraduationCapBrand, AcafeConstellation, ScStateSeal } from '@/components/features/BrandElements';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -95,26 +95,27 @@ function Home() {
                 <OverlapSquares size={18} colorA="#3E5715" colorB="#8FBE3F" />
               </div>
 
-              {/* Graduation cap logomark */}
-              <div className="mb-4 relative">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                  <GraduationCapLogo size={42} color="#8FBE3F" />
-                </div>
-                {/* glow pulse ring */}
-                <div className="absolute inset-0 rounded-2xl bg-primary/5 animate-ping" style={{ animationDuration: '3s' }} />
+              {/* Marca Universidade Gratuita */}
+              <div className="mb-5 w-full flex justify-center">
+                <GraduationCapBrand
+                  width={148}
+                  color="#ffffff"
+                  className="opacity-95"
+                  style={{ filter: 'drop-shadow(0 0 18px rgba(143,190,63,0.38))' }}
+                />
               </div>
 
               <h2 className="text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tight leading-none">
                 Universidade<br />
                 <span className="text-primary">Gratuita</span>
               </h2>
-              {/* SC flag accent stripe under title */}
+              {/* SC flag accent stripe */}
               <div className="flex gap-[3px] mt-2 mb-1" aria-hidden="true">
                 <div className="h-[3px] w-8 rounded-full" style={{ backgroundColor: '#8FBE3F' }} />
                 <div className="h-[3px] w-5 rounded-full" style={{ backgroundColor: '#A40006' }} />
                 <div className="h-[3px] w-3 rounded-full" style={{ backgroundColor: '#F5E306' }} />
               </div>
-              <p className="text-[10px] text-muted-foreground/70 font-bold tracking-[0.22em] uppercase">
+              <p className="text-[10px] text-muted-foreground/60 font-bold tracking-[0.22em] uppercase">
                 Programa do Governo de SC
               </p>
             </div>
