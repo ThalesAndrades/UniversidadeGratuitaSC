@@ -1,5 +1,5 @@
-import { useRef, useCallback, memo } from 'react';
-import { CheckCircle2, Download, X } from 'lucide-react';
+import { useRef, useCallback, useMemo, useState, memo } from 'react';
+import { Download, X, CheckCircle2, Share2 } from 'lucide-react';
 import QRCode from '@/components/features/QRCode';
 import { PassportFormData } from '@/lib/validations';
 import { formatDate } from '@/lib/utils';
@@ -13,158 +13,297 @@ interface PassportSplashProps {
   onClose: () => void;
 }
 
+// Gera número de passaporte determinístico baseado nos dados do usuário
+function generatePassportNumber(data: PassportFormData): string {
+  const year = new Date().getFullYear();
+  const seed = (data.firstName + data.lastName + data.email + data.birthDate)
+    .split('')
+    .reduce((acc, c, i) => acc + c.charCodeAt(0) * (i + 1), 0);
+  const num = String(seed % 1000000).padStart(6, '0');
+  return `SC${year}${num}`;
+}
+
 function PassportSplash({ data, onClose }: PassportSplashProps) {
   const passportRef = useRef<HTMLDivElement>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const university = UNIVERSITIES.find((u) => u.id === data.university);
+  const passportNumber = useMemo(() => generatePassportNumber(data), [data]);
+  const issueDate = useMemo(() => {
+    const now = new Date();
+    return `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+  }, []);
+
+  const qrValue = useMemo(
+    () => `https://universidadegratuita.sc.gov.br/validar?id=${passportNumber}&nome=${encodeURIComponent(data.firstName + ' ' + data.lastName)}`,
+    [passportNumber, data.firstName, data.lastName]
+  );
 
   const handleDownloadPDF = useCallback(async () => {
     if (!passportRef.current) return;
-
+    setIsDownloading(true);
     try {
       const canvas = await html2canvas(passportRef.current, {
-        scale: 2,
+        scale: 3,
         backgroundColor: '#ffffff',
+        useCORS: true,
+        logging: false,
       });
 
       const imgWidth = 210;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgData = canvas.toDataURL('image/png');
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save(`passaporte-${data.firstName}-${data.lastName}.pdf`);
-    } catch (error) {
-      console.error('Erro ao gerar PDF:', error);
+
+      // Centralizar na página
+      const pageHeight = 297;
+      const yOffset = Math.max(0, (pageHeight - imgHeight) / 2);
+      pdf.addImage(imgData, 'PNG', 0, yOffset, imgWidth, imgHeight);
+      pdf.save(`passaporte-universitario-${data.firstName.toLowerCase()}-${data.lastName.toLowerCase()}.pdf`);
+    } catch {
       alert('Erro ao gerar PDF. Tente novamente.');
+    } finally {
+      setIsDownloading(false);
     }
   }, [data.firstName, data.lastName]);
 
+  const handleShare = useCallback(async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Meu Passaporte Universitário',
+          text: `${data.firstName} ${data.lastName} — ${university?.name} | Universidade Gratuita SC`,
+        });
+      } catch {
+        // Usuário cancelou
+      }
+    }
+  }, [data.firstName, data.lastName, university]);
+
   return (
-    <div className="fixed inset-0 bg-background/90 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-in">
-      <div className="bg-background rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-slide-in border border-border">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+      <div className="bg-[#0f1a14] rounded-2xl max-w-lg w-full max-h-[95vh] overflow-hidden shadow-2xl animate-slide-in border border-[#84e650]/20 flex flex-col">
+
         {/* Success Header */}
-        <div className="bg-card p-6 sm:p-8 text-foreground text-center border-b border-border">
-          <CheckCircle2 className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 animate-bounce stroke-[3px] text-primary" />
-          <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight mb-1 sm:mb-2">Passaporte Criado!</h2>
-          <p className="font-bold tracking-wide opacity-90 text-muted-foreground text-sm sm:text-base">Seu passaporte virtual foi gerado com sucesso</p>
+        <div className="relative p-5 sm:p-6 text-center flex-shrink-0">
+          {/* Glow ring */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+            <div className="w-48 h-48 rounded-full bg-[#84e650]/5 animate-ping" style={{ animationDuration: '2s' }} />
+          </div>
+          <div className="relative">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#84e650]/15 mb-3 ring-2 ring-[#84e650]/40">
+              <CheckCircle2 className="w-8 h-8 text-[#84e650]" strokeWidth={2.5} />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+              Passaporte Gerado!
+            </h2>
+            <p className="text-sm text-white/50 mt-1">Seu documento está pronto para download</p>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Fechar"
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white transition-colors touch-manipulation"
+          >
+            <X className="w-4 h-4" strokeWidth={2.5} />
+          </button>
         </div>
 
-        {/* Passport Card */}
-        <div className="p-8 bg-muted overflow-y-auto max-h-[60vh]">
-          <div ref={passportRef} className="border-4 border-foreground rounded-2xl overflow-hidden bg-card shadow-2xl relative max-w-full">
-            
-            {/* Watermark */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-              <div className="w-64 h-64 bg-brand-green" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }}></div>
-            </div>
-
-            {/* Card Header (Official Program Logo Style) */}
-            <div className="bg-card p-6 text-foreground border-b-8 border-primary relative z-10 flex flex-col items-center">
-              <div className="flex flex-col items-center relative w-full max-w-[280px] mx-auto">
-                 {/* Stylized Graduation Cap */}
-                 <div className="relative w-20 h-16 flex flex-col items-center mb-1">
-                    <div className="w-16 h-3 bg-primary rounded-sm absolute top-0 z-0"></div>
-                    <div className="w-20 h-10 bg-primary absolute top-2 z-10" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }}></div>
-                    <div className="w-12 h-5 bg-primary absolute top-8 z-0 rounded-b-xl border-b-4 border-black/20"></div>
-                    <div className="w-2 h-7 bg-primary absolute right-2 top-5 z-20" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)' }}></div>
-                 </div>
-                 
-                 <h3 className="text-xl sm:text-2xl font-black text-foreground uppercase tracking-tight leading-none mt-1 text-center">
-                   Universidade<br/>
-                   <span className="text-2xl sm:text-3xl">Gratuita</span>
-                 </h3>
+        {/* Scrollable passport area */}
+        <div className="overflow-y-auto flex-1 px-3 sm:px-4 pb-3">
+          {/* ── PASSPORT DOCUMENT (capturado pelo html2canvas) ── */}
+          <div
+            ref={passportRef}
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              fontFamily: "'Arial', 'Helvetica', sans-serif",
+            }}
+          >
+            {/* Document Header */}
+            <div style={{ backgroundColor: '#0d3320', padding: '20px 24px 16px', position: 'relative' }}>
+              {/* decorative top stripe */}
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #84e650 0%, #5cb832 50%, #84e650 100%)' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                {/* SC Shield */}
+                <div style={{
+                  width: '44px', height: '44px', borderRadius: '50%',
+                  backgroundColor: '#84e650', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <span style={{ fontSize: '16px', fontWeight: '900', color: '#0d3320', letterSpacing: '-1px' }}>SC</span>
+                </div>
+                <div>
+                  <div style={{ fontSize: '10px', color: '#84e650', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                    Governo de Santa Catarina
+                  </div>
+                  <div style={{ fontSize: '18px', fontWeight: '900', color: '#ffffff', letterSpacing: '1px', textTransform: 'uppercase', lineHeight: '1.1' }}>
+                    Universidade Gratuita
+                  </div>
+                  <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', textTransform: 'uppercase', marginTop: '2px' }}>
+                    Passaporte Estudantil — ACAFE
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Card Body */}
-            <div className="p-8 relative z-10">
-              <div className="flex flex-col sm:flex-row gap-8 items-start w-full">
+            {/* Passport Number Banner */}
+            <div style={{ backgroundColor: '#84e650', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '9px', fontWeight: '800', color: '#0d3320', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                Nº {passportNumber}
+              </span>
+              <span style={{ fontSize: '9px', fontWeight: '700', color: '#0d3320', letterSpacing: '1px' }}>
+                Emissão: {issueDate}
+              </span>
+            </div>
+
+            {/* Main Content */}
+            <div style={{ backgroundColor: '#f8faf8', padding: '20px 24px' }}>
+              <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
                 {/* Photo */}
-                <div className="flex-shrink-0 relative mx-auto sm:mx-0">
-                  <div className="absolute -inset-1 bg-primary rounded-xl transform rotate-3"></div>
-                  <img
-                    src={data.photo}
-                    alt="Foto do estudante"
-                    className="w-36 h-36 rounded-xl object-cover border-4 border-background shadow-md bg-background relative z-10"
+                <div style={{ flexShrink: 0 }}>
+                  <div style={{
+                    width: '96px', height: '116px',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    border: '3px solid #84e650',
+                    backgroundColor: '#e5e7e5',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  }}>
+                    <img
+                      src={data.photo}
+                      alt="Foto do estudante"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      crossOrigin="anonymous"
+                    />
+                  </div>
+                  {/* Photo label */}
+                  <div style={{ marginTop: '4px', textAlign: 'center', fontSize: '7px', color: '#666', letterSpacing: '1px', textTransform: 'uppercase', fontWeight: '700' }}>
+                    Titular
+                  </div>
+                </div>
+
+                {/* Info Fields */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ marginBottom: '10px' }}>
+                    <div style={{ fontSize: '8px', color: '#84e650', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', backgroundColor: '#0d3320', display: 'inline-block', padding: '1px 6px', borderRadius: '3px', marginBottom: '3px' }}>
+                      Nome do Estudante
+                    </div>
+                    <div style={{ fontSize: '17px', fontWeight: '900', color: '#0d3320', textTransform: 'uppercase', letterSpacing: '0.5px', lineHeight: '1.1' }}>
+                      {data.firstName} {data.lastName}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
+                    <div style={{ backgroundColor: '#ffffff', padding: '7px 10px', borderRadius: '6px', borderLeft: '3px solid #84e650' }}>
+                      <div style={{ fontSize: '7px', color: '#888', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '2px' }}>Nascimento</div>
+                      <div style={{ fontSize: '12px', fontWeight: '800', color: '#0d3320' }}>{formatDate(data.birthDate)}</div>
+                    </div>
+                    <div style={{ backgroundColor: '#ffffff', padding: '7px 10px', borderRadius: '6px', borderLeft: '3px solid #84e650' }}>
+                      <div style={{ fontSize: '7px', color: '#888', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '2px' }}>Telefone</div>
+                      <div style={{ fontSize: '12px', fontWeight: '800', color: '#0d3320' }}>{data.phone}</div>
+                    </div>
+                  </div>
+
+                  <div style={{ backgroundColor: '#ffffff', padding: '7px 10px', borderRadius: '6px', borderLeft: '3px solid #0d3320' }}>
+                    <div style={{ fontSize: '7px', color: '#888', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '2px' }}>E-mail</div>
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#333', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{data.email}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div style={{ margin: '16px 0', borderTop: '2px dashed #d4e8d4' }} />
+
+              {/* University & Course */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
+                <div style={{ backgroundColor: '#0d3320', padding: '10px 12px', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '7px', color: '#84e650', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Instituição</div>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#ffffff', lineHeight: '1.3', textTransform: 'uppercase' }}>{university?.name.split(' - ')[0] || university?.name}</div>
+                </div>
+                <div style={{ backgroundColor: '#0d3320', padding: '10px 12px', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '7px', color: '#84e650', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Curso</div>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#ffffff', lineHeight: '1.3', textTransform: 'uppercase' }}>{data.course}</div>
+                </div>
+              </div>
+
+              {/* QR Code Section */}
+              <div style={{ backgroundColor: '#ffffff', borderRadius: '10px', border: '2px solid #e0ece0', padding: '16px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{ flexShrink: 0, padding: '8px', backgroundColor: '#fff', borderRadius: '8px', border: '2px solid #84e650', boxShadow: '0 2px 8px rgba(132,230,80,0.2)' }}>
+                  <QRCode
+                    value={qrValue}
+                    size={100}
+                    bgColor="#ffffff"
+                    fgColor="#0d3320"
+                    level="M"
                   />
                 </div>
-
-                {/* Info */}
-                <div className="flex-1 space-y-4 w-full min-w-0">
-                  <div className="bg-muted/50 p-3 rounded-lg border-l-4 border-primary flex justify-between items-start gap-2">
-                    <div className="min-w-0">
-                      <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-1">Nome Completo</p>
-                      <p className="text-xl font-black text-foreground uppercase tracking-tight break-words">
-                        {data.firstName} {data.lastName}
-                      </p>
-                    </div>
-                    {/* QR Code Validation */}
-                    <div className="flex-shrink-0 bg-white p-1 rounded-md shadow-sm border border-border">
-                      <QRCode 
-                        value={`https://teste.sbs/validate?id=${btoa(data.email).substring(0, 10).toUpperCase()}`}
-                        size={64}
-                        bgColor="#ffffff"
-                        fgColor="#000000"
-                      />
-                    </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '8px', color: '#84e650', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px', backgroundColor: '#0d3320', display: 'inline-block', padding: '2px 6px', borderRadius: '3px' }}>
+                    Código de Validação
                   </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="bg-muted/50 p-3 rounded-lg border-l-4 border-border">
-                      <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-1">Data Nasc.</p>
-                      <p className="text-sm font-black text-foreground">{formatDate(data.birthDate)}</p>
-                    </div>
-                    <div className="bg-muted/50 p-3 rounded-lg border-l-4 border-border">
-                      <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-1">Telefone</p>
-                      <p className="text-sm font-black text-foreground">{data.phone}</p>
-                    </div>
+                  <div style={{ fontSize: '13px', fontWeight: '900', color: '#0d3320', letterSpacing: '1px', marginBottom: '4px', fontFamily: 'monospace' }}>
+                    {passportNumber}
                   </div>
-
-                  <div className="bg-muted/50 p-3 rounded-lg border-l-4 border-border">
-                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-1">Email</p>
-                    <p className="text-sm font-black text-foreground truncate">{data.email}</p>
+                  <div style={{ fontSize: '9px', color: '#666', lineHeight: '1.4' }}>
+                    Aponte a câmera do celular para validar este passaporte online
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* University and Course */}
-              <div className="mt-8 pt-6 border-t-2 border-border space-y-4">
-                <div className="bg-brand-teal/10 p-4 rounded-xl border border-brand-teal/30 overflow-hidden">
-                  <p className="text-[10px] text-brand-teal font-black uppercase tracking-widest mb-1">Instituição de Ensino</p>
-                  <p className="text-lg font-black text-foreground uppercase tracking-tight break-words">{university?.name}</p>
-                </div>
-                <div className="bg-brand-green/10 p-4 rounded-xl border border-brand-green/30 overflow-hidden">
-                  <p className="text-[10px] text-brand-green font-black uppercase tracking-widest mb-1">Curso Escolhido</p>
-                  <p className="text-lg font-black text-foreground uppercase tracking-tight break-words">{data.course}</p>
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="mt-8 flex flex-col items-center bg-muted/30 py-4 rounded-lg border border-border">
-                <p className="text-xs text-foreground font-black uppercase tracking-widest mb-1">
-                  Governo de Santa Catarina
-                </p>
-                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
-                  Documento Estudantil
-                </p>
-              </div>
+            {/* Document Footer */}
+            <div style={{ backgroundColor: '#0d3320', padding: '10px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                Documento Estudantil Oficial · ACAFE
+              </span>
+              <span style={{ fontSize: '8px', color: '#84e650', letterSpacing: '1px', fontWeight: '700' }}>
+                universidadegratuita.sc.gov.br
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="p-4 sm:p-6 bg-card flex flex-col sm:flex-row gap-3 sm:gap-4 border-t border-border">
+        {/* Action Buttons */}
+        <div className="flex-shrink-0 p-3 sm:p-4 border-t border-white/10 flex gap-2 sm:gap-3">
           <Button
             onClick={handleDownloadPDF}
-            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-black uppercase tracking-wide py-4 sm:py-6 text-base sm:text-lg shadow-[0_8px_20px_hsl(var(--primary)/0.4)] hover:shadow-[0_12px_25px_hsl(var(--primary)/0.6)] hover:-translate-y-1 transition-all duration-300 border-b-[5px] border-black/30 active:translate-y-0 active:border-b-0 active:mt-[5px] mb-1"
+            disabled={isDownloading}
+            className="flex-1 bg-[#84e650] hover:bg-[#84e650]/90 text-[#0d3320] font-black uppercase tracking-wide h-12 sm:h-14 text-sm sm:text-base shadow-[0_4px_20px_rgba(132,230,80,0.35)] hover:shadow-[0_6px_28px_rgba(132,230,80,0.5)] transition-all touch-manipulation disabled:opacity-60"
           >
-            <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2 stroke-[3px]" />
-            Baixar PDF
+            {isDownloading ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Gerando...
+              </span>
+            ) : (
+              <>
+                <Download className="w-4 h-4 mr-2" strokeWidth={3} />
+                Baixar PDF
+              </>
+            )}
           </Button>
-          <Button onClick={onClose} variant="outline" className="flex-1 border-2 border-border text-foreground hover:bg-muted font-black uppercase tracking-wide py-4 sm:py-6 text-base sm:text-lg transition-all border-b-[5px] active:translate-y-0 active:border-b-2 active:mt-[3px] mb-1">
-            <X className="w-4 h-4 sm:w-5 sm:h-5 mr-2 stroke-[3px]" />
+
+          {typeof navigator !== 'undefined' && 'share' in navigator && (
+            <Button
+              onClick={handleShare}
+              variant="outline"
+              className="h-12 sm:h-14 px-4 border-white/20 text-white hover:bg-white/10 touch-manipulation"
+              aria-label="Compartilhar"
+            >
+              <Share2 className="w-4 h-4" strokeWidth={2.5} />
+            </Button>
+          )}
+
+          <Button
+            onClick={onClose}
+            variant="outline"
+            className="flex-1 border-white/20 text-white/70 hover:bg-white/10 hover:text-white font-bold uppercase tracking-wide h-12 sm:h-14 text-sm touch-manipulation"
+          >
+            <X className="w-4 h-4 mr-2" strokeWidth={2.5} />
             Fechar
           </Button>
         </div>

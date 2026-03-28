@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useMemo, memo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Camera, Upload, ChevronRight, ChevronLeft, CheckCircle2 } from 'lucide-react';
+import { Camera, Upload, ChevronRight, ChevronLeft, CheckCircle2, Loader2, ImagePlus } from 'lucide-react';
 import { passportSchema, PassportFormData } from '@/lib/validations';
 import { formatPhone, generateYears, getDaysInMonth } from '@/lib/utils';
 import { compressImage } from '@/lib/imageOptimization';
@@ -10,11 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 
 interface PassportFormProps {
@@ -23,9 +19,12 @@ interface PassportFormProps {
 
 const TOTAL_STEPS = 4;
 
+const STEP_LABELS = ['Foto', 'Dados', 'Contato', 'Curso'];
+
 function PassportForm({ onSubmit }: PassportFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [photoPreview, setPhotoPreview] = useState<string>('');
+  const [isUploading, setIsUploading] = useState(false);
   const [selectedUniversity, setSelectedUniversity] = useState<string>('');
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
@@ -48,7 +47,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
   const phoneValue = watch('phone') || '';
   const birthDateValue = watch('birthDate');
 
-  // Sync date selects with form value
+  // Sync date selects → form value
   useEffect(() => {
     if (selectedDay && selectedMonth && selectedYear) {
       const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
@@ -59,29 +58,26 @@ function PassportForm({ onSubmit }: PassportFormProps) {
   }, [selectedDay, selectedMonth, selectedYear, setValue, birthDateValue]);
 
   const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhone(e.target.value);
-    setValue('phone', formatted, { shouldValidate: true });
+    setValue('phone', formatPhone(e.target.value), { shouldValidate: true });
   }, [setValue]);
 
-  // handleNext defined before handlePhotoUpload so it can be included in deps
   const handleNext = useCallback(async () => {
-    let fieldsToValidate: string[] = [];
+    let fields: string[] = [];
 
-    // Force date sync before validating step 2
     if (currentStep === 2 && selectedDay && selectedMonth && selectedYear) {
       const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
       setValue('birthDate', dateStr, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
     }
 
     switch (currentStep) {
-      case 1: fieldsToValidate = ['photo']; break;
-      case 2: fieldsToValidate = ['firstName', 'lastName', 'birthDate']; break;
-      case 3: fieldsToValidate = ['email', 'phone']; break;
-      case 4: fieldsToValidate = ['university', 'course']; break;
+      case 1: fields = ['photo']; break;
+      case 2: fields = ['firstName', 'lastName', 'birthDate']; break;
+      case 3: fields = ['email', 'phone']; break;
+      case 4: fields = ['university', 'course']; break;
     }
 
-    const isStepValid = await trigger(fieldsToValidate as any[]);
-    if (isStepValid && currentStep < TOTAL_STEPS) {
+    const valid = await trigger(fields as any[]);
+    if (valid && currentStep < TOTAL_STEPS) {
       setCurrentStep(prev => prev + 1);
     }
   }, [currentStep, trigger, setValue, selectedDay, selectedMonth, selectedYear]);
@@ -95,208 +91,226 @@ function PassportForm({ onSubmit }: PassportFormProps) {
       return;
     }
 
+    setIsUploading(true);
     try {
       const compressed = await compressImage(file, 0.5, 800);
       setPhotoPreview(compressed);
       setValue('photo', compressed, { shouldValidate: true });
-
-      // Auto-advance to step 2 after photo is uploaded
       if (currentStep === 1) {
-        setTimeout(() => handleNext(), 500);
+        setTimeout(() => handleNext(), 400);
       }
-    } catch (error) {
-      console.error('Erro ao processar imagem:', error);
-      alert('Erro ao processar imagem. Tente novamente.');
+    } catch {
+      alert('Erro ao processar imagem. Tente outra foto.');
+    } finally {
+      setIsUploading(false);
+      // Reset input so same file can be reselected
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   }, [setValue, currentStep, handleNext]);
+
+  const handlePrev = useCallback(() => {
+    if (currentStep > 1) setCurrentStep(prev => prev - 1);
+  }, [currentStep]);
+
+  // Scroll to current step
+  useEffect(() => {
+    const el = formContainerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: (currentStep - 1) * el.clientWidth, behavior: 'smooth' });
+  }, [currentStep]);
 
   const currentDays = useMemo(() => getDaysInMonth(selectedMonth || 1, selectedYear || 2000), [selectedMonth, selectedYear]);
   const years = useMemo(() => generateYears(), []);
   const months = useMemo(() => [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
   ], []);
-
-  const selectedUniversityData = useMemo(() =>
-    UNIVERSITIES.find(u => u.id === selectedUniversity),
-    [selectedUniversity]
-  );
-
-  const handlePrev = () => {
-    if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
-    }
-  };
-
-  // Scroll smoothly when step changes
-  useEffect(() => {
-    if (formContainerRef.current) {
-      const stepWidth = formContainerRef.current.clientWidth;
-      formContainerRef.current.scrollTo({
-        left: (currentStep - 1) * stepWidth,
-        behavior: 'smooth'
-      });
-    }
-  }, [currentStep]);
+  const selectedUniversityData = useMemo(() => UNIVERSITIES.find(u => u.id === selectedUniversity), [selectedUniversity]);
 
   const dateIncomplete = currentStep === 2 && (!selectedDay || !selectedMonth || !selectedYear);
 
   return (
-    <div className="flex flex-col h-full bg-background relative">
-      {/* Progress Bar */}
-      <div className="px-6 py-4 bg-card border-b border-border z-10 sticky top-0 shadow-sm">
-        <div className="flex justify-between mb-2 relative">
-          <div className="absolute top-1/2 left-0 w-full h-1 bg-muted -translate-y-1/2 rounded-full z-0"></div>
-          <div
-            className="absolute top-1/2 left-0 h-1 bg-primary -translate-y-1/2 rounded-full z-0 transition-all duration-500 ease-out"
-            style={{ width: `${((currentStep - 1) / (TOTAL_STEPS - 1)) * 100}%` }}
-          ></div>
+    <div className="flex flex-col h-full bg-background">
 
-          {[1, 2, 3, 4].map((step) => (
-            <div
-              key={step}
-              className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 border-2 ${
-                step < currentStep
-                  ? 'bg-primary border-primary text-primary-foreground shadow-[0_0_10px_hsl(var(--primary)/0.5)]'
-                  : step === currentStep
-                    ? 'bg-background border-primary text-primary ring-4 ring-primary/30 shadow-[0_0_15px_hsl(var(--primary)/0.3)]'
-                    : 'bg-background border-border text-muted-foreground'
-              }`}
-            >
-              {step < currentStep ? <CheckCircle2 className="w-5 h-5" /> : step}
-            </div>
-          ))}
-        </div>
-        <div className="text-center mt-2">
-          <p className="text-xs font-bold text-foreground uppercase tracking-widest">
-            {currentStep === 1 && "Sua Foto"}
-            {currentStep === 2 && "Dados Pessoais"}
-            {currentStep === 3 && "Contato"}
-            {currentStep === 4 && "Instituição"}
-          </p>
+      {/* Progress */}
+      <div className="px-5 py-3 bg-card border-b border-border shrink-0">
+        <div className="flex items-center justify-between relative">
+          {/* Track line */}
+          <div className="absolute top-4 left-4 right-4 h-0.5 bg-border z-0" />
+          <div
+            className="absolute top-4 left-4 h-0.5 bg-primary z-0 transition-all duration-500 ease-out"
+            style={{ width: `calc(${((currentStep - 1) / (TOTAL_STEPS - 1)) * 100}% - 0px)` }}
+          />
+          {STEP_LABELS.map((label, i) => {
+            const step = i + 1;
+            const done = step < currentStep;
+            const active = step === currentStep;
+            return (
+              <div key={step} className="relative z-10 flex flex-col items-center gap-1">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border-2 transition-all duration-300 ${
+                  done ? 'bg-primary border-primary text-primary-foreground' :
+                  active ? 'bg-background border-primary text-primary ring-2 ring-primary/30' :
+                  'bg-background border-border text-muted-foreground'
+                }`}>
+                  {done ? <CheckCircle2 className="w-4 h-4" /> : step}
+                </div>
+                <span className={`text-[9px] font-bold uppercase tracking-wide transition-colors ${active ? 'text-primary' : done ? 'text-muted-foreground' : 'text-muted-foreground/50'}`}>
+                  {label}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col h-[calc(100vh-280px)] sm:h-[450px]">
-        {/* Horizontal Scroll Container */}
+      <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col min-h-0">
+        {/* Horizontal scroll container */}
         <div
           ref={formContainerRef}
-          className="flex-1 flex overflow-hidden snap-x snap-mandatory scroll-smooth"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="flex-1 flex overflow-hidden"
+          style={{ scrollbarWidth: 'none' }}
         >
-          {/* STEP 1: Photo */}
-          <div className="min-w-full w-full flex-shrink-0 snap-center p-6 flex flex-col items-center justify-center space-y-6">
-            <div className="text-center mb-4">
-              <h3 className="text-xl font-black text-foreground uppercase">Foto Oficial</h3>
-              <p className="text-sm text-muted-foreground">Adicione uma foto clara do seu rosto</p>
+
+          {/* ── STEP 1: Photo ── */}
+          <div className="min-w-full flex-shrink-0 flex flex-col items-center justify-center gap-5 p-6">
+            <div className="text-center">
+              <h3 className="text-lg font-black text-foreground uppercase tracking-wide">Sua Foto</h3>
+              <p className="text-xs text-muted-foreground mt-1">Uma foto clara do seu rosto</p>
             </div>
 
-            <div className="flex flex-col items-center">
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                className={`relative w-48 h-48 rounded-full border-4 flex items-center justify-center cursor-pointer transition-all overflow-hidden bg-card shadow-inner group ${
-                  errors.photo ? 'border-destructive' : photoPreview ? 'border-primary shadow-[0_0_30px_hsl(var(--primary)/0.4)]' : 'border-dashed border-border hover:border-primary/50'
-                }`}
-              >
-                {photoPreview ? (
-                  <>
-                    <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Camera className="w-10 h-10 text-white" />
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center gap-3 text-muted-foreground group-hover:text-primary transition-colors">
-                    <div className="bg-background border border-border p-4 rounded-full shadow-sm group-hover:border-primary/50 transition-colors">
-                      <Camera className="w-10 h-10" />
-                    </div>
-                    <span className="text-sm font-bold uppercase tracking-wider">Tocar para abrir</span>
+            <button
+              type="button"
+              onClick={() => !isUploading && fileInputRef.current?.click()}
+              disabled={isUploading}
+              className={`relative w-44 h-44 sm:w-48 sm:h-48 rounded-full border-4 flex items-center justify-center overflow-hidden transition-all duration-300 touch-manipulation select-none ${
+                isUploading ? 'border-primary/50 cursor-wait' :
+                errors.photo ? 'border-destructive' :
+                photoPreview ? 'border-primary shadow-[0_0_32px_hsl(var(--primary)/0.35)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)]' :
+                'border-dashed border-border hover:border-primary/60 active:border-primary'
+              } bg-card`}
+              aria-label="Selecionar foto"
+            >
+              {isUploading ? (
+                <div className="flex flex-col items-center gap-3 text-primary">
+                  <Loader2 className="w-10 h-10 animate-spin" />
+                  <span className="text-xs font-bold uppercase">Processando…</span>
+                </div>
+              ) : photoPreview ? (
+                <>
+                  <img src={photoPreview} alt="Sua foto" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 hover:opacity-100 active:opacity-100 transition-opacity gap-2">
+                    <Camera className="w-9 h-9 text-white" />
+                    <span className="text-white text-xs font-bold uppercase">Trocar</span>
                   </div>
-                )}
-              </div>
-              {/* Removed capture="user" so user can choose between camera and gallery */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoUpload}
-                className="hidden"
-              />
-              {errors.photo && (
-                <p className="text-brand-accent text-sm mt-4 font-bold bg-destructive/10 px-4 py-2 rounded-lg">{errors.photo.message}</p>
+                </>
+              ) : (
+                <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                  <div className="bg-background border-2 border-border p-4 rounded-full">
+                    <ImagePlus className="w-9 h-9" />
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wider">Toque para adicionar</span>
+                </div>
               )}
-            </div>
+            </button>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoUpload}
+              className="hidden"
+              aria-hidden="true"
+            />
+
+            {photoPreview && !isUploading && (
+              <p className="text-xs text-primary font-semibold flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5" /> Foto adicionada — avançando…
+              </p>
+            )}
+            {errors.photo && (
+              <p className="text-destructive text-xs font-bold bg-destructive/10 px-4 py-2 rounded-lg">
+                {errors.photo.message}
+              </p>
+            )}
           </div>
 
-          {/* STEP 2: Personal Info */}
-          <div className="min-w-full w-full flex-shrink-0 snap-center p-6 flex flex-col justify-center space-y-5">
+          {/* ── STEP 2: Personal Info ── */}
+          <div className="min-w-full flex-shrink-0 flex flex-col justify-center gap-4 p-6 overflow-y-auto">
             <div>
-              <Label htmlFor="firstName" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Nome *</Label>
+              <Label htmlFor="firstName" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Nome *</Label>
               <Input
                 id="firstName"
                 {...register('firstName')}
                 placeholder="Ex: João"
-                className="mt-1 h-14 text-lg border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-background rounded-xl shadow-sm hover:border-primary/50 transition-colors"
+                autoComplete="given-name"
+                autoCapitalize="words"
+                className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl"
               />
-              {errors.firstName && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.firstName.message}</p>}
+              {errors.firstName && <p className="text-destructive text-xs mt-1 font-semibold">{errors.firstName.message}</p>}
             </div>
 
             <div>
-              <Label htmlFor="lastName" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Sobrenome *</Label>
+              <Label htmlFor="lastName" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Sobrenome *</Label>
               <Input
                 id="lastName"
                 {...register('lastName')}
                 placeholder="Ex: da Silva"
-                className="mt-1 h-14 text-lg border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-background rounded-xl shadow-sm hover:border-primary/50 transition-colors"
+                autoComplete="family-name"
+                autoCapitalize="words"
+                className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl"
               />
-              {errors.lastName && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.lastName.message}</p>}
+              {errors.lastName && <p className="text-destructive text-xs mt-1 font-semibold">{errors.lastName.message}</p>}
             </div>
 
             <div>
-              <Label className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Nascimento *</Label>
+              <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Data de Nascimento *</Label>
               <div className="grid grid-cols-3 gap-2 mt-1">
-                <Select onValueChange={(value) => setSelectedDay(parseInt(value))}>
-                  <SelectTrigger className="h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
+                <Select onValueChange={(v) => setSelectedDay(parseInt(v))}>
+                  <SelectTrigger className="h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
                     <SelectValue placeholder="Dia" />
                   </SelectTrigger>
                   <SelectContent>
-                    {currentDays.map((day) => (<SelectItem key={day} value={String(day)} className="focus:bg-primary/20">{day}</SelectItem>))}
-                  </SelectContent>
-                </Select>
-
-                <Select onValueChange={(value) => setSelectedMonth(parseInt(value))}>
-                  <SelectTrigger className="h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
-                    <SelectValue placeholder="Mês" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {months.map((month, index) => (
-                      <SelectItem key={index} value={String(index + 1)} className="focus:bg-primary/20">
-                        {month}
-                      </SelectItem>
+                    {currentDays.map(d => (
+                      <SelectItem key={d} value={String(d)}>{d}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
 
-                <Select onValueChange={(value) => setSelectedYear(parseInt(value))}>
-                  <SelectTrigger className="h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
+                <Select onValueChange={(v) => setSelectedMonth(parseInt(v))}>
+                  <SelectTrigger className="h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
+                    <SelectValue placeholder="Mês" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {months.map((m, i) => (
+                      <SelectItem key={i} value={String(i + 1)}>{m}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Select onValueChange={(v) => setSelectedYear(parseInt(v))}>
+                  <SelectTrigger className="h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
                     <SelectValue placeholder="Ano" />
                   </SelectTrigger>
                   <SelectContent>
-                    {years.map((year) => (<SelectItem key={year} value={String(year)} className="focus:bg-primary/20">{year}</SelectItem>))}
+                    {years.map(y => (
+                      <SelectItem key={y} value={String(y)}>{y}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
               {dateIncomplete && !errors.birthDate && (
-                <p className="text-muted-foreground text-xs mt-1 font-medium ml-1">Selecione dia, mês e ano.</p>
+                <p className="text-muted-foreground text-xs mt-1.5 font-medium">Selecione dia, mês e ano.</p>
               )}
-              {errors.birthDate && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.birthDate.message}</p>}
+              {errors.birthDate && (
+                <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.birthDate.message}</p>
+              )}
             </div>
           </div>
 
-          {/* STEP 3: Contact */}
-          <div className="min-w-full w-full flex-shrink-0 snap-center p-6 flex flex-col justify-center space-y-6">
+          {/* ── STEP 3: Contact ── */}
+          <div className="min-w-full flex-shrink-0 flex flex-col justify-center gap-5 p-6">
             <div>
-              <Label htmlFor="phone" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">WhatsApp *</Label>
+              <Label htmlFor="phone" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">WhatsApp *</Label>
               <Input
                 id="phone"
                 value={phoneValue}
@@ -305,84 +319,89 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 maxLength={15}
                 type="tel"
                 inputMode="numeric"
-                className="mt-1 h-14 text-lg border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors"
+                autoComplete="tel"
+                className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl font-semibold"
               />
-              {errors.phone && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.phone.message}</p>}
+              {errors.phone && <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.phone.message}</p>}
             </div>
 
             <div>
-              <Label htmlFor="email" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">E-mail *</Label>
+              <Label htmlFor="email" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">E-mail *</Label>
               <Input
                 id="email"
                 type="email"
                 inputMode="email"
+                autoComplete="email"
+                autoCapitalize="none"
                 {...register('email')}
                 placeholder="aluno@email.com"
-                className="mt-1 h-14 text-lg border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors"
+                className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl"
               />
-              {errors.email && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.email.message}</p>}
+              {errors.email && <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.email.message}</p>}
             </div>
           </div>
 
-          {/* STEP 4: University & Course */}
-          <div className="min-w-full w-full flex-shrink-0 snap-center p-6 flex flex-col justify-center space-y-6">
+          {/* ── STEP 4: University & Course ── */}
+          <div className="min-w-full flex-shrink-0 flex flex-col justify-center gap-5 p-6">
             <div>
-              <Label htmlFor="university" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Instituição ACAFE *</Label>
-              <Select onValueChange={(value) => {
-                setSelectedUniversity(value);
-                setValue('university', value, { shouldValidate: true });
+              <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Instituição ACAFE *</Label>
+              <Select onValueChange={(v) => {
+                setSelectedUniversity(v);
+                setValue('university', v, { shouldValidate: true });
                 setValue('course', '', { shouldValidate: false });
               }}>
-                <SelectTrigger className="mt-1 h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold text-left whitespace-normal leading-tight shadow-sm hover:border-primary/50 transition-colors">
+                <SelectTrigger className="mt-1 h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm text-left">
                   <SelectValue placeholder="Selecione a universidade" />
                 </SelectTrigger>
-                <SelectContent className="max-h-[250px]">
-                  {UNIVERSITIES.map((university) => (
-                    <SelectItem key={university.id} value={university.id} className="py-3 font-bold border-b border-border last:border-0 focus:bg-primary/20">
-                      {university.name}
+                <SelectContent className="max-h-[260px]">
+                  {UNIVERSITIES.map(u => (
+                    <SelectItem key={u.id} value={u.id} className="py-2.5 font-semibold text-sm">
+                      {u.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {errors.university && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.university.message}</p>}
+              {errors.university && <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.university.message}</p>}
             </div>
 
             {selectedUniversityData ? (
               <div className="animate-fade-in">
-                <Label htmlFor="course" className="text-xs font-bold text-foreground uppercase tracking-widest ml-1 opacity-80">Curso Desejado *</Label>
-                <Select onValueChange={(value) => setValue('course', value, { shouldValidate: true })}>
-                  <SelectTrigger className="mt-1 h-14 border-2 border-border focus:ring-0 focus:border-primary bg-background rounded-xl font-bold shadow-sm hover:border-primary/50 transition-colors">
+                <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Curso Desejado *</Label>
+                <Select onValueChange={(v) => setValue('course', v, { shouldValidate: true })}>
+                  <SelectTrigger className="mt-1 h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
                     <SelectValue placeholder="Selecione o curso" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[200px]">
-                    {selectedUniversityData.courses.map((course) => (
-                      <SelectItem key={course} value={course} className="py-3 font-bold focus:bg-primary/20">
-                        {course}
-                      </SelectItem>
+                    {selectedUniversityData.courses.map(c => (
+                      <SelectItem key={c} value={c} className="py-2.5 font-semibold text-sm">{c}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.course && <p className="text-destructive text-xs mt-1 font-bold ml-1">{errors.course.message}</p>}
+                {errors.course && <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.course.message}</p>}
               </div>
             ) : (
-              <p className="text-muted-foreground text-xs font-medium ml-1">
-                Selecione a instituição para ver os cursos disponíveis.
-              </p>
+              <div className="flex items-center gap-2 p-3 bg-muted/30 rounded-xl border border-border/50">
+                <div className="w-2 h-2 rounded-full bg-primary/50 shrink-0" />
+                <p className="text-xs text-muted-foreground font-medium">
+                  Selecione a instituição para ver os cursos.
+                </p>
+              </div>
             )}
           </div>
         </div>
 
         {/* Navigation Footer */}
-        <div className="p-4 bg-card border-t border-border flex flex-col gap-2 z-10 sticky bottom-0 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
-          <div className="flex gap-3">
+        <div className="px-4 py-3 bg-card border-t border-border shrink-0 flex flex-col gap-2">
+          <div className="flex gap-2">
             {currentStep > 1 && (
               <Button
                 type="button"
                 onClick={handlePrev}
                 variant="outline"
-                className="h-14 w-14 rounded-xl border-2 border-border text-foreground hover:bg-muted flex-shrink-0 border-b-[4px] active:translate-y-0 active:border-b-2 active:mt-[2px]"
+                className="h-12 w-12 rounded-xl border-2 border-border text-foreground hover:bg-muted shrink-0 touch-manipulation"
+                aria-label="Voltar"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-5 h-5" />
               </Button>
             )}
 
@@ -390,26 +409,25 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               <Button
                 type="button"
                 onClick={handleNext}
-                className="flex-1 h-14 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-black uppercase tracking-widest rounded-xl shadow-[0_8px_20px_hsl(var(--primary)/0.4)] hover:shadow-[0_12px_25px_hsl(var(--primary)/0.6)] hover:-translate-y-1 transition-all duration-300 border-b-[5px] border-black/30 active:translate-y-0 active:border-b-0 active:mt-[5px] mb-1"
+                className="flex-1 h-12 bg-primary hover:bg-primary/90 active:bg-primary/80 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_6px_20px_hsl(var(--primary)/0.4)] border-b-4 border-black/30 active:border-b-0 active:mt-1 transition-all duration-150 touch-manipulation"
               >
                 Avançar
-                <ChevronRight className="w-5 h-5 ml-2" />
+                <ChevronRight className="w-4 h-4 ml-2 shrink-0" />
               </Button>
             ) : (
               <Button
                 type="submit"
                 disabled={!isValid}
-                className="flex-1 h-14 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-black uppercase tracking-widest rounded-xl shadow-[0_8px_20px_hsl(var(--primary)/0.4)] hover:shadow-[0_12px_25px_hsl(var(--primary)/0.6)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:shadow-none border-b-[5px] border-black/30 active:translate-y-0 active:border-b-0 active:mt-[5px] mb-1"
+                className="flex-1 h-12 bg-primary hover:bg-primary/90 active:bg-primary/80 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_6px_20px_hsl(var(--primary)/0.4)] border-b-4 border-black/30 active:border-b-0 active:mt-1 disabled:opacity-40 disabled:shadow-none disabled:pointer-events-none transition-all duration-150 touch-manipulation"
               >
-                <Upload className="w-5 h-5 mr-2 stroke-[3px]" />
-                Gerar Oficial
+                <Upload className="w-4 h-4 mr-2 shrink-0" />
+                Gerar Passaporte
               </Button>
             )}
           </div>
 
-          {/* Hint when submit is blocked in step 4 */}
           {currentStep === TOTAL_STEPS && !isValid && selectedUniversityData && (
-            <p className="text-center text-xs text-muted-foreground font-medium">
+            <p className="text-center text-xs text-muted-foreground">
               Selecione o curso para continuar.
             </p>
           )}
