@@ -20,6 +20,41 @@ interface PassportFormProps {
 const TOTAL_STEPS = 4;
 const STEP_LABELS = ['Foto', 'Dados', 'Contato', 'Curso'];
 
+// Validações inline por step — sem trigger/resolver intermediando a navegação
+function validateStep(step: number, values: Record<string, string>): Record<string, string> {
+  const errs: Record<string, string> = {};
+
+  if (step === 1) {
+    if (!values.photo || !values.photo.startsWith('data:image/'))
+      errs.photo = 'Foto é obrigatória';
+  }
+
+  if (step === 2) {
+    if (!values.firstName || values.firstName.trim().length < 2)
+      errs.firstName = 'Nome deve ter pelo menos 2 caracteres';
+    if (!values.lastName || values.lastName.trim().length < 2)
+      errs.lastName = 'Sobrenome deve ter pelo menos 2 caracteres';
+    if (!values.birthDate || !/^\d{4}-\d{2}-\d{2}$/.test(values.birthDate))
+      errs.birthDate = 'Selecione data de nascimento completa';
+  }
+
+  if (step === 3) {
+    const phone = values.phone || '';
+    const email = (values.email || '').trim();
+    if (!/^\(\d{2}\) \d{4,5}-\d{4}$/.test(phone))
+      errs.phone = 'Formato inválido. Ex: (48) 99999-9999';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      errs.email = 'E-mail inválido';
+  }
+
+  if (step === 4) {
+    if (!values.university) errs.university = 'Selecione uma instituição';
+    if (!values.course) errs.course = 'Selecione um curso';
+  }
+
+  return errs;
+}
+
 function PassportForm({ onSubmit }: PassportFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [photoPreview, setPhotoPreview] = useState<string>('');
@@ -28,16 +63,18 @@ function PassportForm({ onSubmit }: PassportFormProps) {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  // Step-local errors (substituem trigger/resolver para navegação)
+  const [stepErrors, setStepErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
     handleSubmit,
     setValue,
+    getValues,
     watch,
-    trigger,
     control,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm<PassportFormData>({
     resolver: zodResolver(passportSchema),
     mode: 'onChange',
@@ -55,25 +92,24 @@ function PassportForm({ onSubmit }: PassportFormProps) {
     }
   }, [selectedDay, selectedMonth, selectedYear, setValue, birthDateValue]);
 
-  const handleNext = useCallback(async () => {
-    if (currentStep === 2 && selectedDay && selectedMonth && selectedYear) {
+  // Avançar: validação síncrona direta, sem trigger/resolver
+  const handleNext = useCallback((overrideStep?: number) => {
+    const step = overrideStep ?? currentStep;
+
+    // Garante que a data está setada antes de validar step 2
+    if (step === 2 && selectedDay && selectedMonth && selectedYear) {
       const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
-      setValue('birthDate', dateStr, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+      setValue('birthDate', dateStr, { shouldValidate: true });
     }
 
-    let fields: string[] = [];
-    switch (currentStep) {
-      case 1: fields = ['photo']; break;
-      case 2: fields = ['firstName', 'lastName', 'birthDate']; break;
-      case 3: fields = ['email', 'phone']; break;
-      case 4: fields = ['university', 'course']; break;
-    }
+    const currentValues = getValues() as unknown as Record<string, string>;
+    const errs = validateStep(step, currentValues);
+    setStepErrors(errs);
 
-    const valid = await trigger(fields as any[]);
-    if (valid && currentStep < TOTAL_STEPS) {
-      setCurrentStep(prev => prev + 1);
+    if (Object.keys(errs).length === 0 && step < TOTAL_STEPS) {
+      setCurrentStep(step + 1);
     }
-  }, [currentStep, trigger, setValue, selectedDay, selectedMonth, selectedYear]);
+  }, [currentStep, getValues, setValue, selectedDay, selectedMonth, selectedYear]);
 
   const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -89,18 +125,18 @@ function PassportForm({ onSubmit }: PassportFormProps) {
       const compressed = await compressImage(file, 0.5, 800);
       setPhotoPreview(compressed);
       setValue('photo', compressed, { shouldValidate: true });
-      if (currentStep === 1) {
-        setTimeout(() => handleNext(), 400);
-      }
+      // Avança automaticamente para step 2 após foto ser processada
+      setTimeout(() => handleNext(1), 400);
     } catch {
       alert('Erro ao processar imagem. Tente outra foto.');
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
-  }, [setValue, currentStep, handleNext]);
+  }, [setValue, handleNext]);
 
   const handlePrev = useCallback(() => {
+    setStepErrors({});
     if (currentStep > 1) setCurrentStep(prev => prev - 1);
   }, [currentStep]);
 
@@ -111,7 +147,8 @@ function PassportForm({ onSubmit }: PassportFormProps) {
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
   ], []);
   const selectedUniversityData = useMemo(() => UNIVERSITIES.find(u => u.id === selectedUniversity), [selectedUniversity]);
-  const dateIncomplete = currentStep === 2 && (!selectedDay || !selectedMonth || !selectedYear);
+
+  const err = (field: string) => stepErrors[field];
 
   return (
     <div className="flex flex-col h-full bg-background">
@@ -122,7 +159,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
           <div className="absolute top-4 left-4 right-4 h-0.5 bg-border z-0" />
           <div
             className="absolute top-4 left-4 h-0.5 bg-primary z-0 transition-all duration-500 ease-out"
-            style={{ width: `calc(${((currentStep - 1) / (TOTAL_STEPS - 1)) * 100}% - 0px)` }}
+            style={{ width: `${((currentStep - 1) / (TOTAL_STEPS - 1)) * 100}%` }}
           />
           {STEP_LABELS.map((label, i) => {
             const step = i + 1;
@@ -137,7 +174,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 }`}>
                   {done ? <CheckCircle2 className="w-4 h-4" /> : step}
                 </div>
-                <span className={`text-[9px] font-bold uppercase tracking-wide transition-colors ${active ? 'text-primary' : done ? 'text-muted-foreground' : 'text-muted-foreground/50'}`}>
+                <span className={`text-[9px] font-bold uppercase tracking-wide ${active ? 'text-primary' : 'text-muted-foreground/60'}`}>
                   {label}
                 </span>
               </div>
@@ -148,10 +185,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col min-h-0">
 
-        {/* Step content — only active step in DOM, no overflow-hidden issues */}
+        {/* Apenas o step ativo é renderizado — sem overflow-hidden lateral */}
         <div key={currentStep} className="flex-1 overflow-y-auto animate-fade-in">
 
-          {/* ── STEP 1: Photo ── */}
+          {/* ── STEP 1: Foto ── */}
           {currentStep === 1 && (
             <div className="flex flex-col items-center justify-center gap-5 p-6 min-h-full">
               <div className="text-center">
@@ -163,10 +200,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 type="button"
                 onClick={() => !isUploading && fileInputRef.current?.click()}
                 disabled={isUploading}
-                className={`relative w-44 h-44 sm:w-48 sm:h-48 rounded-full border-4 flex items-center justify-center overflow-hidden transition-all duration-300 touch-manipulation select-none ${
+                className={`relative w-44 h-44 rounded-full border-4 flex items-center justify-center overflow-hidden transition-all duration-300 touch-manipulation select-none ${
                   isUploading ? 'border-primary/50 cursor-wait' :
-                  errors.photo ? 'border-destructive' :
-                  photoPreview ? 'border-primary shadow-[0_0_32px_hsl(var(--primary)/0.35)]' :
+                  err('photo') ? 'border-destructive' :
+                  photoPreview ? 'border-primary shadow-[0_0_32px_hsl(var(--primary)/0.3)]' :
                   'border-dashed border-border hover:border-primary/60 active:border-primary'
                 } bg-card`}
                 aria-label="Selecionar foto"
@@ -194,29 +231,18 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                 )}
               </button>
 
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoUpload}
-                className="hidden"
-                aria-hidden="true"
-              />
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" aria-hidden="true" />
 
               {photoPreview && !isUploading && (
                 <p className="text-xs text-primary font-semibold flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Foto adicionada — avançando…
                 </p>
               )}
-              {errors.photo && (
-                <p className="text-destructive text-xs font-bold bg-destructive/10 px-4 py-2 rounded-lg">
-                  {errors.photo.message}
-                </p>
-              )}
+              {err('photo') && <p className="text-destructive text-xs font-bold bg-destructive/10 px-4 py-2 rounded-lg">{err('photo')}</p>}
             </div>
           )}
 
-          {/* ── STEP 2: Personal Info ── */}
+          {/* ── STEP 2: Dados pessoais ── */}
           {currentStep === 2 && (
             <div className="flex flex-col justify-center gap-4 p-6 min-h-full">
               <div>
@@ -229,7 +255,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   autoCapitalize="words"
                   className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl"
                 />
-                {errors.firstName && <p className="text-destructive text-xs mt-1 font-semibold">{errors.firstName.message}</p>}
+                {err('firstName') && <p className="text-destructive text-xs mt-1 font-semibold">{err('firstName')}</p>}
               </div>
 
               <div>
@@ -242,7 +268,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   autoCapitalize="words"
                   className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl"
                 />
-                {errors.lastName && <p className="text-destructive text-xs mt-1 font-semibold">{errors.lastName.message}</p>}
+                {err('lastName') && <p className="text-destructive text-xs mt-1 font-semibold">{err('lastName')}</p>}
               </div>
 
               <div>
@@ -253,9 +279,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                       <SelectValue placeholder="Dia" />
                     </SelectTrigger>
                     <SelectContent>
-                      {currentDays.map(d => (
-                        <SelectItem key={d} value={String(d)}>{d}</SelectItem>
-                      ))}
+                      {currentDays.map(d => <SelectItem key={d} value={String(d)}>{d}</SelectItem>)}
                     </SelectContent>
                   </Select>
 
@@ -264,9 +288,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                       <SelectValue placeholder="Mês" />
                     </SelectTrigger>
                     <SelectContent>
-                      {months.map((m, i) => (
-                        <SelectItem key={i} value={String(i + 1)}>{m}</SelectItem>
-                      ))}
+                      {months.map((m, i) => <SelectItem key={i} value={String(i + 1)}>{m}</SelectItem>)}
                     </SelectContent>
                   </Select>
 
@@ -275,23 +297,19 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                       <SelectValue placeholder="Ano" />
                     </SelectTrigger>
                     <SelectContent>
-                      {years.map(y => (
-                        <SelectItem key={y} value={String(y)}>{y}</SelectItem>
-                      ))}
+                      {years.map(y => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
-                {dateIncomplete && !errors.birthDate && (
-                  <p className="text-muted-foreground text-xs mt-1.5 font-medium">Selecione dia, mês e ano.</p>
-                )}
-                {errors.birthDate && (
-                  <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.birthDate.message}</p>
-                )}
+                {!selectedDay || !selectedMonth || !selectedYear
+                  ? <p className="text-muted-foreground text-xs mt-1.5 font-medium">Selecione dia, mês e ano.</p>
+                  : null}
+                {err('birthDate') && <p className="text-destructive text-xs mt-1.5 font-semibold">{err('birthDate')}</p>}
               </div>
             </div>
           )}
 
-          {/* ── STEP 3: Contact ── */}
+          {/* ── STEP 3: Contato ── */}
           {currentStep === 3 && (
             <div className="flex flex-col justify-center gap-5 p-6 min-h-full">
               <div>
@@ -312,11 +330,11 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                       type="tel"
                       inputMode="numeric"
                       autoComplete="tel"
-                      className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl font-semibold"
+                      className={`mt-1 h-12 text-base border-2 focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl font-semibold ${err('phone') ? 'border-destructive' : 'border-border'}`}
                     />
                   )}
                 />
-                {errors.phone && <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.phone.message}</p>}
+                {err('phone') && <p className="text-destructive text-xs mt-1.5 font-semibold">{err('phone')}</p>}
               </div>
 
               <div>
@@ -329,14 +347,14 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   autoCapitalize="none"
                   {...register('email')}
                   placeholder="aluno@email.com"
-                  className="mt-1 h-12 text-base border-2 border-border focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl"
+                  className={`mt-1 h-12 text-base border-2 focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl ${err('email') ? 'border-destructive' : 'border-border'}`}
                 />
-                {errors.email && <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.email.message}</p>}
+                {err('email') && <p className="text-destructive text-xs mt-1.5 font-semibold">{err('email')}</p>}
               </div>
             </div>
           )}
 
-          {/* ── STEP 4: University & Course ── */}
+          {/* ── STEP 4: Universidade e Curso ── */}
           {currentStep === 4 && (
             <div className="flex flex-col justify-center gap-5 p-6 min-h-full">
               <div>
@@ -351,13 +369,11 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   </SelectTrigger>
                   <SelectContent className="max-h-[260px]">
                     {UNIVERSITIES.map(u => (
-                      <SelectItem key={u.id} value={u.id} className="py-2.5 font-semibold text-sm">
-                        {u.name}
-                      </SelectItem>
+                      <SelectItem key={u.id} value={u.id} className="py-2.5 font-semibold text-sm">{u.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.university && <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.university.message}</p>}
+                {err('university') && <p className="text-destructive text-xs mt-1.5 font-semibold">{err('university')}</p>}
               </div>
 
               {selectedUniversityData ? (
@@ -373,60 +389,50 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
-                  {errors.course && <p className="text-destructive text-xs mt-1.5 font-semibold">{errors.course.message}</p>}
+                  {err('course') && <p className="text-destructive text-xs mt-1.5 font-semibold">{err('course')}</p>}
                 </div>
               ) : (
                 <div className="flex items-center gap-2 p-3 bg-muted/30 rounded-xl border border-border/50">
                   <div className="w-2 h-2 rounded-full bg-primary/50 shrink-0" />
-                  <p className="text-xs text-muted-foreground font-medium">
-                    Selecione a instituição para ver os cursos.
-                  </p>
+                  <p className="text-xs text-muted-foreground font-medium">Selecione a instituição para ver os cursos.</p>
                 </div>
               )}
             </div>
           )}
         </div>
 
-        {/* Navigation Footer — always in normal flow, never overlapped */}
-        <div className="px-4 py-3 bg-card border-t border-border shrink-0 flex flex-col gap-2">
-          <div className="flex gap-2">
-            {currentStep > 1 && (
-              <Button
-                type="button"
-                onClick={handlePrev}
-                variant="outline"
-                className="h-12 w-12 rounded-xl border-2 border-border text-foreground hover:bg-muted active:scale-95 shrink-0 touch-manipulation select-none"
-                aria-label="Voltar"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-            )}
+        {/* Rodapé de navegação — sempre no fluxo normal, nunca sobreposto */}
+        <div className="px-4 py-3 bg-card border-t border-border shrink-0 flex gap-2">
+          {currentStep > 1 && (
+            <Button
+              type="button"
+              onClick={handlePrev}
+              variant="outline"
+              className="h-12 w-12 rounded-xl border-2 border-border text-foreground hover:bg-muted active:scale-95 shrink-0 touch-manipulation select-none"
+              aria-label="Voltar"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+          )}
 
-            {currentStep < TOTAL_STEPS ? (
-              <Button
-                type="button"
-                onClick={handleNext}
-                className="flex-1 h-12 bg-primary hover:bg-primary/90 active:scale-[0.97] active:opacity-90 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_4px_16px_hsl(var(--primary)/0.4)] transition-all duration-150 touch-manipulation select-none"
-              >
-                Avançar
-                <ChevronRight className="w-4 h-4 ml-2 shrink-0" />
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                disabled={!isValid}
-                className="flex-1 h-12 bg-primary hover:bg-primary/90 active:scale-[0.97] active:opacity-90 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_4px_16px_hsl(var(--primary)/0.4)] disabled:opacity-40 disabled:shadow-none disabled:pointer-events-none transition-all duration-150 touch-manipulation select-none"
-              >
-                <Upload className="w-4 h-4 mr-2 shrink-0" />
-                Gerar Passaporte
-              </Button>
-            )}
-          </div>
-
-          {currentStep === TOTAL_STEPS && !isValid && selectedUniversityData && (
-            <p className="text-center text-xs text-muted-foreground">
-              Selecione o curso para continuar.
-            </p>
+          {currentStep < TOTAL_STEPS ? (
+            <Button
+              type="button"
+              onClick={() => handleNext()}
+              className="flex-1 h-12 bg-primary hover:bg-primary/90 active:scale-[0.97] active:opacity-90 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_4px_16px_hsl(var(--primary)/0.4)] transition-all duration-150 touch-manipulation select-none"
+            >
+              Avançar
+              <ChevronRight className="w-4 h-4 ml-2 shrink-0" />
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              disabled={!isValid}
+              className="flex-1 h-12 bg-primary hover:bg-primary/90 active:scale-[0.97] active:opacity-90 text-primary-foreground font-black uppercase tracking-wider rounded-xl shadow-[0_4px_16px_hsl(var(--primary)/0.4)] disabled:opacity-40 disabled:shadow-none disabled:pointer-events-none transition-all duration-150 touch-manipulation select-none"
+            >
+              <Upload className="w-4 h-4 mr-2 shrink-0" />
+              Gerar Passaporte
+            </Button>
           )}
         </div>
       </form>
