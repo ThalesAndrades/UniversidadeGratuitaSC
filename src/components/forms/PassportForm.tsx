@@ -255,6 +255,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
           {/* ── STEP 2: Dados pessoais ── */}
           {currentStep === 2 && (
             <div className="flex flex-col justify-center gap-4 p-6 min-h-full">
+              <div className="text-center mb-1">
+                <h3 className="text-lg font-black text-foreground uppercase tracking-wide">Seus Dados</h3>
+                <p className="text-xs text-muted-foreground mt-1">Nome completo e data de nascimento</p>
+              </div>
               <div>
                 <Label htmlFor="firstName" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Nome *</Label>
                 <Input
@@ -286,7 +290,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               <div>
                 <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Data de Nascimento *</Label>
                 <div className="grid grid-cols-3 gap-2 mt-1">
-                  <Select onValueChange={(v) => setSelectedDay(parseInt(v))}>
+                  <Select
+                    value={selectedDay ? String(selectedDay) : undefined}
+                    onValueChange={(v) => setSelectedDay(parseInt(v))}
+                  >
                     <SelectTrigger className="h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
                       <SelectValue placeholder="Dia" />
                     </SelectTrigger>
@@ -295,7 +302,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                     </SelectContent>
                   </Select>
 
-                  <Select onValueChange={(v) => setSelectedMonth(parseInt(v))}>
+                  <Select
+                    value={selectedMonth ? String(selectedMonth) : undefined}
+                    onValueChange={(v) => setSelectedMonth(parseInt(v))}
+                  >
                     <SelectTrigger className="h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
                       <SelectValue placeholder="Mês" />
                     </SelectTrigger>
@@ -304,7 +314,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                     </SelectContent>
                   </Select>
 
-                  <Select onValueChange={(v) => setSelectedYear(parseInt(v))}>
+                  <Select
+                    value={selectedYear ? String(selectedYear) : undefined}
+                    onValueChange={(v) => setSelectedYear(parseInt(v))}
+                  >
                     <SelectTrigger className="h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
                       <SelectValue placeholder="Ano" />
                     </SelectTrigger>
@@ -324,6 +337,10 @@ function PassportForm({ onSubmit }: PassportFormProps) {
           {/* ── STEP 3: Contato ── */}
           {currentStep === 3 && (
             <div className="flex flex-col justify-center gap-5 p-6 min-h-full">
+              <div className="text-center mb-1">
+                <h3 className="text-lg font-black text-foreground uppercase tracking-wide">Contato</h3>
+                <p className="text-xs text-muted-foreground mt-1">WhatsApp e e-mail para comunicação</p>
+              </div>
               <div>
                 <Label htmlFor="phone" className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">WhatsApp *</Label>
                 <Input
@@ -361,12 +378,19 @@ function PassportForm({ onSubmit }: PassportFormProps) {
           {/* ── STEP 4: Universidade e Curso ── */}
           {currentStep === 4 && (
             <div className="flex flex-col justify-center gap-5 p-6 min-h-full">
+              <div className="text-center mb-1">
+                <h3 className="text-lg font-black text-foreground uppercase tracking-wide">Instituição</h3>
+                <p className="text-xs text-muted-foreground mt-1">Universidade e curso desejados</p>
+              </div>
               <div>
                 <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Instituição ACAFE *</Label>
-                <Select onValueChange={(v) => {
-                  setSelectedUniversity(v);
-                  setForm(prev => ({ ...prev, university: v, course: '' }));
-                }}>
+                <Select
+                  value={form.university || undefined}
+                  onValueChange={(v) => {
+                    setSelectedUniversity(v);
+                    setForm(prev => ({ ...prev, university: v, course: '' }));
+                  }}
+                >
                   <SelectTrigger className="mt-1 h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm text-left">
                     <SelectValue placeholder="Selecione a universidade" />
                   </SelectTrigger>
@@ -382,7 +406,11 @@ function PassportForm({ onSubmit }: PassportFormProps) {
               {selectedUniversityData ? (
                 <div className="animate-fade-in">
                   <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Curso Desejado *</Label>
-                  <Select onValueChange={(v) => setForm(prev => ({ ...prev, course: v }))}>
+                  <Select
+                    key={selectedUniversity}
+                    value={form.course || undefined}
+                    onValueChange={(v) => setForm(prev => ({ ...prev, course: v }))}
+                  >
                     <SelectTrigger className="mt-1 h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
                       <SelectValue placeholder="Selecione o curso" />
                     </SelectTrigger>

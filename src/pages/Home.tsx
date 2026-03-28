@@ -141,8 +141,11 @@ function Home() {
 
       {/* Form Modal */}
       {showPassportModal && (
-        <div className="fixed inset-0 bg-background/95 backdrop-blur-xl z-50 flex flex-col sm:items-center sm:justify-center sm:p-4 animate-fade-in">
-          <div className="bg-card w-full h-full sm:h-auto sm:max-h-[92vh] sm:rounded-3xl sm:max-w-md shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col border-0 sm:border sm:border-border/50 animate-slide-in overflow-hidden">
+        <div
+          className="fixed inset-0 bg-background/95 backdrop-blur-xl z-50 flex flex-col sm:items-center sm:justify-center sm:p-4 animate-fade-in"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowPassportModal(false); }}
+        >
+          <div className="bg-card w-full h-[100dvh] sm:h-auto sm:max-h-[92vh] sm:rounded-3xl sm:max-w-md shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col border-0 sm:border sm:border-border/50 animate-slide-in overflow-hidden">
             <div className="bg-card border-b border-border px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
                 <InfinityLogo size={22} color="#8FBE3F" />
