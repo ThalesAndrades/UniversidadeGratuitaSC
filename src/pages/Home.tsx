@@ -72,7 +72,7 @@ function Home() {
         <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] max-w-[500px] max-h-[500px] bg-primary/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
       </div>
 
-      <main className="flex-1 flex items-center justify-center px-4 py-6 pt-20 sm:pt-28 relative z-10">
+      <main className="flex-1 flex items-center justify-center px-4 py-6 pt-[4.8rem] sm:pt-28 relative z-10">
         <div className="w-full max-w-sm sm:max-w-md">
           <div className="bg-card rounded-2xl sm:rounded-3xl border border-border/50 shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden relative">
 
@@ -172,52 +172,49 @@ function Home() {
               </button>
             </div>
 
-            {/* Footer institucional — ACAFE · SED · Universidade Gratuita */}
-            <div className="border-t border-border/30 bg-background/30 px-3 pt-2.5 pb-3">
-              <p className="text-[8px] font-bold text-muted-foreground/35 uppercase tracking-[0.28em] text-center mb-2">
-                Parceria
-              </p>
-              <div className="flex items-center justify-center">
+            {/* Rodapé institucional */}
+            <div className="border-t border-border/30">
+
+              {/* Trio de logos — grid com divisórias */}
+              <div className="grid grid-cols-3 divide-x divide-border/30">
 
                 {/* ACAFE */}
-                <div className="flex-1 flex flex-col items-center gap-1.5 px-2 py-1 group cursor-default">
-                  <AcafeConstellation size={22} color="#8FBE3F" className="opacity-80 group-hover:opacity-100 transition-opacity" />
-                  <span className="text-[10px] font-black text-primary/80 group-hover:text-primary lowercase tracking-[0.18em] transition-colors leading-none">
-                    acafe
-                  </span>
-                </div>
-
-                <div className="w-px h-10 bg-border/50 shrink-0" />
-
-                {/* SED — Secretaria de Estado da Educação */}
-                <div className="flex-1 flex flex-col items-center gap-1 px-2 py-1 group cursor-default">
-                  <ScStateSeal size={22} className="opacity-90 group-hover:opacity-100 transition-opacity" />
+                <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
+                  <AcafeConstellation size={20} color="#8FBE3F" />
                   <div className="text-center leading-none">
-                    <span className="text-[10px] font-black text-foreground/80 group-hover:text-foreground tracking-wider block transition-colors">
-                      SED
-                    </span>
-                    <span className="text-[7px] text-muted-foreground/50 uppercase tracking-wide block hidden sm:block">
-                      Educação SC
-                    </span>
+                    <span className="text-[9px] font-black text-primary lowercase tracking-[0.14em] block">acafe</span>
+                    <span className="text-[7px] text-muted-foreground/38 block mt-[2px] hidden sm:block">Rede de Universidades</span>
                   </div>
                 </div>
 
-                <div className="w-px h-10 bg-border/50 shrink-0" />
+                {/* SED */}
+                <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
+                  <ScStateSeal size={20} />
+                  <div className="text-center leading-none">
+                    <span className="text-[9px] font-black text-foreground/70 uppercase tracking-wider block">SED</span>
+                    <span className="text-[7px] text-muted-foreground/38 block mt-[2px] hidden sm:block">Secretaria de Educação</span>
+                  </div>
+                </div>
 
                 {/* Universidade Gratuita */}
-                <div className="flex-1 flex flex-col items-center gap-1 px-2 py-1 group cursor-default">
-                  <GraduationCapLogo size={22} color="#8FBE3F" className="opacity-80 group-hover:opacity-100 transition-opacity" />
+                <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
+                  <GraduationCapLogo size={20} color="#8FBE3F" />
                   <div className="text-center leading-none">
-                    <span className="text-[8px] font-black text-foreground/70 group-hover:text-foreground uppercase tracking-tight block transition-colors">
-                      Univ.
-                    </span>
-                    <span className="text-[8px] font-black text-primary/80 group-hover:text-primary uppercase tracking-tight block transition-colors">
-                      Gratuita
+                    <span className="text-[7px] font-black text-foreground/70 uppercase tracking-tight leading-[1.15] block">
+                      Universidade<br />Gratuita
                     </span>
                   </div>
                 </div>
 
               </div>
+
+              {/* Linha legal */}
+              <div className="border-t border-border/20 bg-background/40 py-1.5 px-4 text-center">
+                <p className="text-[7px] text-muted-foreground/28 uppercase tracking-[0.24em] leading-none">
+                  Governo do Estado de Santa Catarina · Secretaria de Estado da Educação
+                </p>
+              </div>
+
             </div>
           </div>
         </div>
