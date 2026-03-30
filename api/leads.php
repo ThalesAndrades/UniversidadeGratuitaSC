@@ -128,19 +128,75 @@ try {
     PDO::ATTR_EMULATE_PREPARES => false,
   ]);
 
-  $stmt = $pdo->prepare('INSERT INTO leads (created_at, ip, user_agent, referrer, first_name, last_name, email, phone, university, course, consent) VALUES (NOW(), :ip, :ua, :ref, :fn, :ln, :em, :ph, :un, :co, :cs)');
-  $stmt->execute([
-    ':ip' => $ip,
-    ':ua' => $ua,
-    ':ref' => $ref,
-    ':fn' => $firstName,
-    ':ln' => $lastName,
-    ':em' => $email,
-    ':ph' => $phone,
-    ':un' => $university,
-    ':co' => $course,
-    ':cs' => $consent ? 1 : 0,
-  ]);
+  $courseKeyRaw = trim($course);
+  $courseKey = function_exists('mb_strtolower') ? mb_strtolower($courseKeyRaw, 'UTF-8') : strtolower($courseKeyRaw);
+
+  try {
+    $pdo->beginTransaction();
+
+    $upsertUniversity = $pdo->prepare('INSERT INTO universities (university_key, name) VALUES (:uk, :nm) ON DUPLICATE KEY UPDATE name = VALUES(name)');
+    $upsertUniversity->execute([
+      ':uk' => $university,
+      ':nm' => $university,
+    ]);
+
+    $selectUniversity = $pdo->prepare('SELECT id FROM universities WHERE university_key = :uk LIMIT 1');
+    $selectUniversity->execute([':uk' => $university]);
+    $urow = $selectUniversity->fetch();
+    $universityId = is_array($urow) && isset($urow['id']) ? (int)$urow['id'] : null;
+
+    $courseId = null;
+    if ($universityId !== null && $courseKey !== '') {
+      $upsertCourse = $pdo->prepare('INSERT INTO courses (university_id, course_key, name) VALUES (:uid, :ck, :nm) ON DUPLICATE KEY UPDATE name = VALUES(name)');
+      $upsertCourse->execute([
+        ':uid' => $universityId,
+        ':ck' => $courseKey,
+        ':nm' => $course,
+      ]);
+
+      $selectCourse = $pdo->prepare('SELECT id FROM courses WHERE university_id = :uid AND course_key = :ck LIMIT 1');
+      $selectCourse->execute([
+        ':uid' => $universityId,
+        ':ck' => $courseKey,
+      ]);
+      $crow = $selectCourse->fetch();
+      $courseId = is_array($crow) && isset($crow['id']) ? (int)$crow['id'] : null;
+    }
+
+    $stmt = $pdo->prepare('INSERT INTO leads (created_at, ip, user_agent, referrer, first_name, last_name, email, phone, university, course, university_id, course_id, consent) VALUES (NOW(), :ip, :ua, :ref, :fn, :ln, :em, :ph, :un, :co, :uid, :cid, :cs)');
+    $stmt->execute([
+      ':ip' => $ip,
+      ':ua' => $ua,
+      ':ref' => $ref,
+      ':fn' => $firstName,
+      ':ln' => $lastName,
+      ':em' => $email,
+      ':ph' => $phone,
+      ':un' => $university,
+      ':co' => $course,
+      ':uid' => $universityId,
+      ':cid' => $courseId,
+      ':cs' => $consent ? 1 : 0,
+    ]);
+
+    $pdo->commit();
+  } catch (Throwable $e) {
+    if ($pdo->inTransaction()) $pdo->rollBack();
+
+    $stmt = $pdo->prepare('INSERT INTO leads (created_at, ip, user_agent, referrer, first_name, last_name, email, phone, university, course, consent) VALUES (NOW(), :ip, :ua, :ref, :fn, :ln, :em, :ph, :un, :co, :cs)');
+    $stmt->execute([
+      ':ip' => $ip,
+      ':ua' => $ua,
+      ':ref' => $ref,
+      ':fn' => $firstName,
+      ':ln' => $lastName,
+      ':em' => $email,
+      ':ph' => $phone,
+      ':un' => $university,
+      ':co' => $course,
+      ':cs' => $consent ? 1 : 0,
+    ]);
+  }
 
   echo json_encode(['ok' => true], JSON_UNESCAPED_UNICODE);
 } catch (Throwable $e) {
