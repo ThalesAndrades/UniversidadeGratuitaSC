@@ -2,7 +2,7 @@ import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import type { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { InfinityLogo, OverlapSquares, BracketCorner, GraduationCapLogo, GraduationCapBrand, AcafeConstellation, ScStateSeal } from '@/components/features/BrandElements';
+import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, ScStateSeal } from '@/components/features/BrandElements';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -141,13 +141,13 @@ function Home() {
               </div>
 
               {/* Marca Universidade Gratuita */}
-              <div className="mb-5 w-full flex justify-center">
-                <GraduationCapBrand
-                  width={148}
-                  color="#ffffff"
-                  className="opacity-95"
-                  style={{ filter: 'drop-shadow(0 0 18px rgba(143,190,63,0.38))' }}
-                />
+              <div className="mb-4 w-full flex flex-col items-center justify-center">
+                <div style={{ filter: 'drop-shadow(0 0 18px rgba(143,190,63,0.38))' }}>
+                  <AcafeConstellation size={44} color="#8FBE3F" className="opacity-95" />
+                </div>
+                <div className="mt-2 text-[10px] sm:text-[11px] font-black tracking-[0.34em] text-primary/90 uppercase">
+                  Passaporte ACAFE
+                </div>
               </div>
 
               <h2 className="text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tight leading-none">
@@ -170,9 +170,8 @@ function Home() {
               {/* ACAFE brand header */}
               <div className="flex items-center justify-center gap-2 pt-3 px-4">
                 <div className="flex-1 h-px bg-border/40" />
-                <div className="flex items-center gap-1.5">
-                  <AcafeConstellation size={14} color="#8FBE3F" />
-                  <span className="text-[10px] font-black tracking-[0.28em] text-primary/90 lowercase">acafe</span>
+                <div className="flex items-center gap-2">
+                  <AcafeLockup size={14} textClassName="tracking-[0.28em] text-primary/90" />
                   <span className="text-[9px] font-medium text-muted-foreground/50 uppercase tracking-wider hidden sm:inline">· 13 universidades</span>
                 </div>
                 <div className="flex-1 h-px bg-border/40" />
@@ -241,9 +240,8 @@ function Home() {
                   className="flex flex-col items-center gap-1.5 py-3 px-2 group hover:bg-primary/5 transition-colors duration-200 active:bg-primary/10"
                   aria-label="ACAFE no Instagram"
                 >
-                  <AcafeConstellation size={22} color="#8FBE3F" />
+                  <AcafeLockup size={22} className="gap-2" textClassName="tracking-[0.14em] text-primary" />
                   <div className="text-center leading-none">
-                    <span className="text-[10px] font-black text-primary lowercase tracking-[0.14em] block">acafe</span>
                     <span className="text-[8px] text-muted-foreground/45 block mt-[2px] group-hover:text-primary/60 transition-colors">
                       @acafeoficial
                     </span>
