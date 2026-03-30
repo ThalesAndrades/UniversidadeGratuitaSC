@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useMemo, memo } from 'react';
 import { toast } from 'sonner';
 import { Camera, Upload, ChevronRight, ChevronLeft, CheckCircle2, Loader2, ImagePlus } from 'lucide-react';
-import { passportSchema, PassportFormData } from '@/lib/validations';
+import { passportSchema, type PassportFormData } from '@/lib/validations';
 import { formatPhone, generateYears, getDaysInMonth } from '@/lib/utils';
 import { compressImage } from '@/lib/imageOptimization';
 import { UNIVERSITIES } from '@/constants/universities';

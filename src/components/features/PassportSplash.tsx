@@ -2,7 +2,7 @@ import { useRef, useCallback, useMemo, useState, memo } from 'react';
 import { Download, X, CheckCircle2, Share2 } from 'lucide-react';
 import QRCode from '@/components/features/QRCode';
 import { InfinityLogo } from '@/components/features/BrandElements';
-import { PassportFormData } from '@/lib/validations';
+import type { PassportFormData } from '@/lib/validations';
 import { formatDate } from '@/lib/utils';
 import { UNIVERSITIES } from '@/constants/universities';
 import { Button } from '@/components/ui/button';
@@ -48,22 +48,39 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
         import('jspdf'),
       ]);
 
+      const isCoarsePointer =
+        typeof window !== 'undefined' &&
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+      const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+      const scale = Math.min(isCoarsePointer ? 2 : 3, Math.max(1.5, dpr));
+
       const canvas = await html2canvas(passportRef.current, {
-        scale: 3,
+        scale,
         backgroundColor: '#ffffff',
         useCORS: true,
         logging: false,
       });
 
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
 
-      const pageHeight = 297;
+      let imgWidth = pageWidth;
+      let imgHeight = (canvas.height * imgWidth) / canvas.width;
+      if (imgHeight > pageHeight) {
+        imgHeight = pageHeight;
+        imgWidth = (canvas.width * imgHeight) / canvas.height;
+      }
+
+      const xOffset = Math.max(0, (pageWidth - imgWidth) / 2);
       const yOffset = Math.max(0, (pageHeight - imgHeight) / 2);
-      pdf.addImage(imgData, 'PNG', 0, yOffset, imgWidth, imgHeight);
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+
+      pdf.addImage(imgData, 'JPEG', xOffset, yOffset, imgWidth, imgHeight, undefined, 'FAST');
       pdf.save(`passaporte-universitario-${data.firstName.toLowerCase()}-${data.lastName.toLowerCase()}.pdf`);
+      canvas.width = 0;
+      canvas.height = 0;
     } catch {
       toast.error('Erro ao gerar PDF. Tente novamente.');
     } finally {
@@ -85,7 +102,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
   }, [data.firstName, data.lastName, university]);
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-none sm:backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
       <div className="bg-[#272B20] rounded-2xl max-w-lg w-full max-h-[95vh] overflow-hidden shadow-2xl animate-slide-in border border-[#8FBE3F]/20 flex flex-col">
 
         {/* Success Header */}

@@ -1,5 +1,5 @@
 import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
-import { PassportFormData } from '@/lib/validations';
+import type { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { InfinityLogo, OverlapSquares, BracketCorner, GraduationCapLogo, GraduationCapBrand, AcafeConstellation, ScStateSeal } from '@/components/features/BrandElements';
@@ -68,8 +68,8 @@ function Home() {
 
       {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div className="absolute top-0 right-0 w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/3 translate-x-1/4" style={{ willChange: 'transform' }} />
-        <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] max-w-[500px] max-h-[500px] bg-primary/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" style={{ willChange: 'transform' }} />
+        <div className="absolute top-0 right-0 w-[70vw] h-[70vw] sm:w-[60vw] sm:h-[60vw] max-w-[700px] max-h-[700px] bg-primary/10 rounded-full blur-[70px] sm:blur-[120px] -translate-y-1/3 translate-x-1/4" style={{ willChange: 'transform' }} />
+        <div className="absolute bottom-0 left-0 w-[60vw] h-[60vw] sm:w-[50vw] sm:h-[50vw] max-w-[500px] max-h-[500px] bg-primary/5 rounded-full blur-[60px] sm:blur-[100px] translate-y-1/3 -translate-x-1/4" style={{ willChange: 'transform' }} />
       </div>
 
       <main className="flex-1 flex items-center justify-center px-4 py-6 pt-[4.8rem] sm:pt-28 relative z-10">
@@ -258,7 +258,7 @@ function Home() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="passport-modal-title"
-          className="fixed inset-0 bg-background/95 backdrop-blur-xl z-50 flex flex-col sm:items-center sm:justify-center sm:p-4 animate-fade-in"
+          className="fixed inset-0 bg-background/95 backdrop-blur-none sm:backdrop-blur-xl z-50 flex flex-col sm:items-center sm:justify-center sm:p-4 animate-fade-in"
           onClick={(e) => { if (e.target === e.currentTarget) setShowPassportModal(false); }}
         >
           <div className="bg-card w-full h-[100dvh] sm:h-auto sm:max-h-[92vh] sm:rounded-3xl sm:max-w-md shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col border-0 sm:border sm:border-border/50 animate-slide-in overflow-hidden">
