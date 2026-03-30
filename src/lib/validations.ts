@@ -1,11 +1,8 @@
 import { z } from 'zod';
-import DOMPurify from 'dompurify';
 
-// Função para sanitizar strings contra XSS
 const sanitizeString = (val: string) => {
   if (typeof val !== 'string') return val;
-  // Remove qualquer tag HTML/Script e espaços extras
-  return DOMPurify.sanitize(val.trim(), { ALLOWED_TAGS: [] });
+  return val.trim().replace(/[<>]/g, '').replace(/\s+/g, ' ');
 };
 
 export const passportSchema = z.object({

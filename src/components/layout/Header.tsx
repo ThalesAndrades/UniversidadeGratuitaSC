@@ -41,7 +41,7 @@ function Header() {
 
       {/* ── Barra principal ───────────────────────────────────────────────── */}
       <div
-        className="bg-card/95 backdrop-blur-md border-b border-border/50"
+        className="bg-card/95 backdrop-blur-none sm:backdrop-blur-md border-b border-border/50"
         style={{ boxShadow: '0 2px 24px rgba(0,0,0,0.28)' }}
       >
         <div className="container mx-auto px-4 h-11 sm:h-12 flex items-center justify-between gap-4">

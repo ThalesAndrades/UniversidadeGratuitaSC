@@ -32,7 +32,7 @@ export default defineConfig({
           if (id.includes('node_modules/html2canvas/') || id.includes('node_modules/jspdf/')) {
             return 'pdf-vendor';
           }
-          if (id.includes('node_modules/zod/') || id.includes('node_modules/dompurify/') || id.includes('node_modules/@hookform/')) {
+          if (id.includes('node_modules/zod/') || id.includes('node_modules/@hookform/')) {
             return 'validation-vendor';
           }
         },
