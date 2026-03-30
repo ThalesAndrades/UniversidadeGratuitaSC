@@ -158,34 +158,6 @@ export const AcafeConstellation = memo(function AcafeConstellation({
   );
 });
 
-interface AcafeLockupProps {
-  size?: number;
-  color?: string;
-  textColor?: string;
-  className?: string;
-  textClassName?: string;
-}
-
-export const AcafeLockup = memo(function AcafeLockup({
-  size = 20,
-  color = '#8FBE3F',
-  textColor = 'hsl(var(--primary))',
-  className = '',
-  textClassName = '',
-}: AcafeLockupProps) {
-  return (
-    <div className={`inline-flex items-center gap-2 leading-none ${className}`}>
-      <AcafeConstellation size={size} color={color} className="opacity-90 shrink-0" />
-      <span
-        className={`text-[11px] font-black lowercase tracking-wider ${textClassName}`}
-        style={{ color: textColor }}
-      >
-        acafe
-      </span>
-    </div>
-  );
-});
-
 // ── Escudo do Estado de Santa Catarina (Brasão / SED) ──────────────────────
 // Fiel ao brasão oficial: listras vermelhas + fundo verde + estrela dourada
 interface ScStateSealProps {
