@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { GraduationCapLogo, AcafeConstellation } from '@/components/features/BrandElements';
+import { GraduationCapLogo, AcafeLockup } from '@/components/features/BrandElements';
 
 function Header() {
   return (
@@ -71,12 +71,12 @@ function Header() {
               <span className="text-[7px] font-semibold text-muted-foreground/38 uppercase tracking-[0.22em] mb-[3px]">
                 Em parceria com
               </span>
-              <span className="text-[11px] font-black text-primary lowercase tracking-wider">acafe</span>
+              <AcafeLockup size={18} />
             </div>
             <div className="w-px h-7 bg-border/35 hidden sm:block" />
-            <AcafeConstellation size={20} color="#8FBE3F" className="opacity-90" />
-            {/* Label — mobile */}
-            <span className="text-[10px] font-black text-primary lowercase tracking-wider sm:hidden">acafe</span>
+            <div className="sm:hidden">
+              <AcafeLockup size={18} />
+            </div>
           </div>
 
         </div>

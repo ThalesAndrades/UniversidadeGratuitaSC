@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 bunfig.toml
 *.bak
+
+# Hostinger DB credentials (never commit)
+api/config.local.php
