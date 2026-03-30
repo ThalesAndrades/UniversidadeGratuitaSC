@@ -1,0 +1,10 @@
+<?php
+declare(strict_types=1);
+
+return [
+  'db_host' => 'localhost',
+  'db_name' => '525832347_passaporte',
+  'db_user' => 'u525832347_acafe',
+  'db_pass' => 'CHANGE_ME',
+];
+

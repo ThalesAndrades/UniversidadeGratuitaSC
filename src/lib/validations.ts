@@ -71,6 +71,7 @@ export const passportSchema = z.object({
     // Validar se a string base64 é realmente uma imagem e não um payload malicioso
     .refine(val => val.startsWith('data:image/'), 'Formato de imagem inválido')
     .refine(val => val.length < 5 * 1024 * 1024, 'Imagem muito grande após compressão'), // Max ~5MB em base64
+  consent: z.boolean().optional().default(true),
 });
 
 export type PassportFormData = z.infer<typeof passportSchema>;

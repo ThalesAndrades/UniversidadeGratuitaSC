@@ -11,6 +11,46 @@ const PassportForm = lazy(() => import('@/components/forms/PassportForm').then(m
 
 const RATE_LIMIT_TIME = 10000;
 
+function captureLead(data: PassportFormData) {
+  if (typeof window === 'undefined') return;
+  if (!data?.consent) return;
+
+  const run = () => {
+    try {
+      const url = new URL('/api/leads.php', window.location.origin).toString();
+      const payload = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        university: data.university,
+        course: data.course,
+        consent: !!data.consent,
+        ts: Math.floor(Date.now() / 1000),
+        hp: '',
+      };
+
+      const body = JSON.stringify(payload);
+
+      if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+        const ok = navigator.sendBeacon(url, new Blob([body], { type: 'application/json' }));
+        if (ok) return;
+      }
+
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body,
+        keepalive: true,
+      }).catch(() => {});
+    } catch {}
+  };
+
+  const ric = (window as any).requestIdleCallback as undefined | ((cb: () => void, opts?: { timeout: number }) => void);
+  if (typeof ric === 'function') ric(run, { timeout: 1200 });
+  else setTimeout(run, 0);
+}
+
 function Home() {
   const lastSubmitTimeRef = useRef(0);
   const [showPassportModal, setShowPassportModal] = useState(false);
@@ -45,6 +85,7 @@ function Home() {
         throw new Error('Dados inválidos.');
       }
       setPassportData(data);
+      captureLead(data);
       setShowPassportModal(false);
       setShowSplash(true);
       toast.success('Passaporte gerado com sucesso!');

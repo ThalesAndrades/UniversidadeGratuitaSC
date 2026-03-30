@@ -8,6 +8,7 @@ import { UNIVERSITIES } from '@/constants/universities';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
@@ -70,11 +71,13 @@ interface FormState {
   email: string;
   university: string;
   course: string;
+  consent: boolean;
 }
 
 const EMPTY_FORM: FormState = {
   photo: '', firstName: '', lastName: '', birthDate: '',
   phone: '', email: '', university: '', course: '',
+  consent: true,
 };
 
 function PassportForm({ onSubmit }: PassportFormProps) {
@@ -388,6 +391,18 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   className={`mt-1 h-12 text-base border-2 focus-visible:ring-0 focus-visible:border-primary bg-card rounded-xl ${err('email') ? 'border-destructive' : 'border-border'}`}
                 />
                 {err('email') && <p className="text-destructive text-xs mt-1.5 font-semibold">{err('email')}</p>}
+              </div>
+
+              <div className="flex items-start gap-3 rounded-xl border border-border/60 bg-muted/15 px-4 py-3">
+                <Checkbox
+                  id="consent"
+                  checked={form.consent}
+                  onCheckedChange={(v) => setForm(prev => ({ ...prev, consent: v === true }))}
+                  className="mt-0.5"
+                />
+                <Label htmlFor="consent" className="text-xs leading-relaxed text-muted-foreground font-semibold cursor-pointer select-none">
+                  Aceito receber comunicações sobre o Programa Universidade Gratuita e o passaporte estudantil.
+                </Label>
               </div>
             </div>
           )}
