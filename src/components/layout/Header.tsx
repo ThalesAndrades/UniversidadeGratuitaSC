@@ -43,10 +43,8 @@ function Header() {
         <div className="container mx-auto px-4 h-11 sm:h-12 flex items-center justify-between gap-4">
 
           {/* Identidade do programa */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <div className="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center" aria-hidden="true">
-              <AcafeConstellation size={17} color="#8FBE3F" />
-            </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <AcafeConstellation size={28} color="#8FBE3F" className="shrink-0 drop-shadow-[0_0_6px_rgba(143,190,63,0.3)]" />
             <div className="flex flex-col">
               <span className="text-[8px] font-semibold text-muted-foreground/45 uppercase tracking-[0.22em] leading-none mb-[3px]">
                 Gere seu
