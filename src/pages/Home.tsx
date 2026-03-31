@@ -401,46 +401,40 @@ function Home() {
                 minHeight: '10rem',
               }}
             >
-              {/* ── Barcode pattern (overlay no header, estilo passaporte) ── */}
+              {/* ── Selos diagonais (overlay no header, estilo ingresso) ── */}
               <div className="absolute inset-0 pointer-events-none select-none" aria-hidden="true"
                 style={{ overflow: 'hidden' }}
               >
-                {/* Barcode strip — top area */}
                 <div style={{
-                  position: 'absolute', top: 0, left: 0, right: 0,
-                  display: 'flex', flexDirection: 'column', gap: '3px',
-                  padding: '10px 16px',
-                  opacity: 0.07,
+                  position: 'absolute',
+                  top: '-200%', left: '-80%', right: '-80%', bottom: '-200%',
+                  transform: 'rotate(-22deg)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '14px',
+                  justifyContent: 'center',
+                  opacity: 0.06,
                 }}>
-                  {Array.from({ length: 5 }).map((_, row) => (
-                    <div key={row} style={{ display: 'flex', gap: '1.5px', height: row === 0 || row === 4 ? '3px' : '8px' }}>
-                      {Array.from({ length: 80 }).map((_, i) => {
-                        const seed = (row * 80 + i) * 2654435761;
-                        const w = ((seed >>> 16) % 4) + 1;
-                        const on = ((seed >>> 8) % 3) !== 0;
-                        return on ? (
-                          <div key={i} style={{
-                            width: `${w}px`, height: '100%',
-                            backgroundColor: '#8FBE3F',
-                            flexShrink: 0,
-                          }} />
-                        ) : (
-                          <div key={i} style={{ width: `${w > 2 ? 2 : 1}px`, flexShrink: 0 }} />
-                        );
-                      })}
+                  {Array.from({ length: 18 }).map((_, row) => (
+                    <div key={row} style={{
+                      display: 'flex', gap: '18px', whiteSpace: 'nowrap',
+                      marginLeft: row % 2 === 0 ? '0px' : '-80px',
+                    }}>
+                      {Array.from({ length: 12 }).map((_, col) => (
+                        <span key={col} style={{
+                          fontSize: '9px', fontWeight: 900, letterSpacing: '2.5px',
+                          textTransform: 'uppercase', color: '#8FBE3F',
+                          fontFamily: 'Arial, Helvetica, sans-serif',
+                        }}>
+                          {(row + col) % 3 === 0
+                            ? 'ACAFE ✦ SC'
+                            : (row + col) % 3 === 1
+                              ? 'UNIVERSIDADE GRATUITA'
+                              : 'PASSAPORTE ESTUDANTIL'}
+                        </span>
+                      ))}
                     </div>
                   ))}
-                  {/* MRZ-style text under barcode */}
-                  <div style={{
-                    marginTop: '2px',
-                    fontFamily: '"Courier New", Courier, monospace',
-                    fontSize: '6.5px', fontWeight: 700,
-                    letterSpacing: '2px', color: '#8FBE3F',
-                    opacity: 0.7, lineHeight: 1.4,
-                  }}>
-                    <div>P&lt;BRA&lt;ACAFE&lt;&lt;PASSAPORTE&lt;ESTUDANTIL&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
-                    <div>SC00000&lt;&lt;0BRAFUNDACAO&lt;&lt;EDUCACIONAL&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
-                  </div>
                 </div>
               </div>
 
