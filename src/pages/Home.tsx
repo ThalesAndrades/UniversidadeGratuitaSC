@@ -180,7 +180,7 @@ function Home() {
 
             {/* Body */}
             <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
-              {/* Tagline — chapéu posicionado acima da última vogal "e" de "gente" */}
+              {/* Tagline — "A gente ajuda a gente." com chapéu acima do "e" final */}
               <div className="flex flex-col items-start w-full" style={{ letterSpacing: '-0.03em' }}>
                 <span className="text-[2.2rem] sm:text-[2.65rem] font-black text-foreground/90 leading-none">
                   A gente
@@ -193,20 +193,23 @@ function Home() {
                       aria-hidden="true"
                       style={{
                         position: 'absolute',
-                        top: '-0.52em',
+                        top: '-1.05em',
                         left: '50%',
-                        transform: 'translateX(-50%) rotate(6deg)',
-                        width: '0.72em',
-                        height: '0.54em',
+                        transform: 'translateX(-50%) rotate(4deg)',
+                        width: '1.35em',
+                        height: '1.0em',
                         pointerEvents: 'none',
                       }}
                     >
-                      <svg viewBox="0 0 300 222" fill="currentColor" width="100%" height="100%">
-                        <rect x="0" y="0" width="300" height="34" rx="4" />
-                        <path d="M0 42 L300 42 L300 74 L26 74 Z" />
-                        <path d="M54 90 L246 90 Q264 90 264 128 Q264 206 150 206 Q36 206 36 128 Q36 90 54 90 Z" />
-                        <rect x="242" y="0" width="12" height="96" />
-                        <path d="M224 74 L262 74 L262 192 L243 168 L224 192 Z" />
+                      <svg viewBox="0 0 100 80" fill="currentColor" width="100%" height="100%">
+                        {/* Capelo — losango/diamante (vista frontal do mortarboard) */}
+                        <polygon points="50,2 96,24 50,46 4,24" />
+                        {/* Cúpula arredondada abaixo */}
+                        <path d="M26 30 Q26 60 50 64 Q74 60 74 30" fill="currentColor" opacity="0.9" />
+                        {/* Borla — cordão + pendente */}
+                        <line x1="50" y1="46" x2="82" y2="46" stroke="currentColor" strokeWidth="3" />
+                        <line x1="82" y1="46" x2="82" y2="62" stroke="currentColor" strokeWidth="3" />
+                        <rect x="76" y="62" width="12" height="14" rx="2" fill="currentColor" />
                       </svg>
                     </span>
                   </span>
