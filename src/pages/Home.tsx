@@ -382,6 +382,47 @@ function Home() {
             }}
           >
 
+            {/* ── Faixa holográfica — topo do card, acima do header ── */}
+            <div className="relative overflow-hidden" aria-hidden="true"
+              style={{ height: '42px', background: 'linear-gradient(135deg, hsl(82,30%,18%) 0%, hsl(82,22%,22%) 25%, hsl(82,30%,18%) 50%, hsl(55,25%,20%) 75%, hsl(82,30%,18%) 100%)' }}
+            >
+              {/* Shimmer layers */}
+              <div className="absolute inset-0" style={{
+                background: 'repeating-linear-gradient(105deg, transparent 0px, rgba(143,190,63,0.08) 2px, transparent 4px, transparent 12px)',
+              }} />
+              <div className="absolute inset-0" style={{
+                background: 'repeating-linear-gradient(75deg, transparent 0px, rgba(232,185,49,0.05) 1px, transparent 3px, transparent 16px)',
+              }} />
+              <div className="absolute inset-0" style={{
+                background: 'linear-gradient(90deg, transparent 0%, rgba(143,190,63,0.06) 20%, rgba(255,255,255,0.04) 40%, rgba(27,95,173,0.05) 60%, rgba(232,185,49,0.04) 80%, transparent 100%)',
+              }} />
+              {/* Top shine */}
+              <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(143,190,63,0.25) 30%, rgba(255,255,255,0.12) 50%, rgba(232,185,49,0.2) 70%, transparent)' }} />
+              {/* Bottom separator */}
+              <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(143,190,63,0.12) 30%, rgba(27,95,173,0.08) 70%, transparent)' }} />
+              {/* MRZ micro text */}
+              <div className="absolute inset-0 flex items-center justify-center" style={{ opacity: 0.15 }}>
+                <span style={{
+                  fontFamily: '"Courier New", Courier, monospace',
+                  fontSize: '5.5px', fontWeight: 700, letterSpacing: '3px',
+                  textTransform: 'uppercase', color: '#8FBE3F',
+                  whiteSpace: 'nowrap',
+                }}>
+                  P&lt;BRA&lt;ACAFE&lt;&lt;PASSAPORTE&lt;ESTUDANTIL&lt;&lt;SC&lt;&lt;2026&lt;&lt;&lt;FUNDACAO&lt;EDUCACIONAL&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+                </span>
+              </div>
+              <div className="absolute inset-0 flex items-end justify-center pb-[6px]" style={{ opacity: 0.1 }}>
+                <span style={{
+                  fontFamily: '"Courier New", Courier, monospace',
+                  fontSize: '5px', fontWeight: 700, letterSpacing: '2.5px',
+                  textTransform: 'uppercase', color: '#8FBE3F',
+                  whiteSpace: 'nowrap',
+                }}>
+                  SC00000&lt;&lt;0BRA&lt;&lt;REDE&lt;UNIVERSIDADES&lt;COMUNITARIAS&lt;&lt;SANTA&lt;CATARINA&lt;&lt;&lt;
+                </span>
+              </div>
+            </div>
+
             {/* Bracket corners */}
             {([
               { pos: 'top-2.5 left-2.5',    rot: 0   },
@@ -401,48 +442,6 @@ function Home() {
                 minHeight: '10rem',
               }}
             >
-
-              {/* ── Faixa holográfica superior — estilo passaporte/ingresso ── */}
-              <div className="relative overflow-hidden" aria-hidden="true"
-                style={{ height: '38px', background: 'linear-gradient(135deg, hsl(82,30%,18%) 0%, hsl(82,22%,22%) 25%, hsl(82,30%,18%) 50%, hsl(55,25%,20%) 75%, hsl(82,30%,18%) 100%)' }}
-              >
-                {/* Shimmer layers */}
-                <div className="absolute inset-0" style={{
-                  background: 'repeating-linear-gradient(105deg, transparent 0px, rgba(143,190,63,0.08) 2px, transparent 4px, transparent 12px)',
-                }} />
-                <div className="absolute inset-0" style={{
-                  background: 'repeating-linear-gradient(75deg, transparent 0px, rgba(232,185,49,0.05) 1px, transparent 3px, transparent 16px)',
-                }} />
-                <div className="absolute inset-0" style={{
-                  background: 'linear-gradient(90deg, transparent 0%, rgba(143,190,63,0.06) 20%, rgba(255,255,255,0.04) 40%, rgba(27,95,173,0.05) 60%, rgba(232,185,49,0.04) 80%, transparent 100%)',
-                }} />
-                {/* Subtle top shine */}
-                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(143,190,63,0.25) 30%, rgba(255,255,255,0.12) 50%, rgba(232,185,49,0.2) 70%, transparent)' }} />
-                {/* Bottom separator */}
-                <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(143,190,63,0.12) 30%, rgba(27,95,173,0.08) 70%, transparent)' }} />
-                {/* Micro text — MRZ style */}
-                <div className="absolute inset-0 flex items-center justify-center" style={{ opacity: 0.15 }}>
-                  <span style={{
-                    fontFamily: '"Courier New", Courier, monospace',
-                    fontSize: '5.5px', fontWeight: 700, letterSpacing: '3px',
-                    textTransform: 'uppercase', color: '#8FBE3F',
-                    whiteSpace: 'nowrap',
-                  }}>
-                    P&lt;BRA&lt;ACAFE&lt;&lt;PASSAPORTE&lt;ESTUDANTIL&lt;&lt;SC&lt;&lt;2026&lt;&lt;&lt;FUNDACAO&lt;EDUCACIONAL&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
-                  </span>
-                </div>
-                {/* Second MRZ line */}
-                <div className="absolute inset-0 flex items-end justify-center pb-[6px]" style={{ opacity: 0.1 }}>
-                  <span style={{
-                    fontFamily: '"Courier New", Courier, monospace',
-                    fontSize: '5px', fontWeight: 700, letterSpacing: '2.5px',
-                    textTransform: 'uppercase', color: '#8FBE3F',
-                    whiteSpace: 'nowrap',
-                  }}>
-                    SC00000&lt;&lt;0BRA&lt;&lt;REDE&lt;UNIVERSIDADES&lt;COMUNITARIAS&lt;&lt;SANTA&lt;CATARINA&lt;&lt;&lt;
-                  </span>
-                </div>
-              </div>
 
               {/* Ambient light */}
               <div className="absolute -top-14 left-1/4 w-56 h-56 rounded-full pointer-events-none"
@@ -495,20 +494,6 @@ function Home() {
                   </div>
                 </div>
 
-                {/* Subtitle chip */}
-                <div className="flex">
-                  <span
-                    className="inline-flex items-center gap-1.5 text-[8px] sm:text-[9px] font-bold tracking-[0.12em] uppercase leading-none px-2.5 py-1.5 rounded-full"
-                    style={{
-                      background: 'rgba(143,190,63,0.08)',
-                      border: '1px solid rgba(143,190,63,0.12)',
-                      color: 'rgba(143,190,63,0.7)',
-                    }}
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#8FBE3F]/50" />
-                    Passaporte Estudantil · Santa Catarina
-                  </span>
-                </div>
               </div>
 
               {/* Bottom edge highlight */}
