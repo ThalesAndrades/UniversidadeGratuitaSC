@@ -43,14 +43,14 @@ const UNIVERSITIES: University[] = [
   { name: 'IELUSC',           logo: ieluscLogo     },
 ];
 
-// ─── Badge (somente logo, sem texto) ────────────────────────────────────────
+// ─── Badge ──────────────────────────────────────────────────────────────────
 
 function UniversityBadge({ u }: { u: University }) {
   return (
-    <div className="flex items-center justify-center px-3 sm:px-4 shrink-0 cursor-default group">
+    <div className="shrink-0 px-1.5 sm:px-2 cursor-default group">
       <div
-        className="w-[5rem] h-[3.2rem] sm:w-[6rem] sm:h-[3.8rem]
-                   flex items-center justify-center
+        className="w-14 h-10 sm:w-16 sm:h-11 rounded-md
+                   flex items-center justify-center p-1.5
                    group-hover:scale-105 transition-transform duration-300"
         title={u.name}
       >
@@ -73,17 +73,14 @@ const MemoizedBadge = memo(UniversityBadge);
 function UniversityLogos() {
   const items = [...UNIVERSITIES, ...UNIVERSITIES];
   return (
-    <div className="w-full px-3 sm:px-4">
-      <div
-        className="w-full bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)]
-                   overflow-hidden py-4 sm:py-5 flex items-center
-                   [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]"
-      >
-        <div className="flex w-max animate-marquee hover:[animation-play-state:paused] items-center">
-          {items.map((u, i) => (
-            <MemoizedBadge key={`${u.name}-${i}`} u={u} />
-          ))}
-        </div>
+    <div
+      className="w-full bg-white/95 overflow-hidden py-2.5 sm:py-3 flex items-center
+                 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+    >
+      <div className="flex w-max animate-marquee hover:[animation-play-state:paused] items-center">
+        {items.map((u, i) => (
+          <MemoizedBadge key={`${u.name}-${i}`} u={u} />
+        ))}
       </div>
     </div>
   );
