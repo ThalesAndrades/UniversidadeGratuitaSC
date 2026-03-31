@@ -2,7 +2,7 @@ import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import type { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, ScStateSeal } from '@/components/features/BrandElements';
+import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, ScStateSeal, GraduationCapBrand } from '@/components/features/BrandElements';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
