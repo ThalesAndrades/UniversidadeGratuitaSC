@@ -13,8 +13,9 @@ export default defineConfig({
   build: {
     target: 'es2015',
     minify: 'esbuild',
-    outDir: 'dist',
-    emptyOutDir: true,
+    outDir: '.',
+    emptyOutDir: false,
+    assetsDir: 'assets',
     assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
