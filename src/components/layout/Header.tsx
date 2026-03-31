@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { AcafeConstellation } from '@/components/features/BrandElements';
+import acafeLogo from '@/assets/acafe-logo.png';
 
 function Header() {
   return (
@@ -44,7 +44,7 @@ function Header() {
 
           {/* Identidade do programa */}
           <div className="flex items-center gap-2 shrink-0">
-            <AcafeConstellation size={28} color="#8FBE3F" className="shrink-0 drop-shadow-[0_0_6px_rgba(143,190,63,0.3)]" />
+            <img src={acafeLogo} alt="ACAFE" className="h-[28px] w-auto shrink-0 drop-shadow-[0_0_6px_rgba(143,190,63,0.3)]" draggable={false} />
             <div className="flex flex-col">
               <span className="text-[8px] font-semibold text-muted-foreground/45 uppercase tracking-[0.22em] leading-none mb-[3px]">
                 Gere seu
@@ -74,7 +74,7 @@ function Header() {
               <span className="text-[11px] font-black text-primary lowercase tracking-wider">acafe</span>
             </div>
             <div className="w-px h-7 bg-border/35 hidden sm:block" aria-hidden="true" />
-            <AcafeConstellation size={20} color="#8FBE3F" />
+            <img src={acafeLogo} alt="ACAFE" className="h-[20px] w-auto" draggable={false} />
             {/* Label — mobile */}
             <span className="text-[10px] font-black text-primary lowercase tracking-wider sm:hidden">acafe</span>
           </a>

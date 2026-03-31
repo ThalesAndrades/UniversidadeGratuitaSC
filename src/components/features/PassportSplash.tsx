@@ -1,7 +1,7 @@
 import { useRef, useCallback, useMemo, useState, memo } from 'react';
 import { Download, X, CheckCircle2, Share2 } from 'lucide-react';
 import QRCode from '@/components/features/QRCode';
-import { AcafeConstellation } from '@/components/features/BrandElements';
+import acafeLogo from '@/assets/acafe-logo.png';
 import type { PassportFormData } from '@/lib/validations';
 import { formatDate } from '@/lib/utils';
 import { UNIVERSITIES } from '@/constants/universities';
@@ -113,7 +113,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
           </div>
           <div className="relative">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#8FBE3F]/15 mb-3 ring-2 ring-[#8FBE3F]/30 relative">
-              <AcafeConstellation size={36} color="#8FBE3F" />
+              <img src={acafeLogo} alt="ACAFE" className="h-[36px] w-auto" draggable={false} />
               <CheckCircle2 className="w-4 h-4 text-[#8FBE3F] absolute -bottom-1 -right-1 bg-[#272B20] rounded-full" strokeWidth={2.5} />
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
@@ -154,7 +154,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0,
                 }}>
-                  <AcafeConstellation size={30} color="#8FBE3F" />
+                  <img src={acafeLogo} alt="ACAFE" className="h-[30px] w-auto" draggable={false} />
                 </div>
                 <div>
                   <div style={{ fontSize: '10px', color: '#8FBE3F', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>
