@@ -430,7 +430,6 @@ function Home() {
               style={{
                 background: 'linear-gradient(155deg, hsl(82,28%,24%) 0%, hsl(82,14%,13%) 55%, hsl(210,12%,12%) 100%)',
                 boxShadow: S.header,
-                minHeight: '10rem',
               }}
             >
 
@@ -446,7 +445,7 @@ function Home() {
                 <img
                   src={heroPassport}
                   alt=""
-                  className="w-[155px] sm:w-[175px] h-auto object-contain"
+                  className="w-[130px] sm:w-[150px] h-auto object-contain"
                   style={{
                     opacity: 0.38,
                     filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.6))',
@@ -459,7 +458,7 @@ function Home() {
               </div>
 
               {/* ── Content — left column ── */}
-              <div className="relative z-10 px-5 pt-4 pb-5 sm:px-6 sm:pt-5 sm:pb-5 flex flex-col gap-3.5 max-w-[70%] sm:max-w-[65%]">
+              <div className="relative z-10 px-5 pt-3.5 pb-4 sm:px-6 sm:pt-4 sm:pb-4 flex flex-col gap-2.5 max-w-[70%] sm:max-w-[65%]">
 
                 {/* Eyebrow */}
                 <p className="text-[7.5px] sm:text-[8.5px] text-muted-foreground/35 font-bold tracking-[0.25em] uppercase leading-none">
@@ -468,20 +467,20 @@ function Home() {
 
                 {/* ACAFE logo */}
                 <div style={{ filter: 'drop-shadow(0 2px 20px rgba(143,190,63,0.35))' }}>
-                  <AcafeOfficialLogo size={80} color="#ffffff" />
+                  <AcafeOfficialLogo size={68} color="#ffffff" />
                 </div>
 
                 {/* Title block */}
                 <div>
-                  <h2 className="text-[22px] sm:text-2xl font-black text-foreground uppercase tracking-tight leading-none">
+                  <h2 className="text-[20px] sm:text-[22px] font-black text-foreground uppercase tracking-tight leading-none">
                     Passaporte{' '}
                     <span className="text-primary">Acafe</span>
                   </h2>
 
-                  <div className="flex gap-[3px] mt-2.5" aria-hidden="true">
-                    <div className="h-[2.5px] w-9 rounded-full bg-[#8FBE3F]" />
-                    <div className="h-[2.5px] w-5 rounded-full bg-[#1B5FAD]" />
-                    <div className="h-[2.5px] w-3 rounded-full bg-[#E8B931]" />
+                  <div className="flex gap-[3px] mt-2" aria-hidden="true">
+                    <div className="h-[2px] w-8 rounded-full bg-[#8FBE3F]" />
+                    <div className="h-[2px] w-4 rounded-full bg-[#1B5FAD]" />
+                    <div className="h-[2px] w-2.5 rounded-full bg-[#E8B931]" />
                   </div>
                 </div>
 
