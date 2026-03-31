@@ -180,41 +180,33 @@ function Home() {
 
             {/* Body */}
             <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
-              {/* Tagline — "A gente ajuda a gente." com chapéu na referência oficial */}
-              <div className="relative w-full" style={{ letterSpacing: '-0.03em' }}>
-                <div className="text-[2.2rem] sm:text-[2.65rem] font-black text-foreground/90 leading-[1.3]">
-                  A gente
-                </div>
-                <div className="text-[2.35rem] sm:text-[2.75rem] font-black leading-[1.3]">
-                  ajuda a gente<span className="text-primary">.</span>
-                </div>
-                {/* Chapéu posicionado absoluto: espaço vazio à direita de "A gente", acima do final de "gente" */}
-                <span
-                  aria-hidden="true"
-                  className="absolute"
-                  style={{
-                    right: '8%',
-                    top: '-4%',
-                    width: '2.4rem',
-                    height: '2.4rem',
-                    pointerEvents: 'none',
-                  }}
-                >
-                  <svg viewBox="0 0 120 100" fill="currentColor" width="100%" height="100%">
-                    {/* Tabuleiro do capelo (mortarboard — vista 3/4) */}
-                    <polygon points="60,4 116,28 60,52 4,28" />
-                    {/* Cúpula semi-esférica */}
-                    <path d="M30 34 Q30 62 60 68 Q90 62 90 34" opacity="0.85" />
-                    {/* Cordão da borla */}
-                    <line x1="88" y1="38" x2="104" y2="58" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+              {/* Tagline — imagem SVG "A gente ajuda a gente." com capelo */}
+              <div className="w-full" role="img" aria-label="A gente ajuda a gente.">
+                <svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+                  {/* Linha 1: "A gente" */}
+                  <text x="0" y="78" fontFamily="'Inter','Helvetica Neue',Arial,sans-serif" fontSize="88" fontWeight="900" fill="currentColor" letterSpacing="-2">
+                    A gente
+                  </text>
+                  {/* Linha 2: "ajuda a gente" */}
+                  <text x="0" y="178" fontFamily="'Inter','Helvetica Neue',Arial,sans-serif" fontSize="88" fontWeight="900" fill="currentColor" letterSpacing="-2">
+                    ajuda a gente
+                  </text>
+                  {/* Ponto verde */}
+                  <text x="480" y="178" fontFamily="'Inter','Helvetica Neue',Arial,sans-serif" fontSize="88" fontWeight="900" fill="#8FBE3F" letterSpacing="-2">
+                    .
+                  </text>
+                  {/* Capelo acima do "e" final — outline style como na referência */}
+                  <g transform="translate(410, 18) scale(0.72)">
+                    {/* Tabuleiro (losango) */}
+                    <polygon points="55,0 110,28 55,56 0,28" fill="none" stroke="currentColor" strokeWidth="6" strokeLinejoin="round" />
+                    {/* Cúpula arredondada */}
+                    <path d="M22 36 Q22 72 55 78 Q88 72 88 36" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+                    {/* Borla — cordão */}
+                    <line x1="83" y1="42" x2="100" y2="62" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
                     {/* Bolinha da borla */}
-                    <circle cx="106" cy="62" r="5.5" fill="currentColor" />
-                    {/* Pendentes da borla */}
-                    <line x1="102" y1="66" x2="98" y2="82" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-                    <line x1="106" y1="67" x2="106" y2="84" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-                    <line x1="110" y1="66" x2="114" y2="82" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-                  </svg>
-                </span>
+                    <circle cx="102" cy="66" r="6" fill="currentColor" />
+                  </g>
+                </svg>
               </div>
 
               <p className="text-sm text-muted-foreground/80 leading-relaxed w-full text-left">
