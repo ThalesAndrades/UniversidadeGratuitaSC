@@ -98,8 +98,8 @@ const S = {
   tagline:  '0 2px 8px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.04)',
 } as const;
 
-function AccessPassportModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (data: PassportFormData) => void }) {
-  const [email, setEmail] = useState('');
+function AccessPassportModal({ onClose, onSuccess, initialEmail = '' }: { onClose: () => void; onSuccess: (data: PassportFormData) => void; initialEmail?: string }) {
+  const [email, setEmail] = useState(initialEmail);
   const [birthDate, setBirthDate] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -261,8 +261,17 @@ function Home() {
   const [showAccessModal, setShowAccessModal] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
   const [passportData, setPassportData] = useState<PassportFormData | null>(null);
+  const [prefillEmail, setPrefillEmail] = useState('');
 
+  // Detect ?passaporte= URL param from QR code scan
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const emailParam = params.get('passaporte');
+    if (emailParam) {
+      setPrefillEmail(decodeURIComponent(emailParam));
+      setShowAccessModal(true);
+    }
+    // Clean URL after reading params
     if (window.location.search || window.location.hash) {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
@@ -674,8 +683,9 @@ function Home() {
       {/* Access Modal */}
       {showAccessModal && (
         <AccessPassportModal
-          onClose={() => setShowAccessModal(false)}
+          onClose={() => { setShowAccessModal(false); setPrefillEmail(''); }}
           onSuccess={handleAccessSuccess}
+          initialEmail={prefillEmail}
         />
       )}
 

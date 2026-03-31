@@ -35,8 +35,8 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
   }, []);
 
   const qrValue = useMemo(
-    () => `https://passaporteacafe.app/validar?id=${passportNumber}&nome=${encodeURIComponent(data.firstName + ' ' + data.lastName)}`,
-    [passportNumber, data.firstName, data.lastName]
+    () => `https://passaporteacafe.app/?passaporte=${encodeURIComponent(data.email)}&id=${passportNumber}`,
+    [passportNumber, data.email]
   );
 
   const handleDownloadPDF = useCallback(async () => {
@@ -124,7 +124,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
           <button
             onClick={onClose}
             aria-label="Fechar"
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white transition-colors touch-manipulation"
+            className="absolute top-3 right-3 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white transition-colors touch-manipulation active:scale-95"
           >
             <X className="w-4 h-4" strokeWidth={2.5} />
           </button>
@@ -269,7 +269,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
                     {passportNumber}
                   </div>
                   <div style={{ fontSize: '9px', color: '#666', lineHeight: '1.4' }}>
-                    Aponte a câmera do celular para validar este passaporte online
+                    Escaneie para acessar este passaporte
                   </div>
                 </div>
               </div>
