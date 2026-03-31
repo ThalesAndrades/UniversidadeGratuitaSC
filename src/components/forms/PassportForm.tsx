@@ -426,7 +426,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   <SelectTrigger className="mt-1 h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm text-left">
                     <SelectValue placeholder="Selecione a universidade" />
                   </SelectTrigger>
-                  <SelectContent className="max-h-[260px]">
+                  <SelectContent className="max-h-[280px]">
                     {UNIVERSITIES.map(u => (
                       <SelectItem key={u.id} value={u.id} className="py-2.5 font-semibold text-sm">{u.name}</SelectItem>
                     ))}
@@ -446,7 +446,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                     <SelectTrigger className="mt-1 h-12 border-2 border-border focus:ring-0 focus:border-primary bg-card rounded-xl font-semibold text-sm">
                       <SelectValue placeholder="Selecione o curso" />
                     </SelectTrigger>
-                    <SelectContent className="max-h-[200px]">
+                    <SelectContent className="max-h-[240px]">
                       {selectedUniversityData.courses.map(c => (
                         <SelectItem key={c} value={c} className="py-2.5 font-semibold text-sm">{c}</SelectItem>
                       ))}
