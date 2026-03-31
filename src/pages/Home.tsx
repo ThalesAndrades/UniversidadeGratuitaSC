@@ -7,6 +7,8 @@ import univGratuitaLogo from '@/assets/universidade-gratuita-logo.png';
 import sedLogo from '@/assets/sed-logo.png';
 import heroPassport from '@/assets/hero-passport.png';
 import acafeLogo from '@/assets/acafe-logo.png';
+import acafeLogoWhite from '@/assets/acafe-logo-white.png';
+import acafeSymbol from '@/assets/acafe-symbol.png';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -151,7 +153,7 @@ function AccessPassportModal({ onClose, onSuccess, initialEmail = '' }: { onClos
         >
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-              <img src={acafeLogo} alt="ACAFE" className="h-[16px] w-auto" draggable={false} />
+              <img src={acafeSymbol} alt="ACAFE" className="h-[16px] w-auto" draggable={false} />
             </div>
             <div>
               <h2 className="text-base font-black text-foreground uppercase tracking-tight">Meu Passaporte</h2>
@@ -468,7 +470,7 @@ function Home() {
 
                 {/* ACAFE logo */}
                 <div style={{ filter: 'drop-shadow(0 2px 20px rgba(143,190,63,0.35))' }}>
-                  <img src={acafeLogo} alt="ACAFE" className="h-[42px] sm:h-[48px] w-auto" draggable={false} />
+                  <img src={acafeLogoWhite} alt="ACAFE" className="h-[42px] sm:h-[48px] w-auto" draggable={false} />
                 </div>
 
                 {/* Title block */}
@@ -501,7 +503,7 @@ function Home() {
               >
                 <div className="flex-1 h-px bg-border/20 group-hover:bg-primary/25 transition-colors" />
                 <div className="flex items-center gap-1.5">
-                  <img src={acafeLogo} alt="ACAFE" className="h-[12px] w-auto" draggable={false} />
+                  <img src={acafeSymbol} alt="ACAFE" className="h-[12px] w-auto" draggable={false} />
                   <span className="text-[8px] font-semibold text-muted-foreground/30 uppercase tracking-wider group-hover:text-primary/55 transition-colors">
                     <span className="hidden sm:inline">· universidades associadas · </span>
                     <span className="inline-flex items-center gap-0.5">
@@ -574,7 +576,7 @@ function Home() {
                 onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(143,190,63,0.35)')}
                 onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(143,190,63,0.15)')}
               >
-                <img src={acafeLogo} alt="ACAFE" className="h-[13px] w-auto" draggable={false} />
+                <img src={acafeSymbol} alt="ACAFE" className="h-[13px] w-auto" draggable={false} />
                 Acessar Meu Passaporte
               </button>
 
@@ -669,7 +671,7 @@ function Home() {
             >
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                  <img src={acafeLogo} alt="ACAFE" className="h-[18px] w-auto" draggable={false} />
+                  <img src={acafeSymbol} alt="ACAFE" className="h-[18px] w-auto" draggable={false} />
                 </div>
                 <div>
                   <h2 id="passport-modal-title" className="text-base sm:text-lg font-black text-foreground uppercase tracking-tight">Passaporte Acafe</h2>
