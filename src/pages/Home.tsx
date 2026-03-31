@@ -163,7 +163,7 @@ function Home() {
               <BracketCorner key={rot} size={16} color="#8FBE3F" className={`absolute ${pos} opacity-20`} rotate={rot} />
             ))}
 
-            {/* ── Card Header with Hero Image ── */}
+            {/* ── Card Header — Hero layout ── */}
             <div
               className="relative overflow-hidden"
               style={{
@@ -171,53 +171,71 @@ function Home() {
                 boxShadow: S.header,
               }}
             >
-              {/* Hero passport image — positioned as elegant background */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none" aria-hidden="true">
+              {/* Ambient glow */}
+              <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none"
+                style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.12) 0%, transparent 60%)' }} />
+              <div className="absolute -bottom-12 -left-12 w-44 h-44 rounded-full pointer-events-none"
+                style={{ background: 'radial-gradient(circle, rgba(27,95,173,0.06) 0%, transparent 60%)' }} />
+
+              {/* Hero passport — nítida, lateral direita, parcialmente cortada */}
+              <div
+                className="absolute -right-6 sm:-right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none"
+                aria-hidden="true"
+                style={{
+                  maskImage: 'linear-gradient(to left, transparent 0%, black 15%, black 60%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to left, transparent 0%, black 15%, black 60%, transparent 100%)',
+                }}
+              >
                 <img
                   src={heroPassport}
                   alt=""
-                  className="w-[75%] sm:w-[65%] max-w-[280px] h-auto object-contain opacity-[0.07] translate-y-1 scale-105"
-                  style={{
-                    filter: 'brightness(1.6) contrast(0.8)',
-                    maskImage: 'radial-gradient(ellipse 80% 85% at 50% 50%, black 30%, transparent 75%)',
-                    WebkitMaskImage: 'radial-gradient(ellipse 80% 85% at 50% 50%, black 30%, transparent 75%)',
-                  }}
+                  className="w-[130px] sm:w-[150px] h-auto object-contain opacity-[0.18]"
+                  style={{ filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.4))' }}
                   draggable={false}
                   loading="eager"
                 />
               </div>
 
-              {/* Decorative glow orbs */}
-              <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.10) 0%, transparent 60%)' }} />
-              <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(27,95,173,0.05) 0%, transparent 60%)' }} />
+              {/* Content — alinhado à esquerda com espaço para a imagem */}
+              <div className="relative z-10 px-5 pt-5 pb-4 sm:px-6 sm:pt-6 sm:pb-5">
 
-              {/* Content layer */}
-              <div className="relative z-10 px-5 pt-6 pb-5 sm:px-6 sm:pt-7 sm:pb-6 flex flex-col items-center text-center">
-
-                <div className="absolute top-3 right-3 opacity-30">
-                  <OverlapSquares size={14} colorA="#3E5715" colorB="#8FBE3F" />
+                <div className="absolute top-3 right-3 opacity-25">
+                  <OverlapSquares size={12} colorA="#3E5715" colorB="#8FBE3F" />
                 </div>
 
-                <div className="mb-3" style={{ filter: 'drop-shadow(0 2px 20px rgba(143,190,63,0.35))' }}>
-                  <AcafeOfficialLogo size={90} color="#ffffff" />
+                {/* ACAFE logo + titles — left-aligned */}
+                <div className="flex items-start gap-3.5 sm:gap-4">
+
+                  {/* Logo ACAFE com glow */}
+                  <div
+                    className="shrink-0 mt-0.5"
+                    style={{ filter: 'drop-shadow(0 2px 16px rgba(143,190,63,0.3))' }}
+                  >
+                    <AcafeOfficialLogo size={72} color="#ffffff" />
+                  </div>
+
+                  {/* Textos */}
+                  <div className="flex flex-col min-w-0">
+                    <p className="text-[8px] sm:text-[9px] text-muted-foreground/40 font-bold tracking-[0.22em] uppercase leading-none mb-1.5">
+                      Associação Catarinense
+                    </p>
+
+                    <h2 className="text-lg sm:text-xl font-black text-foreground uppercase tracking-tight leading-[1.1]">
+                      Passaporte{' '}
+                      <span className="text-primary">Acafe</span>
+                    </h2>
+
+                    <div className="flex gap-[3px] mt-2" aria-hidden="true">
+                      <div className="h-[2px] w-7 rounded-full bg-[#8FBE3F]" />
+                      <div className="h-[2px] w-4 rounded-full bg-[#1B5FAD]" />
+                      <div className="h-[2px] w-2.5 rounded-full bg-[#E8B931]" />
+                    </div>
+
+                    <p className="text-[8px] sm:text-[9px] text-muted-foreground/35 font-semibold tracking-[0.15em] uppercase mt-1.5 leading-none">
+                      Passaporte Estudantil · SC
+                    </p>
+                  </div>
                 </div>
-
-                <h2 className="text-xl sm:text-2xl font-black text-foreground uppercase tracking-tight leading-none drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]">
-                  Passaporte{' '}
-                  <span className="text-primary">Acafe</span>
-                </h2>
-
-                <div className="flex gap-[3px] mt-2.5" aria-hidden="true">
-                  <div className="h-[2.5px] w-8 rounded-full bg-[#8FBE3F]" />
-                  <div className="h-[2.5px] w-5 rounded-full bg-[#1B5FAD]" />
-                  <div className="h-[2.5px] w-3 rounded-full bg-[#E8B931]" />
-                </div>
-
-                <p className="text-[9px] sm:text-[10px] text-muted-foreground/45 font-bold tracking-[0.2em] uppercase mt-2">
-                  Associação Catarinense · ACAFE
-                </p>
               </div>
             </div>
 
