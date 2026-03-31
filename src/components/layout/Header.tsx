@@ -5,38 +5,29 @@ function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
 
-      {/* ── Barra de identificação governamental ─────────────────────────── */}
+      {/* ── Barra de identificação institucional ─────────────────────────── */}
       <div className="bg-background border-b border-border/15">
         <div className="container mx-auto px-4 h-7 flex items-center justify-between">
           <span className="text-[9px] font-semibold text-muted-foreground/40 uppercase tracking-[0.24em]">
-            Estado de Santa Catarina
+            ACAFE · Santa Catarina
           </span>
 
-          {/* sc.gov.br wordmark */}
+          {/* passaporteacafe.app wordmark */}
           <div className="flex items-center gap-1.5">
-            {/* Miniatura bandeira SC */}
-            <div className="flex rounded-[2px] overflow-hidden shrink-0" style={{ width: 15, height: 11 }}>
-              <div className="flex flex-col w-full">
-                <div className="flex-1" style={{ backgroundColor: '#A40006' }} />
-                <div className="flex-1" style={{ backgroundColor: '#ffffff22' }} />
-                <div className="flex-1" style={{ backgroundColor: '#A40006' }} />
-                <div className="flex-1 bg-white/10" />
-                <div className="flex-1" style={{ backgroundColor: '#1A5C1A' }} />
-              </div>
-            </div>
             <span className="text-[10px] font-black leading-none tracking-tight select-none">
-              <span style={{ color: '#CC0000' }}>sc.</span>
-              <span style={{ color: '#2D7A1F' }}>gov.br</span>
+              <span style={{ color: '#8FBE3F' }}>passaporte</span>
+              <span style={{ color: '#1B5FAD' }}>acafe</span>
+              <span className="text-muted-foreground/50">.app</span>
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── Faixa de cores bandeira SC ────────────────────────────────────── */}
+      {/* ── Faixa de cores ACAFE ─────────────────────────────────────────── */}
       <div className="h-[2.5px] w-full flex" aria-hidden="true">
         <div className="flex-[3]" style={{ backgroundColor: '#8FBE3F' }} />
-        <div className="flex-[2]" style={{ backgroundColor: '#A40006' }} />
-        <div className="flex-1"  style={{ backgroundColor: '#F5E306' }} />
+        <div className="flex-[2]" style={{ backgroundColor: '#1B5FAD' }} />
+        <div className="flex-1"  style={{ backgroundColor: '#E8B931' }} />
       </div>
 
       {/* ── Barra principal ───────────────────────────────────────────────── */}
@@ -53,10 +44,10 @@ function Header() {
             </div>
             <div className="flex flex-col">
               <span className="text-[8px] font-semibold text-muted-foreground/45 uppercase tracking-[0.22em] leading-none mb-[3px]">
-                Programa
+                Gere seu
               </span>
               <h1 className="text-[13px] sm:text-sm font-black text-foreground uppercase tracking-tight leading-none">
-                Universidade <span className="text-primary">Gratuita</span>
+                Passaporte <span className="text-primary">Acafe</span>
               </h1>
             </div>
           </div>
@@ -69,7 +60,7 @@ function Header() {
             {/* Label — desktop */}
             <div className="hidden sm:flex flex-col items-end leading-none">
               <span className="text-[7px] font-semibold text-muted-foreground/38 uppercase tracking-[0.22em] mb-[3px]">
-                Em parceria com
+                Rede de universidades
               </span>
               <span className="text-[11px] font-black text-primary lowercase tracking-wider">acafe</span>
             </div>
