@@ -242,6 +242,189 @@ export const ScStateSeal = memo(function ScStateSeal({
   );
 });
 
+// ── Logo oficial ACAFE (wordmark serif + constelação molecular) ─────────────
+interface AcafeOfficialLogoProps {
+  size?: number;
+  color?: string;
+  className?: string;
+}
+
+export const AcafeOfficialLogo = memo(function AcafeOfficialLogo({
+  size = 80,
+  color = '#8FBE3F',
+  className = '',
+}: AcafeOfficialLogoProps) {
+  const h = Math.round(size * 0.55);
+  return (
+    <svg
+      width={size}
+      height={h}
+      viewBox="0 0 160 88"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Constelação molecular (canto superior direito) */}
+      <circle cx="118" cy="16" r="4.5" fill={color} />
+      <circle cx="138" cy="8" r="3.5" fill={color} />
+      <circle cx="148" cy="22" r="5.5" fill={color} />
+      <circle cx="132" cy="34" r="3" fill={color} />
+      <circle cx="152" cy="40" r="4" fill={color} />
+      <line x1="118" y1="16" x2="138" y2="8" stroke={color} strokeWidth="1.5" />
+      <line x1="138" y1="8" x2="148" y2="22" stroke={color} strokeWidth="1.5" />
+      <line x1="148" y1="22" x2="132" y2="34" stroke={color} strokeWidth="1.5" />
+      <line x1="148" y1="22" x2="152" y2="40" stroke={color} strokeWidth="1.5" />
+      <line x1="118" y1="16" x2="132" y2="34" stroke={color} strokeWidth="1.5" />
+
+      {/* Wordmark "acafe" — serifado bold */}
+      <text
+        x="4"
+        y="76"
+        fontFamily="'Georgia', 'Times New Roman', serif"
+        fontSize="58"
+        fontWeight="900"
+        fill={color}
+        letterSpacing="-1"
+      >
+        acafe
+      </text>
+    </svg>
+  );
+});
+
+// ── Logo Universidade Gratuita (chapéu + arco swoosh) ───────────────────────
+interface UnivGratuitaLogoProps {
+  size?: number;
+  color?: string;
+  className?: string;
+}
+
+export const UnivGratuitaLogo = memo(function UnivGratuitaLogo({
+  size = 48,
+  color = '#ffffff',
+  className = '',
+}: UnivGratuitaLogoProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Tabuleiro do capelo (topo — retângulo largo) */}
+      <rect x="10" y="8" width="80" height="10" rx="2" fill={color} />
+
+      {/* Face frontal do tabuleiro (trapézio 3D) */}
+      <path d="M10 22 L90 22 L90 32 L18 32 Z" fill={color} />
+
+      {/* Cúpula arredondada do capelo */}
+      <path
+        d="M28 38 L72 38 Q80 38 80 54 Q80 74 50 74 Q20 74 20 54 Q20 38 28 38 Z"
+        fill={color}
+      />
+
+      {/* Cordão vertical */}
+      <rect x="76" y="8" width="4" height="34" fill={color} />
+
+      {/* Borla (fita com V-notch) */}
+      <path d="M70 32 L82 32 L82 62 L76 54 L70 62 Z" fill={color} />
+
+      {/* Arco swoosh abaixo do capelo */}
+      <path
+        d="M14 82 Q50 68 86 82"
+        stroke={color}
+        strokeWidth="5"
+        strokeLinecap="round"
+        fill="none"
+      />
+    </svg>
+  );
+});
+
+// ── Logo Governo SC (brasão oficial com fitas vermelhas) ─────────────────────
+interface GovernoScLogoProps {
+  size?: number;
+  className?: string;
+}
+
+export const GovernoScLogo = memo(function GovernoScLogo({
+  size = 40,
+  className = '',
+}: GovernoScLogoProps) {
+  const h = Math.round(size * 1.15);
+  return (
+    <svg
+      width={size}
+      height={h}
+      viewBox="0 0 56 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Fita vermelha esquerda (curva S) */}
+      <path
+        d="M6 8 Q2 14 8 20 Q14 26 8 32 Q2 38 6 42"
+        stroke="#D32F2F"
+        strokeWidth="5"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* Fita vermelha direita (curva S invertida) */}
+      <path
+        d="M50 8 Q54 14 48 20 Q42 26 48 32 Q54 38 50 42"
+        stroke="#D32F2F"
+        strokeWidth="5"
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* Escudo central */}
+      <path
+        d="M14 10 L42 10 L42 34 Q42 50 28 54 Q14 50 14 34 Z"
+        fill="white"
+        stroke="#B0972E"
+        strokeWidth="1.5"
+      />
+
+      {/* Faixas azuis horizontais no escudo */}
+      <rect x="14" y="10" width="28" height="5" rx="0" fill="#1B5FAD" />
+      <rect x="14" y="18" width="28" height="4" fill="#1B5FAD" />
+      <rect x="14" y="25" width="28" height="3" fill="#1B5FAD" />
+
+      {/* Seção verde inferior */}
+      <path
+        d="M14 30 L42 30 L42 34 Q42 50 28 54 Q14 50 14 34 Z"
+        fill="#006B3C"
+      />
+
+      {/* Estrela dourada */}
+      <polygon
+        points="28,34 29.5,39 34,39 30.4,42 31.8,47 28,44 24.2,47 25.6,42 22,39 26.5,39"
+        fill="#E8B931"
+      />
+
+      {/* Texto "SC" abaixo */}
+      <text
+        x="28"
+        y="63"
+        textAnchor="middle"
+        fontFamily="Arial, sans-serif"
+        fontSize="7"
+        fontWeight="800"
+        fill="#555"
+        letterSpacing="0.5"
+      >
+        GOV SC
+      </text>
+    </svg>
+  );
+});
+
 // ── Logo infinito da marca (figura-8 vertical) ──────────────────────────────
 interface InfinityLogoProps {
   size?: number;

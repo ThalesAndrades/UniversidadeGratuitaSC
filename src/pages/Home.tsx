@@ -2,7 +2,7 @@ import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import type { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, ScStateSeal, GraduationCapBrand } from '@/components/features/BrandElements';
+import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, UnivGratuitaLogo, GovernoScLogo, ScStateSeal } from '@/components/features/BrandElements';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -140,13 +140,10 @@ function Home() {
                 <OverlapSquares size={18} colorA="#3E5715" colorB="#8FBE3F" />
               </div>
 
-              {/* Marca Passaporte Acafe */}
+              {/* Marca oficial ACAFE */}
               <div className="mb-4 w-full flex flex-col items-center justify-center">
-                <div style={{ filter: 'drop-shadow(0 0 18px rgba(143,190,63,0.38))' }}>
-                  <AcafeConstellation size={44} color="#8FBE3F" className="opacity-95" />
-                </div>
-                <div className="mt-2 text-[10px] sm:text-[11px] font-black tracking-[0.34em] text-primary/90 uppercase">
-                  Rede ACAFE
+                <div style={{ filter: 'drop-shadow(0 0 20px rgba(143,190,63,0.4))' }}>
+                  <AcafeOfficialLogo size={110} color="#ffffff" />
                 </div>
               </div>
 
@@ -240,52 +237,50 @@ function Home() {
             {/* Rodapé institucional */}
             <div className="border-t border-border/30">
 
-              {/* Trio de logos — grid com divisórias */}
+              {/* Trio de logos institucionais — partes envolvidas */}
               <div className="grid grid-cols-3 divide-x divide-border/30">
 
-                {/* ACAFE — link para Instagram */}
+                {/* Universidade Gratuita — programa */}
+                <div className="flex flex-col items-center justify-center gap-1.5 py-3.5 px-2 cursor-default">
+                  <div className="w-10 h-10 rounded-xl bg-[#2D3A1A] flex items-center justify-center"
+                    style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+                    <UnivGratuitaLogo size={28} color="#ffffff" />
+                  </div>
+                  <div className="text-center leading-none mt-0.5">
+                    <span className="text-[8px] sm:text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.2] block">
+                      Universidade<br />Gratuita
+                    </span>
+                  </div>
+                </div>
+
+                {/* ACAFE — associação (logo oficial destaque) */}
                 <a
                   href="https://www.instagram.com/acafeoficial"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1.5 py-3 px-2 group hover:bg-primary/5 transition-colors duration-200 active:bg-primary/10"
+                  className="flex flex-col items-center justify-center gap-1.5 py-3.5 px-2 group hover:bg-primary/5 transition-colors duration-200 active:bg-primary/10"
                   aria-label="ACAFE no Instagram"
                 >
-                  <AcafeLockup size={22} className="gap-2" textClassName="tracking-[0.14em] text-primary" />
+                  <AcafeOfficialLogo size={72} color="hsl(var(--primary))" />
                   <div className="text-center leading-none">
-                    <span className="text-[8px] text-muted-foreground/45 block mt-[2px] group-hover:text-primary/60 transition-colors">
+                    <span className="text-[7px] sm:text-[8px] text-muted-foreground/45 block group-hover:text-primary/60 transition-colors">
                       @acafeoficial
                     </span>
                   </div>
                 </a>
 
-                {/* SED — Brasão oficial SC */}
-                <div className="flex flex-col items-center gap-1.5 py-3 px-2 cursor-default">
-                  <ScStateSeal size={22} />
+                {/* Governo de SC — SED */}
+                <div className="flex flex-col items-center justify-center gap-1.5 py-3.5 px-2 cursor-default">
+                  <GovernoScLogo size={30} />
                   <div className="text-center leading-none">
-                    <span className="text-[10px] font-black text-foreground/70 uppercase tracking-wider block">SED</span>
-                    <span className="text-[9px] text-muted-foreground/50 block mt-[2px] hidden sm:block">Secretaria de Educação</span>
+                    <span className="text-[8px] sm:text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.2] block">
+                      Governo<br />de SC
+                    </span>
+                    <span className="text-[7px] text-muted-foreground/40 block mt-[1px] hidden sm:block">
+                      Secretaria de Educação
+                    </span>
                   </div>
                 </div>
-
-                {/* Passaporte Acafe — logo + link */}
-                <a
-                  href="https://passaporteacafe.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1.5 py-3 px-2 group hover:bg-primary/5 transition-colors duration-200 active:bg-primary/10"
-                  aria-label="Passaporte Acafe"
-                >
-                  <GraduationCapBrand width={34} color="#8FBE3F" />
-                  <div className="text-center leading-none mt-0.5">
-                    <span className="text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.2] block">
-                      Passaporte<br />Acafe
-                    </span>
-                    <span className="text-[8px] text-muted-foreground/45 block mt-[2px] group-hover:text-primary/60 transition-colors hidden sm:block">
-                      passaporteacafe.app
-                    </span>
-                  </div>
-                </a>
 
               </div>
 
