@@ -49,7 +49,7 @@ function UniversityBadge({ u }: { u: University }) {
   return (
     <div className="shrink-0 px-1.5 sm:px-2 cursor-default group">
       <div
-        className="w-14 h-10 sm:w-16 sm:h-11 rounded-md
+        className="w-14 h-10 sm:w-16 sm:h-11
                    flex items-center justify-center p-1.5
                    group-hover:scale-105 transition-transform duration-300"
         title={u.name}
@@ -74,8 +74,13 @@ function UniversityLogos() {
   const items = [...UNIVERSITIES, ...UNIVERSITIES];
   return (
     <div
-      className="w-full bg-white/95 overflow-hidden py-2.5 sm:py-3 flex items-center
-                 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+      className="w-full overflow-hidden py-2.5 sm:py-3 flex items-center"
+      style={{
+        backgroundColor: '#ffffff',
+        boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.06), inset 0 -1px 4px rgba(0,0,0,0.04)',
+        maskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
+      }}
     >
       <div className="flex w-max animate-marquee hover:[animation-play-state:paused] items-center">
         {items.map((u, i) => (

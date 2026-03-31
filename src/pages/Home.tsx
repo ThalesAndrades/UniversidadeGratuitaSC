@@ -53,6 +53,20 @@ function captureLead(data: PassportFormData) {
   else setTimeout(run, 0);
 }
 
+/* ── Layered shadow system ──────────────────────────────────────────────────
+   Level 1 (card):    close contact shadow + medium spread + deep ambient
+   Level 2 (header):  inset bottom edge light + subtle top highlight
+   Level 3 (CTA):     glow + lift shadow
+   Level 4 (inset):   recessed panels (carousel, footer)
+*/
+const SHADOW = {
+  card: '0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.25), 0 16px 48px rgba(0,0,0,0.4)',
+  header: 'inset 0 -1px 0 rgba(255,255,255,0.04)',
+  footerInset: 'inset 0 1px 3px rgba(0,0,0,0.15)',
+  sedChip: '0 1px 3px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
+  modal: '0 0 0 1px rgba(255,255,255,0.05), 0 24px 80px rgba(0,0,0,0.7)',
+} as const;
+
 function Home() {
   const lastSubmitTimeRef = useRef(0);
   const [showPassportModal, setShowPassportModal] = useState(false);
@@ -101,25 +115,37 @@ function Home() {
     <div
       className="min-h-[100dvh] w-full bg-background text-foreground font-sans flex flex-col"
       style={{
-        backgroundImage: 'radial-gradient(circle, rgba(143,190,63,0.05) 1px, transparent 1px)',
-        backgroundSize: '24px 24px',
+        backgroundImage: 'radial-gradient(circle, rgba(143,190,63,0.04) 1px, transparent 1px)',
+        backgroundSize: '22px 22px',
       }}
     >
       <Suspense fallback={<div className="h-16 w-full bg-card/50" />}>
         <Header />
       </Suspense>
 
-      {/* Ambient glow — subtle, performant */}
+      {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div className="absolute -top-[20%] -right-[10%] w-[60vw] h-[60vw] max-w-[550px] max-h-[550px] bg-primary/8 rounded-full blur-[100px]" style={{ willChange: 'transform' }} />
-        <div className="absolute -bottom-[15%] -left-[10%] w-[50vw] h-[50vw] max-w-[400px] max-h-[400px] bg-primary/4 rounded-full blur-[80px]" style={{ willChange: 'transform' }} />
+        <div
+          className="absolute -top-[20%] -right-[10%] w-[55vw] h-[55vw] max-w-[500px] max-h-[500px] rounded-full blur-[100px]"
+          style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.12) 0%, transparent 70%)', willChange: 'transform' }}
+        />
+        <div
+          className="absolute -bottom-[15%] -left-[10%] w-[45vw] h-[45vw] max-w-[380px] max-h-[380px] rounded-full blur-[80px]"
+          style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.06) 0%, transparent 70%)', willChange: 'transform' }}
+        />
       </div>
 
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-4 pt-[4.5rem] sm:pt-24 pb-6 relative z-10">
         <div className="w-full max-w-[22rem] sm:max-w-md">
 
           {/* ═══════════════ CARD PRINCIPAL ═══════════════ */}
-          <div className="bg-card rounded-2xl border border-border/40 shadow-[0_8px_40px_rgba(0,0,0,0.5)] overflow-hidden relative">
+          <div
+            className="bg-card rounded-2xl overflow-hidden relative"
+            style={{
+              boxShadow: SHADOW.card,
+              border: '1px solid rgba(255,255,255,0.06)',
+            }}
+          >
 
             {/* Bracket corners */}
             {([
@@ -128,22 +154,26 @@ function Home() {
               { pos: 'bottom-2.5 left-2.5', rot: 270 },
               { pos: 'bottom-2.5 right-2.5',rot: 180 },
             ] as const).map(({ pos, rot }) => (
-              <BracketCorner key={rot} size={16} color="#8FBE3F" className={`absolute ${pos} opacity-30`} rotate={rot} />
+              <BracketCorner key={rot} size={16} color="#8FBE3F" className={`absolute ${pos} opacity-25`} rotate={rot} />
             ))}
 
             {/* ── Card Header ── */}
             <div
-              className="relative px-5 pt-6 pb-4 sm:px-6 sm:pt-7 sm:pb-5 border-b border-border/40 flex flex-col items-center text-center overflow-hidden"
-              style={{ background: 'linear-gradient(160deg, hsl(82,28%,20%) 0%, hsl(82,14%,16%) 60%)' }}
+              className="relative px-5 pt-6 pb-4 sm:px-6 sm:pt-7 sm:pb-5 flex flex-col items-center text-center overflow-hidden"
+              style={{
+                background: 'linear-gradient(165deg, hsl(82,28%,21%) 0%, hsl(82,12%,15%) 100%)',
+                boxShadow: SHADOW.header,
+              }}
             >
-              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full opacity-15 pointer-events-none"
-                style={{ background: 'radial-gradient(circle, #8FBE3F 0%, transparent 70%)' }} />
+              {/* Decorative radial */}
+              <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full opacity-12 pointer-events-none"
+                style={{ background: 'radial-gradient(circle, #8FBE3F 0%, transparent 65%)' }} />
 
-              <div className="absolute top-3 right-3 opacity-50">
+              <div className="absolute top-3 right-3 opacity-40">
                 <OverlapSquares size={14} colorA="#3E5715" colorB="#8FBE3F" />
               </div>
 
-              <div className="mb-3" style={{ filter: 'drop-shadow(0 0 16px rgba(143,190,63,0.35))' }}>
+              <div className="mb-3" style={{ filter: 'drop-shadow(0 2px 12px rgba(143,190,63,0.3))' }}>
                 <AcafeOfficialLogo size={90} color="#ffffff" />
               </div>
 
@@ -163,15 +193,15 @@ function Home() {
               </p>
             </div>
 
-            {/* ── Faixa universidades ── */}
-            <div className="border-b border-border/25">
+            {/* ── Faixa universidades (recessed) ── */}
+            <div>
               <div className="flex items-center justify-center gap-1.5 pt-2 pb-0.5 px-4">
-                <div className="flex-1 h-px bg-border/30" />
+                <div className="flex-1 h-px bg-border/25" />
                 <div className="flex items-center gap-1.5">
-                  <AcafeLockup size={12} textClassName="tracking-[0.25em] text-primary/80" />
-                  <span className="text-[8px] font-medium text-muted-foreground/40 uppercase tracking-wider hidden sm:inline">· universidades</span>
+                  <AcafeLockup size={12} textClassName="tracking-[0.25em] text-primary/75" />
+                  <span className="text-[8px] font-medium text-muted-foreground/35 uppercase tracking-wider hidden sm:inline">· universidades</span>
                 </div>
-                <div className="flex-1 h-px bg-border/30" />
+                <div className="flex-1 h-px bg-border/25" />
               </div>
               <Suspense fallback={<div className="h-12 animate-pulse bg-muted/10 rounded mx-4 my-1.5" />}>
                 <UniversityLogos />
@@ -188,7 +218,7 @@ function Home() {
                 loading="eager"
               />
 
-              <p className="text-[13px] sm:text-sm text-muted-foreground/75 leading-relaxed w-full text-left">
+              <p className="text-[13px] sm:text-sm text-muted-foreground/70 leading-relaxed w-full text-left">
                 Gere seu passaporte estudantil para as universidades da rede ACAFE de Santa Catarina.
               </p>
 
@@ -201,6 +231,7 @@ function Home() {
                            hover:-translate-y-0.5 hover:brightness-110 hover:[animation-play-state:paused]"
                 style={{
                   background: 'linear-gradient(135deg, #8FBE3F 0%, #6FA030 100%)',
+                  boxShadow: '0 2px 8px rgba(143,190,63,0.35), 0 8px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)',
                 }}
               >
                 Gerar Passaporte
@@ -208,16 +239,21 @@ function Home() {
               </button>
             </div>
 
-            {/* ── Rodapé institucional ── */}
-            <div className="border-t border-border/25">
-              <div className="grid grid-cols-3 divide-x divide-border/20">
+            {/* ── Rodapé institucional (recessed) ── */}
+            <div
+              style={{
+                boxShadow: SHADOW.footerInset,
+                background: 'linear-gradient(180deg, hsl(82,14%,16%) 0%, hsl(82,14%,14%) 100%)',
+              }}
+            >
+              <div className="grid grid-cols-3 divide-x divide-border/15">
 
-                {/* Universidade Gratuita — logo only */}
+                {/* Universidade Gratuita */}
                 <div className="flex items-center justify-center py-3 px-2">
                   <img
                     src={univGratuitaLogo}
                     alt="Universidade Gratuita"
-                    className="w-10 h-10 sm:w-12 sm:h-12 object-contain invert dark:invert-0"
+                    className="w-10 h-10 sm:w-12 sm:h-12 object-contain invert dark:invert-0 opacity-85"
                   />
                 </div>
 
@@ -230,14 +266,20 @@ function Home() {
                   aria-label="ACAFE no Instagram"
                 >
                   <AcafeOfficialLogo size={60} color="hsl(var(--primary))" />
-                  <span className="text-[7px] text-muted-foreground/40 group-hover:text-primary/60 transition-colors">
+                  <span className="text-[7px] text-muted-foreground/35 group-hover:text-primary/60 transition-colors">
                     @acafeoficial
                   </span>
                 </a>
 
                 {/* SED */}
                 <div className="flex items-center justify-center py-3 px-2">
-                  <div className="bg-white rounded-md p-1 sm:p-1.5">
+                  <div
+                    className="rounded-md p-1 sm:p-1.5"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      boxShadow: SHADOW.sedChip,
+                    }}
+                  >
                     <img
                       src={sedLogo}
                       alt="SED - Secretaria da Educação"
@@ -248,8 +290,8 @@ function Home() {
 
               </div>
 
-              <div className="border-t border-border/15 py-1.5 px-4 text-center">
-                <p className="text-[8px] sm:text-[9px] text-muted-foreground/35 uppercase tracking-[0.15em] leading-none">
+              <div className="border-t border-border/10 py-1.5 px-4 text-center">
+                <p className="text-[8px] sm:text-[9px] text-muted-foreground/30 uppercase tracking-[0.15em] leading-none">
                   ACAFE · Associação Catarinense das Fundações Educacionais
                 </p>
               </div>
@@ -268,7 +310,10 @@ function Home() {
           className="fixed inset-0 bg-background/95 backdrop-blur-none sm:backdrop-blur-xl z-50 flex flex-col sm:items-center sm:justify-center sm:p-4 animate-fade-in"
           onClick={(e) => { if (e.target === e.currentTarget) setShowPassportModal(false); }}
         >
-          <div className="bg-card w-full h-[100dvh] sm:h-auto sm:max-h-[92vh] sm:rounded-2xl sm:max-w-md shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col border-0 sm:border sm:border-border/50 animate-slide-in overflow-hidden">
+          <div
+            className="bg-card w-full h-[100dvh] sm:h-auto sm:max-h-[92vh] sm:rounded-2xl sm:max-w-md flex flex-col border-0 sm:border sm:border-border/50 animate-slide-in overflow-hidden"
+            style={{ boxShadow: SHADOW.modal }}
+          >
             <div className="bg-card border-b border-border px-4 py-3.5 sm:px-6 sm:py-4 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
                 <InfinityLogo size={20} color="#8FBE3F" />
