@@ -2,7 +2,17 @@ import { z } from 'zod';
 
 const sanitizeString = (val: string) => {
   if (typeof val !== 'string') return val;
-  return val.trim().replace(/[<>]/g, '').replace(/\s+/g, ' ');
+  let s = val.trim();
+  // Remove null bytes and control characters
+  s = s.replace(/[\0\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+  // Strip HTML/XML tags
+  s = s.replace(/<[^>]*>?/g, '');
+  // Remove JS/event injection patterns
+  s = s.replace(/(?:javascript|vbscript|data)\s*:/gi, '');
+  s = s.replace(/on\w+\s*=/gi, '');
+  // Collapse whitespace
+  s = s.replace(/\s+/g, ' ');
+  return s;
 };
 
 export const passportSchema = z.object({

@@ -20,6 +20,20 @@ export const compressImage = async (
       return;
     }
 
+    // 3. Validar extensão do arquivo como camada extra
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+    const allowedExt = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'tiff'];
+    if (file.name.includes('.') && !allowedExt.includes(ext)) {
+      reject(new Error('Extensão de arquivo não permitida.'));
+      return;
+    }
+
+    // 4. Limite de tamanho (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      reject(new Error('Arquivo muito grande. Máximo 10MB.'));
+      return;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     
