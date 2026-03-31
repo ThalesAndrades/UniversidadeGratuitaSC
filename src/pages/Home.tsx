@@ -180,41 +180,41 @@ function Home() {
 
             {/* Body */}
             <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
-              {/* Tagline — "A gente ajuda a gente." com chapéu acima do "e" final */}
-              <div className="flex flex-col items-start w-full" style={{ letterSpacing: '-0.03em' }}>
-                <span className="text-[2.2rem] sm:text-[2.65rem] font-black text-foreground/90 leading-none">
+              {/* Tagline — "A gente ajuda a gente." com chapéu na referência oficial */}
+              <div className="relative w-full" style={{ letterSpacing: '-0.03em' }}>
+                <div className="text-[2.2rem] sm:text-[2.65rem] font-black text-foreground/90 leading-[1.3]">
                   A gente
+                </div>
+                <div className="text-[2.35rem] sm:text-[2.75rem] font-black leading-[1.3]">
+                  ajuda a gente<span className="text-primary">.</span>
+                </div>
+                {/* Chapéu posicionado absoluto: espaço vazio à direita de "A gente", acima do final de "gente" */}
+                <span
+                  aria-hidden="true"
+                  className="absolute"
+                  style={{
+                    right: '8%',
+                    top: '-4%',
+                    width: '2.4rem',
+                    height: '2.4rem',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <svg viewBox="0 0 120 100" fill="currentColor" width="100%" height="100%">
+                    {/* Tabuleiro do capelo (mortarboard — vista 3/4) */}
+                    <polygon points="60,4 116,28 60,52 4,28" />
+                    {/* Cúpula semi-esférica */}
+                    <path d="M30 34 Q30 62 60 68 Q90 62 90 34" opacity="0.85" />
+                    {/* Cordão da borla */}
+                    <line x1="88" y1="38" x2="104" y2="58" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+                    {/* Bolinha da borla */}
+                    <circle cx="106" cy="62" r="5.5" fill="currentColor" />
+                    {/* Pendentes da borla */}
+                    <line x1="102" y1="66" x2="98" y2="82" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                    <line x1="106" y1="67" x2="106" y2="84" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                    <line x1="110" y1="66" x2="114" y2="82" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
                 </span>
-                <p className="text-[2.35rem] sm:text-[2.75rem] font-black m-0 mt-1 leading-[1.25]">
-                  ajuda a gent
-                  <span style={{ position: 'relative', display: 'inline-block' }}>
-                    e
-                    <span
-                      aria-hidden="true"
-                      style={{
-                        position: 'absolute',
-                        top: '-1.05em',
-                        left: '50%',
-                        transform: 'translateX(-50%) rotate(4deg)',
-                        width: '1.35em',
-                        height: '1.0em',
-                        pointerEvents: 'none',
-                      }}
-                    >
-                      <svg viewBox="0 0 100 80" fill="currentColor" width="100%" height="100%">
-                        {/* Capelo — losango/diamante (vista frontal do mortarboard) */}
-                        <polygon points="50,2 96,24 50,46 4,24" />
-                        {/* Cúpula arredondada abaixo */}
-                        <path d="M26 30 Q26 60 50 64 Q74 60 74 30" fill="currentColor" opacity="0.9" />
-                        {/* Borla — cordão + pendente */}
-                        <line x1="50" y1="46" x2="82" y2="46" stroke="currentColor" strokeWidth="3" />
-                        <line x1="82" y1="46" x2="82" y2="62" stroke="currentColor" strokeWidth="3" />
-                        <rect x="76" y="62" width="12" height="14" rx="2" fill="currentColor" />
-                      </svg>
-                    </span>
-                  </span>
-                  <span className="text-primary">.</span>
-                </p>
               </div>
 
               <p className="text-sm text-muted-foreground/80 leading-relaxed w-full text-left">

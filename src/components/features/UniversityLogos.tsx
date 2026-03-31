@@ -210,14 +210,14 @@ const UNIVERSITIES: University[] = [
 
 function UniversityBadge({ u }: { u: University }) {
   return (
-    <div className="flex items-center justify-center px-3 sm:px-4 shrink-0 cursor-default group">
+    <div className="flex items-center justify-center px-2 sm:px-3 shrink-0 cursor-default group">
       <div
-        className="w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden
-                   flex items-center justify-center p-2 sm:p-2.5 bg-white
-                   group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+        className="w-[4.2rem] h-[3.2rem] sm:w-[5.2rem] sm:h-[3.8rem] rounded-lg overflow-hidden
+                   flex items-center justify-center p-1.5 sm:p-2 bg-white
+                   group-hover:scale-105 group-hover:shadow-md transition-all duration-300"
         style={{
-          border: '1px solid rgba(0,0,0,0.06)',
-          boxShadow: '0 1px 6px rgba(0,0,0,0.06)',
+          border: '1px solid rgba(0,0,0,0.07)',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
         }}
         title={u.name}
       >
