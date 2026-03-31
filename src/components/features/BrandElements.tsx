@@ -176,7 +176,7 @@ export const AcafeLockup = memo(function AcafeLockup({
 }: AcafeLockupProps) {
   return (
     <div className={`inline-flex items-center gap-2 leading-none ${className}`}>
-      <AcafeConstellation size={size} color={color} className="opacity-90 shrink-0" />
+      <AcafeConstellation size={size} color={color} className="shrink-0" />
       <span
         className={`text-[11px] font-black lowercase tracking-wider ${textClassName}`}
         style={{ color: textColor }}

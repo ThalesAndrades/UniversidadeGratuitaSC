@@ -74,7 +74,7 @@ function Header() {
               <span className="text-[11px] font-black text-primary lowercase tracking-wider">acafe</span>
             </div>
             <div className="w-px h-7 bg-border/35 hidden sm:block" aria-hidden="true" />
-            <AcafeConstellation size={20} color="#8FBE3F" className="opacity-90" />
+            <AcafeConstellation size={20} color="#8FBE3F" />
             {/* Label — mobile */}
             <span className="text-[10px] font-black text-primary lowercase tracking-wider sm:hidden">acafe</span>
           </a>

@@ -536,7 +536,7 @@ function Home() {
                 onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(143,190,63,0.35)')}
                 onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(143,190,63,0.15)')}
               >
-                <AcafeConstellation size={13} color="currentColor" className="opacity-60 group-hover/access:opacity-100 transition-opacity" />
+                <AcafeConstellation size={13} color="#8FBE3F" />
                 Acessar Meu Passaporte
               </button>
 
