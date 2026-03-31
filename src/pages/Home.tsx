@@ -2,8 +2,9 @@ import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import type { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, GovernoScLogo, ScStateSeal } from '@/components/features/BrandElements';
+import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, ScStateSeal } from '@/components/features/BrandElements';
 import univGratuitaLogo from '@/assets/universidade-gratuita-logo.png';
+import sedLogo from '@/assets/sed-logo.png';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -241,17 +242,13 @@ function Home() {
                   </div>
                 </a>
 
-                {/* Governo de SC — SED */}
-                <div className="flex flex-col items-center justify-center gap-1.5 py-3.5 px-2 cursor-default">
-                  <GovernoScLogo size={30} />
-                  <div className="text-center leading-none">
-                    <span className="text-[8px] sm:text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.2] block">
-                      Governo<br />de SC
-                    </span>
-                    <span className="text-[7px] text-muted-foreground/40 block mt-[1px] hidden sm:block">
-                      Secretaria de Educação
-                    </span>
-                  </div>
+                {/* SED — Secretaria de Educação */}
+                <div className="flex items-center justify-center py-3.5 px-2 cursor-default">
+                  <img
+                    src={sedLogo}
+                    alt="SED - Secretaria da Educação"
+                    className="h-10 sm:h-12 w-auto object-contain invert dark:invert-0"
+                  />
                 </div>
 
               </div>
