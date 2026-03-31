@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, ScStateSeal } from '@/components/features/BrandElements';
 import univGratuitaLogo from '@/assets/universidade-gratuita-logo.png';
 import sedLogo from '@/assets/sed-logo.png';
+import heroPassport from '@/assets/hero-passport.png';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -162,42 +163,62 @@ function Home() {
               <BracketCorner key={rot} size={16} color="#8FBE3F" className={`absolute ${pos} opacity-20`} rotate={rot} />
             ))}
 
-            {/* ── Card Header ── */}
+            {/* ── Card Header with Hero Image ── */}
             <div
-              className="relative px-5 pt-6 pb-5 sm:px-6 sm:pt-7 sm:pb-6 flex flex-col items-center text-center overflow-hidden"
+              className="relative overflow-hidden"
               style={{
                 background: 'linear-gradient(168deg, hsl(82,26%,22%) 0%, hsl(82,12%,14%) 100%)',
                 boxShadow: S.header,
               }}
             >
-              {/* Decorative orbs */}
+              {/* Hero passport image — positioned as elegant background */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none" aria-hidden="true">
+                <img
+                  src={heroPassport}
+                  alt=""
+                  className="w-[75%] sm:w-[65%] max-w-[280px] h-auto object-contain opacity-[0.07] translate-y-1 scale-105"
+                  style={{
+                    filter: 'brightness(1.6) contrast(0.8)',
+                    maskImage: 'radial-gradient(ellipse 80% 85% at 50% 50%, black 30%, transparent 75%)',
+                    WebkitMaskImage: 'radial-gradient(ellipse 80% 85% at 50% 50%, black 30%, transparent 75%)',
+                  }}
+                  draggable={false}
+                  loading="eager"
+                />
+              </div>
+
+              {/* Decorative glow orbs */}
               <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.12) 0%, transparent 60%)' }} />
+                style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.10) 0%, transparent 60%)' }} />
               <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(27,95,173,0.06) 0%, transparent 60%)' }} />
+                style={{ background: 'radial-gradient(circle, rgba(27,95,173,0.05) 0%, transparent 60%)' }} />
 
-              <div className="absolute top-3 right-3 opacity-35">
-                <OverlapSquares size={14} colorA="#3E5715" colorB="#8FBE3F" />
+              {/* Content layer */}
+              <div className="relative z-10 px-5 pt-6 pb-5 sm:px-6 sm:pt-7 sm:pb-6 flex flex-col items-center text-center">
+
+                <div className="absolute top-3 right-3 opacity-30">
+                  <OverlapSquares size={14} colorA="#3E5715" colorB="#8FBE3F" />
+                </div>
+
+                <div className="mb-3" style={{ filter: 'drop-shadow(0 2px 20px rgba(143,190,63,0.35))' }}>
+                  <AcafeOfficialLogo size={90} color="#ffffff" />
+                </div>
+
+                <h2 className="text-xl sm:text-2xl font-black text-foreground uppercase tracking-tight leading-none drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]">
+                  Passaporte{' '}
+                  <span className="text-primary">Acafe</span>
+                </h2>
+
+                <div className="flex gap-[3px] mt-2.5" aria-hidden="true">
+                  <div className="h-[2.5px] w-8 rounded-full bg-[#8FBE3F]" />
+                  <div className="h-[2.5px] w-5 rounded-full bg-[#1B5FAD]" />
+                  <div className="h-[2.5px] w-3 rounded-full bg-[#E8B931]" />
+                </div>
+
+                <p className="text-[9px] sm:text-[10px] text-muted-foreground/45 font-bold tracking-[0.2em] uppercase mt-2">
+                  Associação Catarinense · ACAFE
+                </p>
               </div>
-
-              <div className="mb-3.5" style={{ filter: 'drop-shadow(0 2px 16px rgba(143,190,63,0.3))' }}>
-                <AcafeOfficialLogo size={95} color="#ffffff" />
-              </div>
-
-              <h2 className="text-xl sm:text-2xl font-black text-foreground uppercase tracking-tight leading-none">
-                Passaporte{' '}
-                <span className="text-primary">Acafe</span>
-              </h2>
-
-              <div className="flex gap-[3px] mt-2.5" aria-hidden="true">
-                <div className="h-[2.5px] w-8 rounded-full bg-[#8FBE3F]" />
-                <div className="h-[2.5px] w-5 rounded-full bg-[#1B5FAD]" />
-                <div className="h-[2.5px] w-3 rounded-full bg-[#E8B931]" />
-              </div>
-
-              <p className="text-[9px] sm:text-[10px] text-muted-foreground/45 font-bold tracking-[0.2em] uppercase mt-2">
-                Associação Catarinense · ACAFE
-              </p>
             </div>
 
             {/* ── Faixa universidades ── */}
