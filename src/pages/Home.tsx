@@ -244,11 +244,13 @@ function Home() {
 
                 {/* SED — Secretaria de Educação */}
                 <div className="flex items-center justify-center py-3.5 px-2 cursor-default">
-                  <img
-                    src={sedLogo}
-                    alt="SED - Secretaria da Educação"
-                    className="h-10 sm:h-12 w-auto object-contain invert dark:invert-0"
-                  />
+                  <div className="bg-white rounded-lg p-1.5 sm:p-2">
+                    <img
+                      src={sedLogo}
+                      alt="SED - Secretaria da Educação"
+                      className="h-8 sm:h-10 w-auto object-contain"
+                    />
+                  </div>
                 </div>
 
               </div>
