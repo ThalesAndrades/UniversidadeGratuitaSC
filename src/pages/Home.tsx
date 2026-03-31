@@ -6,7 +6,6 @@ import { OverlapSquares, ScStateSeal } from '@/components/features/BrandElements
 import univGratuitaLogo from '@/assets/universidade-gratuita-logo.png';
 import sedLogo from '@/assets/sed-logo.png';
 import heroPassport from '@/assets/hero-passport.png';
-import acafeLogo from '@/assets/acafe-logo.png';
 import acafeLogoWhite from '@/assets/acafe-logo-white.png';
 import acafeSymbol from '@/assets/acafe-symbol.png';
 
@@ -616,7 +615,7 @@ function Home() {
                   className="flex flex-col items-center justify-center gap-1 py-3.5 px-2 group hover:bg-primary/5 transition-colors duration-200 active:bg-primary/10"
                   aria-label="ACAFE no Instagram"
                 >
-                  <img src={acafeLogo} alt="ACAFE" className="h-[36px] w-auto" draggable={false} />
+                  <img src={acafeLogoWhite} alt="ACAFE" className="h-[36px] w-auto" draggable={false} />
                   <span className="text-[7px] text-muted-foreground/30 group-hover:text-primary/55 transition-colors">
                     @acafeoficial
                   </span>
