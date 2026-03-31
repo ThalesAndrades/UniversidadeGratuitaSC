@@ -140,28 +140,28 @@ function Home() {
                 <OverlapSquares size={18} colorA="#3E5715" colorB="#8FBE3F" />
               </div>
 
-              {/* Marca Universidade Gratuita */}
+              {/* Marca Passaporte Acafe */}
               <div className="mb-4 w-full flex flex-col items-center justify-center">
                 <div style={{ filter: 'drop-shadow(0 0 18px rgba(143,190,63,0.38))' }}>
                   <AcafeConstellation size={44} color="#8FBE3F" className="opacity-95" />
                 </div>
                 <div className="mt-2 text-[10px] sm:text-[11px] font-black tracking-[0.34em] text-primary/90 uppercase">
-                  Passaporte ACAFE
+                  Rede ACAFE
                 </div>
               </div>
 
               <h2 className="text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tight leading-none">
-                Universidade<br />
-                <span className="text-primary">Gratuita</span>
+                Passaporte<br />
+                <span className="text-primary">Acafe</span>
               </h2>
-              {/* SC flag accent stripe */}
+              {/* Accent stripe */}
               <div className="flex gap-[3px] mt-2 mb-1" aria-hidden="true">
                 <div className="h-[3px] w-8 rounded-full" style={{ backgroundColor: '#8FBE3F' }} />
-                <div className="h-[3px] w-5 rounded-full" style={{ backgroundColor: '#A40006' }} />
-                <div className="h-[3px] w-3 rounded-full" style={{ backgroundColor: '#F5E306' }} />
+                <div className="h-[3px] w-5 rounded-full" style={{ backgroundColor: '#1B5FAD' }} />
+                <div className="h-[3px] w-3 rounded-full" style={{ backgroundColor: '#E8B931' }} />
               </div>
               <p className="text-[10px] text-muted-foreground/60 font-bold tracking-[0.22em] uppercase">
-                Programa do Governo de SC
+                Associação Catarinense · ACAFE
               </p>
             </div>
 
@@ -172,7 +172,7 @@ function Home() {
                 <div className="flex-1 h-px bg-border/40" />
                 <div className="flex items-center gap-2">
                   <AcafeLockup size={14} textClassName="tracking-[0.28em] text-primary/90" />
-                  <span className="text-[9px] font-medium text-muted-foreground/50 uppercase tracking-wider hidden sm:inline">· 13 universidades</span>
+                  <span className="text-[9px] font-medium text-muted-foreground/50 uppercase tracking-wider hidden sm:inline">· universidades associadas</span>
                 </div>
                 <div className="flex-1 h-px bg-border/40" />
               </div>
@@ -207,7 +207,7 @@ function Home() {
               </div>
 
               <p className="text-sm text-muted-foreground/80 leading-relaxed w-full text-left">
-                Gere seu passaporte estudantil e acesse as universidades da rede ACAFE gratuitamente.
+                Gere seu passaporte estudantil para as universidades da rede ACAFE de Santa Catarina.
               </p>
 
               <button
@@ -257,22 +257,21 @@ function Home() {
                   </div>
                 </div>
 
-                {/* Universidade Gratuita — logo oficial + link Instagram */}
+                {/* Passaporte Acafe — logo + link */}
                 <a
-                  href="https://www.instagram.com/universidadegratuita.oficial"
+                  href="https://passaporteacafe.app"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-col items-center gap-1.5 py-3 px-2 group hover:bg-primary/5 transition-colors duration-200 active:bg-primary/10"
-                  aria-label="Universidade Gratuita no Instagram"
+                  aria-label="Passaporte Acafe"
                 >
-                  {/* Logo oficial do programa em versão compacta */}
                   <GraduationCapBrand width={34} color="#8FBE3F" />
                   <div className="text-center leading-none mt-0.5">
                     <span className="text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.2] block">
-                      Univ.<br />Gratuita
+                      Passaporte<br />Acafe
                     </span>
                     <span className="text-[8px] text-muted-foreground/45 block mt-[2px] group-hover:text-primary/60 transition-colors hidden sm:block">
-                      @univ.gratuita
+                      passaporteacafe.app
                     </span>
                   </div>
                 </a>
@@ -282,7 +281,7 @@ function Home() {
               {/* Linha legal */}
               <div className="border-t border-border/20 bg-background/40 py-2 px-4 text-center">
                 <p className="text-[9px] text-muted-foreground/40 uppercase tracking-[0.18em] leading-none">
-                  Governo do Estado de Santa Catarina · Secretaria de Estado da Educação
+                  ACAFE · Associação Catarinense das Fundações Educacionais
                 </p>
               </div>
 
@@ -305,8 +304,8 @@ function Home() {
               <div className="flex items-center gap-2.5">
                 <InfinityLogo size={22} color="#8FBE3F" />
                 <div>
-                  <h2 id="passport-modal-title" className="text-lg sm:text-xl font-black text-foreground uppercase tracking-tight">Criar Passaporte</h2>
-                  <p className="text-xs text-muted-foreground font-medium mt-0.5">Preencha seus dados oficiais</p>
+                  <h2 id="passport-modal-title" className="text-lg sm:text-xl font-black text-foreground uppercase tracking-tight">Passaporte Acafe</h2>
+                  <p className="text-xs text-muted-foreground font-medium mt-0.5">Preencha seus dados para gerar</p>
                 </div>
               </div>
               <button

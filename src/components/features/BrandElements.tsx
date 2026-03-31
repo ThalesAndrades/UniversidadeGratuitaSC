@@ -1,6 +1,6 @@
 import { memo, type CSSProperties } from 'react';
 
-// ── Marca Universidade Gratuita (chapéu oficial — referência do programa) ─────
+// ── Marca Passaporte Acafe (chapéu de formatura — símbolo do programa) ─────
 interface GraduationCapBrandProps {
   width?: number;
   color?: string;
@@ -159,7 +159,7 @@ export const AcafeConstellation = memo(function AcafeConstellation({
 });
 
 // ── Escudo do Estado de Santa Catarina (Brasão / SED) ──────────────────────
-// Fiel ao brasão oficial: listras vermelhas + fundo verde + estrela dourada
+// Versão simplificada: verde + estrela dourada (sem vermelho)
 interface ScStateSealProps {
   size?: number;
   className?: string;
@@ -187,25 +187,22 @@ export const ScStateSeal = memo(function ScStateSeal({
         </clipPath>
       </defs>
 
-      {/* Conteúdo recortado ao escudo */}
       <g clipPath="url(#sc-shield)">
-        {/* Base branca */}
         <rect x="0" y="0" width="44" height="54" fill="white" />
-        {/* Listras vermelhas horizontais — 4 bandas (porção superior) */}
-        <rect x="0" y="2"  width="44" height="6"  fill="#A40006" />
-        <rect x="0" y="11" width="44" height="5"  fill="#A40006" />
-        <rect x="0" y="20" width="44" height="4"  fill="#A40006" />
-        <rect x="0" y="28" width="44" height="3"  fill="#A40006" />
-        {/* Seção verde (porção inferior) */}
+        {/* Faixas superiores em azul institucional */}
+        <rect x="0" y="2"  width="44" height="6"  fill="#1B5FAD" />
+        <rect x="0" y="11" width="44" height="5"  fill="#1B5FAD" />
+        <rect x="0" y="20" width="44" height="4"  fill="#1B5FAD" />
+        <rect x="0" y="28" width="44" height="3"  fill="#1B5FAD" />
+        {/* Seção verde */}
         <rect x="0" y="30" width="44" height="26" fill="#006B3C" />
         {/* Estrela de 5 pontas dourada */}
         <polygon
           points="22,34 23.9,40.2 30.4,40.2 25.1,44.4 27.0,50.6 22,46.6 17.0,50.6 18.9,44.4 13.6,40.2 20.1,40.2"
-          fill="#F5E306"
+          fill="#E8B931"
         />
       </g>
 
-      {/* Borda dourada do escudo */}
       <path
         d="M2 2 L42 2 L42 32 Q42 50 22 54 Q2 50 2 32 Z"
         fill="none"

@@ -35,7 +35,7 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
   }, []);
 
   const qrValue = useMemo(
-    () => `https://universidadegratuita.sc.gov.br/validar?id=${passportNumber}&nome=${encodeURIComponent(data.firstName + ' ' + data.lastName)}`,
+    () => `https://passaporteacafe.app/validar?id=${passportNumber}&nome=${encodeURIComponent(data.firstName + ' ' + data.lastName)}`,
     [passportNumber, data.firstName, data.lastName]
   );
 
@@ -92,8 +92,8 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Meu Passaporte Universitário',
-          text: `${data.firstName} ${data.lastName} — ${university?.name} | Universidade Gratuita SC`,
+          title: 'Meu Passaporte Acafe',
+          text: `${data.firstName} ${data.lastName} — ${university?.name} | Passaporte Acafe`,
         });
       } catch {
         // Usuário cancelou
@@ -158,13 +158,13 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
                 </div>
                 <div>
                   <div style={{ fontSize: '10px', color: '#8FBE3F', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>
-                    Governo de Santa Catarina
+                    ACAFE · Santa Catarina
                   </div>
                   <div style={{ fontSize: '18px', fontWeight: '900', color: '#ffffff', letterSpacing: '1px', textTransform: 'uppercase', lineHeight: '1.1' }}>
-                    Universidade Gratuita
+                    Passaporte Acafe
                   </div>
                   <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', textTransform: 'uppercase', marginTop: '2px' }}>
-                    Passaporte Estudantil — ACAFE
+                    Passaporte Estudantil · Rede ACAFE
                   </div>
                 </div>
               </div>
@@ -278,10 +278,10 @@ function PassportSplash({ data, onClose }: PassportSplashProps) {
             {/* Document Footer */}
             <div style={{ backgroundColor: '#272B20', padding: '10px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                Documento Estudantil Oficial · ACAFE
+                Passaporte Estudantil · ACAFE
               </span>
               <span style={{ fontSize: '8px', color: '#8FBE3F', letterSpacing: '1px', fontWeight: '700' }}>
-                universidadegratuita.sc.gov.br
+                passaporteacafe.app
               </span>
             </div>
           </div>

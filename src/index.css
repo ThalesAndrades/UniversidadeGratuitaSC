@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    /* ── Paleta oficial Universidade Gratuita SC ──
+    /* ── Paleta oficial Passaporte Acafe ──
        #272B20  background (verde mais escuro)
        #8FBE3F  primary    (verde brilhante)
        #63842C  secondary  (verde médio)
        #3E5715  accent     (verde escuro)
        #DDDEDC  foreground (cinza claro)
-       #A40006  destructive (vermelho SC)
+       #D97706  destructive (âmbar/alerta)
     */
 
     --background: 82 15% 15%;
@@ -34,7 +34,7 @@
     --accent: 83 61% 21%;
     --accent-foreground: 90 3% 87%;
 
-    --destructive: 358 100% 32%;
+    --destructive: 32 90% 44%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 82 20% 24%;
@@ -48,13 +48,13 @@
     --brand-dark: 83 61% 21%;
     --brand-darkest: 82 15% 15%;
     --brand-light: 90 3% 87%;
-    --brand-red: 358 100% 32%;
+    --brand-blue: 214 68% 39%;
     --brand-yellow: 56 95% 49%;
 
-    /* SC flag colors (hex for direct use in gradients / box-shadow) */
+    /* Brand colors (hex for direct use in gradients / box-shadow) */
     --sc-green: #8FBE3F;
-    --sc-red: #A40006;
-    --sc-yellow: #F5E306;
+    --sc-blue: #1B5FAD;
+    --sc-yellow: #E8B931;
   }
 }
 

@@ -401,7 +401,7 @@ function PassportForm({ onSubmit }: PassportFormProps) {
                   className="mt-0.5"
                 />
                 <Label htmlFor="consent" className="text-xs leading-relaxed text-muted-foreground font-semibold cursor-pointer select-none">
-                  Aceito receber comunicações sobre o Programa Universidade Gratuita e o passaporte estudantil.
+                  Aceito receber comunicações sobre o Passaporte Acafe e a rede ACAFE.
                 </Label>
               </div>
             </div>
