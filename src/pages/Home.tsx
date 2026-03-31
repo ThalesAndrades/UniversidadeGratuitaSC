@@ -2,7 +2,8 @@ import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import type { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, UnivGratuitaLogo, GovernoScLogo, ScStateSeal } from '@/components/features/BrandElements';
+import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, GovernoScLogo, ScStateSeal } from '@/components/features/BrandElements';
+import univGratuitaLogo from '@/assets/universidade-gratuita-logo.png';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
@@ -182,7 +183,7 @@ function Home() {
             <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
               {/* Tagline — imagem oficial "A gente ajuda a gente." */}
               <img
-                src="./tagline.jpeg"
+                src="./tagline.png"
                 alt="A gente ajuda a gente."
                 className="w-full h-auto select-none rounded-lg"
                 draggable={false}
@@ -216,16 +217,15 @@ function Home() {
               <div className="grid grid-cols-3 divide-x divide-border/30">
 
                 {/* Universidade Gratuita — programa */}
-                <div className="flex flex-col items-center justify-center gap-1.5 py-3.5 px-2 cursor-default">
-                  <div className="w-10 h-10 rounded-xl bg-[#2D3A1A] flex items-center justify-center"
-                    style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
-                    <UnivGratuitaLogo size={28} color="#ffffff" />
-                  </div>
-                  <div className="text-center leading-none mt-0.5">
-                    <span className="text-[8px] sm:text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.2] block">
-                      Universidade<br />Gratuita
-                    </span>
-                  </div>
+                <div className="flex flex-col items-center justify-center gap-1 py-3.5 px-2 cursor-default">
+                  <img
+                    src={univGratuitaLogo}
+                    alt="Universidade Gratuita"
+                    className="w-10 h-10 sm:w-12 sm:h-12 object-contain invert dark:invert-0"
+                  />
+                  <span className="text-[8px] sm:text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.2] text-center block">
+                    Universidade<br />Gratuita
+                  </span>
                 </div>
 
                 {/* ACAFE — associação (logo oficial destaque) */}
