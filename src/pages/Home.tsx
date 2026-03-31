@@ -2,7 +2,7 @@ import { useState, useRef, lazy, Suspense, memo, useEffect, useCallback } from '
 import type { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, ScStateSeal } from '@/components/features/BrandElements';
+import { OverlapSquares, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, ScStateSeal } from '@/components/features/BrandElements';
 import univGratuitaLogo from '@/assets/universidade-gratuita-logo.png';
 import sedLogo from '@/assets/sed-logo.png';
 import heroPassport from '@/assets/hero-passport.png';
@@ -423,15 +423,6 @@ function Home() {
               </div>
             </div>
 
-            {/* Bracket corners */}
-            {([
-              { pos: 'top-2.5 left-2.5',    rot: 0   },
-              { pos: 'top-2.5 right-2.5',   rot: 90  },
-              { pos: 'bottom-2.5 left-2.5', rot: 270 },
-              { pos: 'bottom-2.5 right-2.5',rot: 180 },
-            ] as const).map(({ pos, rot }) => (
-              <BracketCorner key={rot} size={16} color="#8FBE3F" className={`absolute ${pos} opacity-20`} rotate={rot} />
-            ))}
 
             {/* ── Card Header — Hero editorial ── */}
             <div
