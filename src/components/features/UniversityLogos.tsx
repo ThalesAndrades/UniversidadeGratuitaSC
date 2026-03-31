@@ -2,21 +2,21 @@ import { memo } from 'react';
 
 // ─── Logos oficiais das universidades ACAFE (imagens reais) ─────────────────
 
-import univaliLogo from '../../assets/universities/univali.jpeg';
-import unescLogo from '../../assets/universities/unesc.jpeg';
-import uniplacLogo from '../../assets/universities/uniplac.jpeg';
-import univilleLogo from '../../assets/universities/univille.jpeg';
-import unifebeLogo from '../../assets/universities/unifebe.jpeg';
-import unoChapecoLogo from '../../assets/universities/uno-chapeco.jpeg';
-import furbLogo from '../../assets/universities/furb.jpeg';
-import unoescLogo from '../../assets/universities/unoesc.jpeg';
-import unidaviLogo from '../../assets/universities/unidavi.jpeg';
-import catolicaScLogo from '../../assets/universities/catolica-sc.jpeg';
-import uncLogo from '../../assets/universities/unc.jpeg';
-import uniarpLogo from '../../assets/universities/uniarp.jpeg';
-import unibaveLogo from '../../assets/universities/unibave.jpeg';
-import unisatcLogo from '../../assets/universities/unisatc.jpeg';
-import ieluscLogo from '../../assets/universities/ielusc.jpeg';
+import univaliLogo from '../../assets/universities/univali.png';
+import unescLogo from '../../assets/universities/unesc.png';
+import uniplacLogo from '../../assets/universities/uniplac.png';
+import univilleLogo from '../../assets/universities/univille.png';
+import unifebeLogo from '../../assets/universities/unifebe.png';
+import unoChapecoLogo from '../../assets/universities/uno-chapeco.png';
+import furbLogo from '../../assets/universities/furb.png';
+import unoescLogo from '../../assets/universities/unoesc.png';
+import unidaviLogo from '../../assets/universities/unidavi.png';
+import catolicaScLogo from '../../assets/universities/catolica-sc.png';
+import uncLogo from '../../assets/universities/unc.png';
+import uniarpLogo from '../../assets/universities/uniarp.png';
+import unibaveLogo from '../../assets/universities/unibave.png';
+import unisatcLogo from '../../assets/universities/unisatc.png';
+import ieluscLogo from '../../assets/universities/ielusc.png';
 
 // ─── Dados das universidades ACAFE ──────────────────────────────────────────
 
@@ -47,21 +47,17 @@ const UNIVERSITIES: University[] = [
 
 function UniversityBadge({ u }: { u: University }) {
   return (
-    <div className="flex items-center justify-center px-2 sm:px-3 shrink-0 cursor-default group">
+    <div className="flex items-center justify-center px-3 sm:px-4 shrink-0 cursor-default group">
       <div
-        className="w-[4.5rem] h-[3rem] sm:w-[5.5rem] sm:h-[3.5rem] rounded-lg overflow-hidden
-                   flex items-center justify-center p-1 sm:p-1.5 bg-white
-                   group-hover:scale-105 group-hover:shadow-md transition-all duration-300"
-        style={{
-          border: '1px solid rgba(0,0,0,0.07)',
-          boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
-        }}
+        className="w-[5rem] h-[3.2rem] sm:w-[6rem] sm:h-[3.8rem]
+                   flex items-center justify-center
+                   group-hover:scale-110 transition-transform duration-300"
         title={u.name}
       >
         <img
           src={u.logo}
           alt={u.name}
-          className="max-w-full max-h-full object-contain"
+          className="max-w-full max-h-full object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)]"
           loading="lazy"
           decoding="async"
         />

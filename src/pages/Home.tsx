@@ -216,16 +216,13 @@ function Home() {
               {/* Trio de logos institucionais — partes envolvidas */}
               <div className="grid grid-cols-3 divide-x divide-border/30">
 
-                {/* Universidade Gratuita — programa */}
-                <div className="flex flex-col items-center justify-center gap-1 py-3.5 px-2 cursor-default">
+                {/* Universidade Gratuita — programa (somente logo, sem texto) */}
+                <div className="flex items-center justify-center py-3.5 px-2 cursor-default">
                   <img
                     src={univGratuitaLogo}
                     alt="Universidade Gratuita"
-                    className="w-10 h-10 sm:w-12 sm:h-12 object-contain invert dark:invert-0"
+                    className="w-12 h-12 sm:w-14 sm:h-14 object-contain invert dark:invert-0"
                   />
-                  <span className="text-[8px] sm:text-[9px] font-black text-foreground/70 uppercase tracking-tight leading-[1.2] text-center block">
-                    Universidade<br />Gratuita
-                  </span>
                 </div>
 
                 {/* ACAFE — associação (logo oficial destaque) */}
