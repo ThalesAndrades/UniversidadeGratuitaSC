@@ -195,14 +195,27 @@ function Home() {
 
             {/* ── Faixa universidades (recessed) ── */}
             <div>
-              <div className="flex items-center justify-center gap-1.5 pt-2 pb-0.5 px-4">
-                <div className="flex-1 h-px bg-border/25" />
+              <a
+                href="https://acafe.org.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 pt-2.5 pb-1 px-4 group transition-colors duration-200"
+              >
+                <div className="flex-1 h-px bg-border/25 group-hover:bg-primary/20 transition-colors" />
                 <div className="flex items-center gap-1.5">
-                  <AcafeLockup size={12} textClassName="tracking-[0.25em] text-primary/75" />
-                  <span className="text-[8px] font-medium text-muted-foreground/35 uppercase tracking-wider hidden sm:inline">· universidades</span>
+                  <AcafeLockup size={12} textClassName="tracking-[0.25em] text-primary/75 group-hover:text-primary transition-colors" />
+                  <span className="text-[8px] font-semibold text-muted-foreground/35 uppercase tracking-wider group-hover:text-primary/60 transition-colors">
+                    <span className="hidden sm:inline">· universidades associadas · </span>
+                    <span className="inline-flex items-center gap-0.5">
+                      acafe.org.br
+                      <svg className="w-2 h-2 opacity-0 -translate-x-0.5 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
+                        <path d="M7 17L17 7M17 7H7M17 7v10" />
+                      </svg>
+                    </span>
+                  </span>
                 </div>
-                <div className="flex-1 h-px bg-border/25" />
-              </div>
+                <div className="flex-1 h-px bg-border/25 group-hover:bg-primary/20 transition-colors" />
+              </a>
               <Suspense fallback={<div className="h-12 animate-pulse bg-muted/10 rounded mx-4 my-1.5" />}>
                 <UniversityLogos />
               </Suspense>
