@@ -8,6 +8,7 @@ import sedLogo from '@/assets/sed-logo.png';
 
 const Header = lazy(() => import('@/components/layout/Header').then(m => ({ default: m.Header })));
 const UniversityLogos = lazy(() => import('@/components/features/UniversityLogos'));
+const NetworkConstellation = lazy(() => import('@/components/features/NetworkConstellation'));
 const PassportSplash = lazy(() => import('@/components/features/PassportSplash').then(m => ({ default: m.PassportSplash })));
 const PassportForm = lazy(() => import('@/components/forms/PassportForm').then(m => ({ default: m.PassportForm })));
 
@@ -135,7 +136,12 @@ function Home() {
       </div>
 
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-4 pt-[4.5rem] sm:pt-24 pb-8 relative z-10">
-        <div className="w-full max-w-[22rem] sm:max-w-md">
+        {/* ── Animated network constellation ── */}
+        <Suspense fallback={null}>
+          <NetworkConstellation />
+        </Suspense>
+
+        <div className="w-full max-w-[22rem] sm:max-w-md relative z-10">
 
           {/* ═══════════════ CARD PRINCIPAL ═══════════════ */}
           <div
@@ -320,22 +326,6 @@ function Home() {
                   ACAFE · Associação Catarinense das Fundações Educacionais
                 </p>
               </div>
-            </div>
-          </div>
-
-          {/* ── Floating badge below card ── */}
-          <div className="flex justify-center mt-4">
-            <div
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-              style={{
-                background: 'rgba(143,190,63,0.08)',
-                border: '1px solid rgba(143,190,63,0.12)',
-              }}
-            >
-              <div className="w-1.5 h-1.5 rounded-full bg-[#8FBE3F] animate-pulse" />
-              <span className="text-[9px] font-bold text-primary/60 uppercase tracking-[0.15em]">
-                15 universidades · Santa Catarina
-              </span>
             </div>
           </div>
 
