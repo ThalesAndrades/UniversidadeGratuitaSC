@@ -1,6 +1,6 @@
-import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
+import { useState, useRef, lazy, Suspense, memo, useEffect, useCallback } from 'react';
 import type { PassportFormData } from '@/lib/validations';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, LogIn } from 'lucide-react';
 import { toast } from 'sonner';
 import { OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, ScStateSeal } from '@/components/features/BrandElements';
 import univGratuitaLogo from '@/assets/universidade-gratuita-logo.png';
@@ -15,44 +15,52 @@ const PassportForm = lazy(() => import('@/components/forms/PassportForm').then(m
 
 const RATE_LIMIT_TIME = 10000;
 
-function captureLead(data: PassportFormData) {
-  if (typeof window === 'undefined') return;
-  if (!data?.consent) return;
-
-  const run = () => {
-    try {
-      const url = new URL('/api/leads.php', window.location.origin).toString();
-      const payload = {
+async function saveLead(data: PassportFormData): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const url = new URL('/api/leads.php', window.location.origin).toString();
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
         phone: data.phone,
+        birthDate: data.birthDate,
         university: data.university,
         course: data.course,
+        photo: data.photo,
         consent: !!data.consent,
         ts: Math.floor(Date.now() / 1000),
         hp: '',
-      };
+      }),
+    });
+    if (res.status === 409) {
+      const body = await res.json().catch(() => ({}));
+      return { ok: false, error: body.error || 'duplicate_email' };
+    }
+    return { ok: res.ok };
+  } catch {
+    return { ok: false, error: 'network' };
+  }
+}
 
-      const body = JSON.stringify(payload);
-
-      if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
-        const ok = navigator.sendBeacon(url, new Blob([body], { type: 'application/json' }));
-        if (ok) return;
-      }
-
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body,
-        keepalive: true,
-      }).catch(() => {});
-    } catch {}
-  };
-
-  const ric = (window as any).requestIdleCallback as undefined | ((cb: () => void, opts?: { timeout: number }) => void);
-  if (typeof ric === 'function') ric(run, { timeout: 1200 });
-  else setTimeout(run, 0);
+async function fetchPassport(email: string, birthDate: string): Promise<{ ok: boolean; passport?: PassportFormData; error?: string }> {
+  try {
+    const url = new URL('/api/passport.php', window.location.origin).toString();
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, birthDate }),
+    });
+    const body = await res.json();
+    if (!res.ok || !body.ok) {
+      return { ok: false, error: body.error || 'Passaporte não encontrado.' };
+    }
+    return { ok: true, passport: body.passport as PassportFormData };
+  } catch {
+    return { ok: false, error: 'Erro de conexão. Tente novamente.' };
+  }
 }
 
 /* ── Shadow system ─────────────────────────────────────────────────────────── */
@@ -68,9 +76,135 @@ const S = {
   tagline:  '0 2px 8px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.04)',
 } as const;
 
+function AccessPassportModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (data: PassportFormData) => void }) {
+  const [email, setEmail] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleAccess = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !birthDate) {
+      setError('Preencha todos os campos.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    const result = await fetchPassport(email.trim(), birthDate);
+    setLoading(false);
+    if (result.ok && result.passport) {
+      onSuccess(result.passport);
+    } else {
+      setError(result.error || 'Passaporte não encontrado.');
+    }
+  }, [email, birthDate, onSuccess]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 bg-background/95 backdrop-blur-none sm:backdrop-blur-xl z-50 flex flex-col sm:items-center sm:justify-center sm:p-4 animate-fade-in"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div
+        className="bg-card w-full sm:max-w-sm sm:rounded-2xl flex flex-col border-0 sm:border sm:border-border/50 animate-slide-in overflow-hidden"
+        style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.05), 0 24px 80px rgba(0,0,0,0.7)' }}
+      >
+        <div
+          className="border-b border-border px-4 py-3.5 sm:px-6 sm:py-4 flex items-center justify-between shrink-0"
+          style={{ background: 'linear-gradient(180deg, hsl(82,14%,19%) 0%, hsl(82,14%,17%) 100%)' }}
+        >
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+              <LogIn className="w-4 h-4 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-base font-black text-foreground uppercase tracking-tight">Acessar Passaporte</h2>
+              <p className="text-[11px] text-muted-foreground/60 font-medium mt-0.5">Informe seus dados cadastrados</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Fechar"
+            className="w-10 h-10 rounded-full border border-border bg-background hover:bg-destructive/10 hover:border-destructive/40 hover:text-destructive text-muted-foreground flex items-center justify-center transition-all duration-200 shrink-0 active:scale-95 touch-manipulation"
+          >
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <form onSubmit={handleAccess} className="p-5 sm:p-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="access-email" className="text-xs font-bold text-muted-foreground/70 uppercase tracking-wider">
+              Email cadastrado
+            </label>
+            <input
+              id="access-email"
+              type="email"
+              required
+              autoComplete="email"
+              enterKeyHint="next"
+              placeholder="seu@email.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              className="w-full h-11 px-3 rounded-lg border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="access-birthdate" className="text-xs font-bold text-muted-foreground/70 uppercase tracking-wider">
+              Data de nascimento
+            </label>
+            <input
+              id="access-birthdate"
+              type="date"
+              required
+              enterKeyHint="done"
+              value={birthDate}
+              onChange={e => setBirthDate(e.target.value)}
+              className="w-full h-11 px-3 rounded-lg border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
+            />
+          </div>
+
+          {error && (
+            <p className="text-xs text-red-400 font-medium bg-red-400/10 rounded-lg px-3 py-2">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 rounded-xl font-black text-sm text-primary-foreground uppercase tracking-wide select-none touch-manipulation
+                       flex items-center justify-center gap-2 active:scale-[0.97] transition-all duration-200 disabled:opacity-60"
+            style={{ background: 'linear-gradient(135deg, #8FBE3F 0%, #6FA030 100%)' }}
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Buscando...
+              </span>
+            ) : (
+              <>
+                <LogIn className="w-4 h-4 stroke-[3px]" />
+                Acessar Passaporte
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function Home() {
   const lastSubmitTimeRef = useRef(0);
   const [showPassportModal, setShowPassportModal] = useState(false);
+  const [showAccessModal, setShowAccessModal] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
   const [passportData, setPassportData] = useState<PassportFormData | null>(null);
 
@@ -81,13 +215,23 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (!showPassportModal) return;
+    if (!showPassportModal && !showAccessModal) return;
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setShowPassportModal(false);
+      if (e.key === 'Escape') {
+        setShowPassportModal(false);
+        setShowAccessModal(false);
+      }
     };
     document.addEventListener('keydown', handleEsc);
     return () => document.removeEventListener('keydown', handleEsc);
-  }, [showPassportModal]);
+  }, [showPassportModal, showAccessModal]);
+
+  const handleAccessSuccess = useCallback((data: PassportFormData) => {
+    setPassportData(data);
+    setShowAccessModal(false);
+    setShowSplash(true);
+    toast.success('Passaporte recuperado com sucesso!');
+  }, []);
 
   const handleSubmit = async (data: PassportFormData) => {
     const now = Date.now();
@@ -101,8 +245,18 @@ function Home() {
       if (!data.photo.startsWith('data:image/') || data.firstName.includes('<script>')) {
         throw new Error('Dados inválidos.');
       }
+
+      const result = await saveLead(data);
+      if (!result.ok) {
+        if (result.error === 'duplicate_email') {
+          toast.error('Este email já possui um passaporte. Use "Acessar Meu Passaporte" para recuperá-lo.');
+          setShowPassportModal(false);
+          return;
+        }
+        // Network errors — still show passport (offline-friendly)
+      }
+
       setPassportData(data);
-      captureLead(data);
       setShowPassportModal(false);
       setShowSplash(true);
       toast.success('Passaporte gerado com sucesso!');
@@ -312,6 +466,19 @@ function Home() {
                 <ArrowRight className="w-5 h-5 stroke-[3px] shrink-0 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
               </button>
 
+              {/* Access existing passport */}
+              <button
+                onClick={() => setShowAccessModal(true)}
+                className="w-full py-2.5 rounded-xl font-bold text-xs
+                           text-muted-foreground/60 uppercase tracking-wider select-none touch-manipulation
+                           flex items-center justify-center gap-2
+                           border border-border/30 hover:border-primary/30 hover:text-primary/80
+                           active:scale-[0.97] transition-all duration-200"
+              >
+                <LogIn className="w-3.5 h-3.5 stroke-[2.5px]" />
+                Acessar Meu Passaporte
+              </button>
+
               {/* Trust signal */}
               <div className="flex items-center justify-center gap-3 pt-1">
                 <span className="text-[8px] text-muted-foreground/25 font-semibold uppercase tracking-widest">Gratuito</span>
@@ -431,6 +598,14 @@ function Home() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Access Modal */}
+      {showAccessModal && (
+        <AccessPassportModal
+          onClose={() => setShowAccessModal(false)}
+          onSuccess={handleAccessSuccess}
+        />
       )}
 
       {/* Splash */}

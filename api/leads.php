@@ -32,7 +32,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
 }
 
 $raw = file_get_contents('php://input') ?: '';
-if (strlen($raw) > 1024 * 1024) {
+if (strlen($raw) > 8 * 1024 * 1024) {
   http_response_code(413);
   echo json_encode(['ok' => false], JSON_UNESCAPED_UNICODE);
   exit;
@@ -73,9 +73,11 @@ $firstName = $sanitize($payload['firstName'] ?? '', 50);
 $lastName = $sanitize($payload['lastName'] ?? '', 50);
 $email = $sanitize($payload['email'] ?? '', 120);
 $phone = $sanitize($payload['phone'] ?? '', 20);
+$birthDate = $sanitize($payload['birthDate'] ?? '', 10);
 $university = $sanitize($payload['university'] ?? '', 120);
 $course = $sanitize($payload['course'] ?? '', 120);
 $consent = (bool)($payload['consent'] ?? false);
+$photo = is_string($payload['photo'] ?? null) ? ($payload['photo']) : '';
 
 if ($firstName === '' || $lastName === '' || $email === '' || $phone === '' || !$consent) {
   http_response_code(204);
@@ -163,7 +165,7 @@ try {
       $courseId = is_array($crow) && isset($crow['id']) ? (int)$crow['id'] : null;
     }
 
-    $stmt = $pdo->prepare('INSERT INTO leads (created_at, ip, user_agent, referrer, first_name, last_name, email, phone, university, course, university_id, course_id, consent) VALUES (NOW(), :ip, :ua, :ref, :fn, :ln, :em, :ph, :un, :co, :uid, :cid, :cs)');
+    $stmt = $pdo->prepare('INSERT INTO leads (created_at, ip, user_agent, referrer, first_name, last_name, email, phone, birth_date, university, course, university_id, course_id, photo, consent) VALUES (NOW(), :ip, :ua, :ref, :fn, :ln, :em, :ph, :bd, :un, :co, :uid, :cid, :ph2, :cs)');
     $stmt->execute([
       ':ip' => $ip,
       ':ua' => $ua,
@@ -172,10 +174,12 @@ try {
       ':ln' => $lastName,
       ':em' => $email,
       ':ph' => $phone,
+      ':bd' => $birthDate !== '' ? $birthDate : null,
       ':un' => $university,
       ':co' => $course,
       ':uid' => $universityId,
       ':cid' => $courseId,
+      ':ph2' => $photo !== '' ? $photo : null,
       ':cs' => $consent ? 1 : 0,
     ]);
 
@@ -183,7 +187,14 @@ try {
   } catch (Throwable $e) {
     if ($pdo->inTransaction()) $pdo->rollBack();
 
-    $stmt = $pdo->prepare('INSERT INTO leads (created_at, ip, user_agent, referrer, first_name, last_name, email, phone, university, course, consent) VALUES (NOW(), :ip, :ua, :ref, :fn, :ln, :em, :ph, :un, :co, :cs)');
+    // Check for duplicate email (unique constraint violation)
+    if ($e->getCode() == '23000' || strpos($e->getMessage(), 'Duplicate') !== false) {
+      http_response_code(409);
+      echo json_encode(['ok' => false, 'error' => 'duplicate_email', 'message' => 'Este email já possui um passaporte cadastrado. Use "Acessar Meu Passaporte" para recuperá-lo.'], JSON_UNESCAPED_UNICODE);
+      exit;
+    }
+
+    $stmt = $pdo->prepare('INSERT INTO leads (created_at, ip, user_agent, referrer, first_name, last_name, email, phone, birth_date, university, course, photo, consent) VALUES (NOW(), :ip, :ua, :ref, :fn, :ln, :em, :ph, :bd, :un, :co, :ph2, :cs)');
     $stmt->execute([
       ':ip' => $ip,
       ':ua' => $ua,
@@ -192,8 +203,10 @@ try {
       ':ln' => $lastName,
       ':em' => $email,
       ':ph' => $phone,
+      ':bd' => $birthDate !== '' ? $birthDate : null,
       ':un' => $university,
       ':co' => $course,
+      ':ph2' => $photo !== '' ? $photo : null,
       ':cs' => $consent ? 1 : 0,
     ]);
   }

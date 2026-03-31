@@ -80,6 +80,30 @@ try {
   ");
   echo "✓ Table 'leads' ready\n";
 
+  // Migration: add birth_date, photo, and unique email constraint
+  $columns = $pdo->query("SHOW COLUMNS FROM leads")->fetchAll(PDO::FETCH_COLUMN, 0);
+  if (!in_array('birth_date', $columns)) {
+    $pdo->exec("ALTER TABLE leads ADD COLUMN birth_date DATE DEFAULT NULL AFTER phone");
+    echo "✓ Column 'birth_date' added to leads\n";
+  }
+  if (!in_array('photo', $columns)) {
+    $pdo->exec("ALTER TABLE leads ADD COLUMN photo LONGTEXT DEFAULT NULL AFTER course_id");
+    echo "✓ Column 'photo' added to leads\n";
+  }
+
+  // Add unique constraint on email (only if not already present)
+  $indexes = $pdo->query("SHOW INDEX FROM leads WHERE Key_name = 'uq_email'")->fetchAll();
+  if (count($indexes) === 0) {
+    // Remove duplicates first (keep latest per email)
+    $pdo->exec("
+      DELETE l1 FROM leads l1
+      INNER JOIN leads l2
+      WHERE l1.email = l2.email AND l1.id < l2.id
+    ");
+    $pdo->exec("ALTER TABLE leads ADD UNIQUE KEY uq_email (email)");
+    echo "✓ Unique constraint 'uq_email' added to leads\n";
+  }
+
   // Show existing lead count
   $count = $pdo->query("SELECT COUNT(*) as cnt FROM leads")->fetch();
   echo "\nTotal leads captured: " . $count['cnt'] . "\n";
