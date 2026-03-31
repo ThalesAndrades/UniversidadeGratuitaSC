@@ -27,3 +27,7 @@ bunfig.toml
 
 # Hostinger DB credentials (never commit)
 api/config.local.php
+
+# Security storage (rate-limit counters, audit logs)
+api/.security/ratelimit/
+api/.security/logs/

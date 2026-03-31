@@ -3,18 +3,36 @@ declare(strict_types=1);
 
 /**
  * Database setup script — creates required tables for lead capture.
- * Run once via CLI or browser: php api/setup-db.php
+ * Run via CLI: php api/setup-db.php
+ * Via browser: api/setup-db.php?key=<SECRET_KEY>
  */
+
+// ── Access control: CLI only, or browser with secret key ────────────────────
+$isCli = (php_sapi_name() === 'cli');
+if (!$isCli) {
+  $secretKey = $_GET['key'] ?? '';
+  // Change this key on first use — it's a one-time migration script
+  $validKey = 'acafe-setup-2026-' . md5(__DIR__);
+  if ($secretKey !== $validKey) {
+    http_response_code(403);
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "Acesso negado.\n";
+    exit;
+  }
+}
+
+header('Content-Type: text/plain; charset=utf-8');
 
 $localConfigPath = __DIR__ . DIRECTORY_SEPARATOR . 'config.local.php';
 if (is_file($localConfigPath)) {
   $config = require $localConfigPath;
 } else {
+  // Credentials must be in config.local.php or environment variables
   $config = [
-    'db_host' => 'localhost',
-    'db_name' => 'u525832347_passaporte',
-    'db_user' => 'u525832347_acafe',
-    'db_pass' => '@PassAcafe!2026',
+    'db_host' => getenv('LEADS_DB_HOST') ?: 'localhost',
+    'db_name' => getenv('LEADS_DB_NAME') ?: '',
+    'db_user' => getenv('LEADS_DB_USER') ?: '',
+    'db_pass' => getenv('LEADS_DB_PASS') ?: '',
   ];
 }
 
@@ -27,7 +45,7 @@ try {
     PDO::ATTR_EMULATE_PREPARES => false,
   ]);
 
-  echo "Connected to database: " . $config['db_name'] . "\n";
+  echo "Connected to database.\n";
 
   // Universities table
   $pdo->exec("
@@ -104,22 +122,15 @@ try {
     echo "✓ Unique constraint 'uq_email' added to leads\n";
   }
 
-  // Show existing lead count
+  // Show count only (no PII exposure)
   $count = $pdo->query("SELECT COUNT(*) as cnt FROM leads")->fetch();
-  echo "\nTotal leads captured: " . $count['cnt'] . "\n";
-
-  // Show recent leads
-  $recent = $pdo->query("SELECT id, created_at, first_name, last_name, email, university, course FROM leads ORDER BY id DESC LIMIT 10")->fetchAll();
-  if (count($recent) > 0) {
-    echo "\nLast " . count($recent) . " leads:\n";
-    foreach ($recent as $r) {
-      echo "  #{$r['id']} {$r['created_at']} — {$r['first_name']} {$r['last_name']} ({$r['email']}) → {$r['university']} / {$r['course']}\n";
-    }
-  } else {
-    echo "\nNo leads captured yet.\n";
-  }
+  echo "\nTotal leads: " . $count['cnt'] . "\n";
 
 } catch (Throwable $e) {
-  echo "ERROR: " . $e->getMessage() . "\n";
+  if ($isCli) {
+    echo "ERROR: " . $e->getMessage() . "\n";
+  } else {
+    echo "ERROR: Falha na execução. Verifique via CLI para detalhes.\n";
+  }
   exit(1);
 }

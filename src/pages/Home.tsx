@@ -35,6 +35,9 @@ async function saveLead(data: PassportFormData): Promise<{ ok: boolean; error?: 
         hp: '',
       }),
     });
+    if (res.status === 429) {
+      return { ok: false, error: 'rate_limit' };
+    }
     if (res.status === 409) {
       return { ok: false, error: 'duplicate_email' };
     }
@@ -67,6 +70,9 @@ async function fetchPassport(email: string, birthDate: string): Promise<{ ok: bo
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, birthDate }),
     });
+    if (res.status === 429) {
+      return { ok: false, error: 'Muitas tentativas. Aguarde alguns minutos antes de tentar novamente.' };
+    }
     const body = await res.json().catch(() => ({ ok: false }));
     if (!res.ok || !body.ok) {
       const raw = body.error || '';
@@ -296,6 +302,10 @@ function Home() {
 
       const result = await saveLead(data);
       if (!result.ok) {
+        if (result.error === 'rate_limit') {
+          toast.error('Muitas tentativas. Aguarde alguns minutos antes de tentar novamente.', { duration: 6000 });
+          return;
+        }
         if (result.error === 'duplicate_email') {
           toast.error('Este email já possui um passaporte cadastrado. Clique em "Acessar Meu Passaporte" para recuperá-lo.', { duration: 6000 });
           setShowPassportModal(false);
