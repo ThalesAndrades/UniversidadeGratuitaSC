@@ -392,6 +392,49 @@ function Home() {
               <BracketCorner key={rot} size={16} color="#8FBE3F" className={`absolute ${pos} opacity-20`} rotate={rot} />
             ))}
 
+            {/* ── Faixa de selos diagonais (topo do card, estilo ingresso) ── */}
+            <div
+              className="relative overflow-hidden"
+              aria-hidden="true"
+              style={{
+                height: '54px',
+                background: 'linear-gradient(155deg, hsl(82,22%,18%) 0%, hsl(82,14%,13%) 50%, hsl(210,10%,11%) 100%)',
+                borderBottom: '1px solid rgba(143,190,63,0.08)',
+              }}
+            >
+              <div style={{
+                position: 'absolute',
+                top: '-200%', left: '-80%', right: '-80%', bottom: '-200%',
+                transform: 'rotate(-22deg)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px',
+                justifyContent: 'center',
+                opacity: 0.055,
+              }}>
+                {Array.from({ length: 18 }).map((_, row) => (
+                  <div key={row} style={{
+                    display: 'flex', gap: '18px', whiteSpace: 'nowrap',
+                    marginLeft: row % 2 === 0 ? '0px' : '-80px',
+                  }}>
+                    {Array.from({ length: 12 }).map((_, col) => (
+                      <span key={col} style={{
+                        fontSize: '9px', fontWeight: 900, letterSpacing: '2.5px',
+                        textTransform: 'uppercase', color: '#8FBE3F',
+                        fontFamily: 'Arial, Helvetica, sans-serif',
+                      }}>
+                        {(row + col) % 3 === 0
+                          ? 'ACAFE ✦ SC'
+                          : (row + col) % 3 === 1
+                            ? 'UNIVERSIDADE GRATUITA'
+                            : 'PASSAPORTE ESTUDANTIL'}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* ── Card Header — Hero editorial ── */}
             <div
               className="relative overflow-hidden"
@@ -401,42 +444,6 @@ function Home() {
                 minHeight: '10rem',
               }}
             >
-              {/* ── Diagonal stamp pattern (ticket-style header) ── */}
-              <div className="absolute inset-0 pointer-events-none select-none" aria-hidden="true"
-                style={{ overflow: 'hidden', opacity: 0.035 }}
-              >
-                <div style={{
-                  position: 'absolute',
-                  top: '-60%', left: '-60%', right: '-60%', bottom: '-60%',
-                  transform: 'rotate(-22deg)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '16px',
-                  justifyContent: 'center',
-                }}>
-                  {Array.from({ length: 14 }).map((_, row) => (
-                    <div key={row} style={{
-                      display: 'flex', gap: '20px', whiteSpace: 'nowrap',
-                      marginLeft: row % 2 === 0 ? '0px' : '-70px',
-                    }}>
-                      {Array.from({ length: 10 }).map((_, col) => (
-                        <span key={col} style={{
-                          fontSize: '10px', fontWeight: 900, letterSpacing: '3px',
-                          textTransform: 'uppercase', color: '#ffffff',
-                          fontFamily: 'Arial, Helvetica, sans-serif',
-                        }}>
-                          {(row + col) % 3 === 0
-                            ? 'ACAFE ✦ SC'
-                            : (row + col) % 3 === 1
-                              ? 'UNIVERSIDADE GRATUITA'
-                              : 'PASSAPORTE ESTUDANTIL'}
-                        </span>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {/* Ambient light */}
               <div className="absolute -top-14 left-1/4 w-56 h-56 rounded-full pointer-events-none"
                 style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.09) 0%, transparent 60%)' }} />
