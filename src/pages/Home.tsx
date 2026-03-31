@@ -180,34 +180,14 @@ function Home() {
 
             {/* Body */}
             <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
-              {/* Tagline — imagem SVG "A gente ajuda a gente." com capelo */}
-              <div className="w-full" role="img" aria-label="A gente ajuda a gente.">
-                <svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-                  {/* Linha 1: "A gente" */}
-                  <text x="0" y="78" fontFamily="'Inter','Helvetica Neue',Arial,sans-serif" fontSize="88" fontWeight="900" fill="currentColor" letterSpacing="-2">
-                    A gente
-                  </text>
-                  {/* Linha 2: "ajuda a gente" */}
-                  <text x="0" y="178" fontFamily="'Inter','Helvetica Neue',Arial,sans-serif" fontSize="88" fontWeight="900" fill="currentColor" letterSpacing="-2">
-                    ajuda a gente
-                  </text>
-                  {/* Ponto verde */}
-                  <text x="480" y="178" fontFamily="'Inter','Helvetica Neue',Arial,sans-serif" fontSize="88" fontWeight="900" fill="#8FBE3F" letterSpacing="-2">
-                    .
-                  </text>
-                  {/* Capelo acima do "e" final — outline style como na referência */}
-                  <g transform="translate(410, 18) scale(0.72)">
-                    {/* Tabuleiro (losango) */}
-                    <polygon points="55,0 110,28 55,56 0,28" fill="none" stroke="currentColor" strokeWidth="6" strokeLinejoin="round" />
-                    {/* Cúpula arredondada */}
-                    <path d="M22 36 Q22 72 55 78 Q88 72 88 36" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
-                    {/* Borla — cordão */}
-                    <line x1="83" y1="42" x2="100" y2="62" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-                    {/* Bolinha da borla */}
-                    <circle cx="102" cy="66" r="6" fill="currentColor" />
-                  </g>
-                </svg>
-              </div>
+              {/* Tagline — imagem oficial "A gente ajuda a gente." */}
+              <img
+                src="./tagline.png"
+                alt="A gente ajuda a gente."
+                className="w-full h-auto select-none"
+                draggable={false}
+                loading="eager"
+              />
 
               <p className="text-sm text-muted-foreground/80 leading-relaxed w-full text-left">
                 Gere seu passaporte estudantil para as universidades da rede ACAFE de Santa Catarina.
