@@ -407,22 +407,22 @@ function Home() {
               >
                 <div style={{
                   position: 'absolute',
-                  top: '-200%', left: '-80%', right: '-80%', bottom: '-200%',
-                  transform: 'rotate(-22deg)',
+                  top: '-120%', left: '-60%', right: '-60%', bottom: '-120%',
+                  transform: 'rotate(-18deg)',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '14px',
+                  gap: '10px',
                   justifyContent: 'center',
-                  opacity: 0.06,
+                  opacity: 0.12,
                 }}>
-                  {Array.from({ length: 18 }).map((_, row) => (
+                  {Array.from({ length: 24 }).map((_, row) => (
                     <div key={row} style={{
-                      display: 'flex', gap: '18px', whiteSpace: 'nowrap',
-                      marginLeft: row % 2 === 0 ? '0px' : '-80px',
+                      display: 'flex', gap: '14px', whiteSpace: 'nowrap',
+                      marginLeft: row % 2 === 0 ? '0px' : '-60px',
                     }}>
-                      {Array.from({ length: 12 }).map((_, col) => (
+                      {Array.from({ length: 16 }).map((_, col) => (
                         <span key={col} style={{
-                          fontSize: '9px', fontWeight: 900, letterSpacing: '2.5px',
+                          fontSize: '7.5px', fontWeight: 900, letterSpacing: '2px',
                           textTransform: 'uppercase', color: '#8FBE3F',
                           fontFamily: 'Arial, Helvetica, sans-serif',
                         }}>
