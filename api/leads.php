@@ -96,10 +96,10 @@ if (is_file($localConfigPath)) {
   $config = require $localConfigPath;
 } else {
   $config = [
-    'db_host' => getenv('LEADS_DB_HOST') ?: '',
-    'db_name' => getenv('LEADS_DB_NAME') ?: '',
-    'db_user' => getenv('LEADS_DB_USER') ?: '',
-    'db_pass' => getenv('LEADS_DB_PASS') ?: '',
+    'db_host' => getenv('LEADS_DB_HOST') ?: 'localhost',
+    'db_name' => getenv('LEADS_DB_NAME') ?: 'u525832347_passaporte',
+    'db_user' => getenv('LEADS_DB_USER') ?: 'u525832347_acafe',
+    'db_pass' => getenv('LEADS_DB_PASS') ?: '@PassAcafe!2026',
   ];
 }
 

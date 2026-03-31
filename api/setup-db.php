@@ -6,7 +6,17 @@ declare(strict_types=1);
  * Run once via CLI or browser: php api/setup-db.php
  */
 
-$config = require __DIR__ . DIRECTORY_SEPARATOR . 'config.local.php';
+$localConfigPath = __DIR__ . DIRECTORY_SEPARATOR . 'config.local.php';
+if (is_file($localConfigPath)) {
+  $config = require $localConfigPath;
+} else {
+  $config = [
+    'db_host' => 'localhost',
+    'db_name' => 'u525832347_passaporte',
+    'db_user' => 'u525832347_acafe',
+    'db_pass' => '@PassAcafe!2026',
+  ];
+}
 
 $dsn = 'mysql:host=' . $config['db_host'] . ';dbname=' . $config['db_name'] . ';charset=utf8mb4';
 
