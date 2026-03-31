@@ -401,6 +401,42 @@ function Home() {
                 minHeight: '10rem',
               }}
             >
+              {/* ── Diagonal stamp pattern (ticket-style header) ── */}
+              <div className="absolute inset-0 pointer-events-none select-none" aria-hidden="true"
+                style={{ overflow: 'hidden', opacity: 0.035 }}
+              >
+                <div style={{
+                  position: 'absolute',
+                  top: '-60%', left: '-60%', right: '-60%', bottom: '-60%',
+                  transform: 'rotate(-22deg)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px',
+                  justifyContent: 'center',
+                }}>
+                  {Array.from({ length: 14 }).map((_, row) => (
+                    <div key={row} style={{
+                      display: 'flex', gap: '20px', whiteSpace: 'nowrap',
+                      marginLeft: row % 2 === 0 ? '0px' : '-70px',
+                    }}>
+                      {Array.from({ length: 10 }).map((_, col) => (
+                        <span key={col} style={{
+                          fontSize: '10px', fontWeight: 900, letterSpacing: '3px',
+                          textTransform: 'uppercase', color: '#ffffff',
+                          fontFamily: 'Arial, Helvetica, sans-serif',
+                        }}>
+                          {(row + col) % 3 === 0
+                            ? 'ACAFE ✦ SC'
+                            : (row + col) % 3 === 1
+                              ? 'UNIVERSIDADE GRATUITA'
+                              : 'PASSAPORTE ESTUDANTIL'}
+                        </span>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Ambient light */}
               <div className="absolute -top-14 left-1/4 w-56 h-56 rounded-full pointer-events-none"
                 style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.09) 0%, transparent 60%)' }} />
