@@ -382,6 +382,43 @@ function Home() {
             }}
           >
 
+            {/* ── Selos diagonais (overlay no card inteiro, estilo ingresso) ── */}
+            <div className="absolute inset-0 pointer-events-none select-none z-[1]" aria-hidden="true"
+              style={{ overflow: 'hidden' }}
+            >
+              <div style={{
+                position: 'absolute',
+                top: '-80%', left: '-50%', right: '-50%', bottom: '-80%',
+                transform: 'rotate(-18deg)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                justifyContent: 'center',
+                opacity: 0.09,
+              }}>
+                {Array.from({ length: 40 }).map((_, row) => (
+                  <div key={row} style={{
+                    display: 'flex', gap: '14px', whiteSpace: 'nowrap',
+                    marginLeft: row % 2 === 0 ? '0px' : '-60px',
+                  }}>
+                    {Array.from({ length: 16 }).map((_, col) => (
+                      <span key={col} style={{
+                        fontSize: '7px', fontWeight: 900, letterSpacing: '2px',
+                        textTransform: 'uppercase', color: '#8FBE3F',
+                        fontFamily: 'Arial, Helvetica, sans-serif',
+                      }}>
+                        {(row + col) % 3 === 0
+                          ? 'ACAFE ✦ SC'
+                          : (row + col) % 3 === 1
+                            ? 'UNIVERSIDADE GRATUITA'
+                            : 'PASSAPORTE ESTUDANTIL'}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Bracket corners */}
             {([
               { pos: 'top-2.5 left-2.5',    rot: 0   },
@@ -389,7 +426,7 @@ function Home() {
               { pos: 'bottom-2.5 left-2.5', rot: 270 },
               { pos: 'bottom-2.5 right-2.5',rot: 180 },
             ] as const).map(({ pos, rot }) => (
-              <BracketCorner key={rot} size={16} color="#8FBE3F" className={`absolute ${pos} opacity-20`} rotate={rot} />
+              <BracketCorner key={rot} size={16} color="#8FBE3F" className={`absolute ${pos} opacity-20 z-[2]`} rotate={rot} />
             ))}
 
             {/* ── Card Header — Hero editorial ── */}
@@ -401,42 +438,6 @@ function Home() {
                 minHeight: '10rem',
               }}
             >
-              {/* ── Selos diagonais (overlay no header, estilo ingresso) ── */}
-              <div className="absolute inset-0 pointer-events-none select-none" aria-hidden="true"
-                style={{ overflow: 'hidden' }}
-              >
-                <div style={{
-                  position: 'absolute',
-                  top: '-120%', left: '-60%', right: '-60%', bottom: '-120%',
-                  transform: 'rotate(-18deg)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
-                  justifyContent: 'center',
-                  opacity: 0.12,
-                }}>
-                  {Array.from({ length: 24 }).map((_, row) => (
-                    <div key={row} style={{
-                      display: 'flex', gap: '14px', whiteSpace: 'nowrap',
-                      marginLeft: row % 2 === 0 ? '0px' : '-60px',
-                    }}>
-                      {Array.from({ length: 16 }).map((_, col) => (
-                        <span key={col} style={{
-                          fontSize: '7.5px', fontWeight: 900, letterSpacing: '2px',
-                          textTransform: 'uppercase', color: '#8FBE3F',
-                          fontFamily: 'Arial, Helvetica, sans-serif',
-                        }}>
-                          {(row + col) % 3 === 0
-                            ? 'ACAFE ✦ SC'
-                            : (row + col) % 3 === 1
-                              ? 'UNIVERSIDADE GRATUITA'
-                              : 'PASSAPORTE ESTUDANTIL'}
-                        </span>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
 
               {/* Ambient light */}
               <div className="absolute -top-14 left-1/4 w-56 h-56 rounded-full pointer-events-none"
