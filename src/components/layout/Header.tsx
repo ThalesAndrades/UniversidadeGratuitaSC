@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { GraduationCapLogo, AcafeConstellation } from '@/components/features/BrandElements';
+import { AcafeConstellation } from '@/components/features/BrandElements';
 
 function Header() {
   return (
@@ -45,7 +45,7 @@ function Header() {
           {/* Identidade do programa */}
           <div className="flex items-center gap-2.5 shrink-0">
             <div className="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center" aria-hidden="true">
-              <GraduationCapLogo size={17} color="#8FBE3F" />
+              <AcafeConstellation size={17} color="#8FBE3F" />
             </div>
             <div className="flex flex-col">
               <span className="text-[8px] font-semibold text-muted-foreground/45 uppercase tracking-[0.22em] leading-none mb-[3px]">

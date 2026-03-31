@@ -2,7 +2,7 @@ import { useState, useRef, lazy, Suspense, memo, useEffect } from 'react';
 import type { PassportFormData } from '@/lib/validations';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { InfinityLogo, OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, ScStateSeal } from '@/components/features/BrandElements';
+import { OverlapSquares, BracketCorner, AcafeConstellation, AcafeLockup, AcafeOfficialLogo, ScStateSeal } from '@/components/features/BrandElements';
 import univGratuitaLogo from '@/assets/universidade-gratuita-logo.png';
 import sedLogo from '@/assets/sed-logo.png';
 import heroPassport from '@/assets/hero-passport.png';
@@ -403,7 +403,7 @@ function Home() {
             >
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                  <InfinityLogo size={18} color="#8FBE3F" />
+                  <AcafeConstellation size={18} color="#8FBE3F" />
                 </div>
                 <div>
                   <h2 id="passport-modal-title" className="text-base sm:text-lg font-black text-foreground uppercase tracking-tight">Passaporte Acafe</h2>
