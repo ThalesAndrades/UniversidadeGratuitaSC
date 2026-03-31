@@ -163,80 +163,84 @@ function Home() {
               <BracketCorner key={rot} size={16} color="#8FBE3F" className={`absolute ${pos} opacity-20`} rotate={rot} />
             ))}
 
-            {/* ── Card Header — Hero layout ── */}
+            {/* ── Card Header — Hero editorial ── */}
             <div
               className="relative overflow-hidden"
               style={{
-                background: 'linear-gradient(168deg, hsl(82,26%,22%) 0%, hsl(82,12%,14%) 100%)',
+                background: 'linear-gradient(155deg, hsl(82,28%,24%) 0%, hsl(82,14%,13%) 55%, hsl(210,12%,12%) 100%)',
                 boxShadow: S.header,
+                minHeight: '10rem',
               }}
             >
-              {/* Ambient glow */}
-              <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.12) 0%, transparent 60%)' }} />
-              <div className="absolute -bottom-12 -left-12 w-44 h-44 rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(27,95,173,0.06) 0%, transparent 60%)' }} />
+              {/* Ambient light */}
+              <div className="absolute -top-14 left-1/4 w-56 h-56 rounded-full pointer-events-none"
+                style={{ background: 'radial-gradient(circle, rgba(143,190,63,0.09) 0%, transparent 60%)' }} />
 
-              {/* Hero passport — nítida, lateral direita, parcialmente cortada */}
+              {/* ── Hero passport image — crisp, right-aligned, prominent ── */}
               <div
-                className="absolute -right-6 sm:-right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none"
+                className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none select-none"
                 aria-hidden="true"
-                style={{
-                  maskImage: 'linear-gradient(to left, transparent 0%, black 15%, black 60%, transparent 100%)',
-                  WebkitMaskImage: 'linear-gradient(to left, transparent 0%, black 15%, black 60%, transparent 100%)',
-                }}
               >
                 <img
                   src={heroPassport}
                   alt=""
-                  className="w-[130px] sm:w-[150px] h-auto object-contain opacity-[0.18]"
-                  style={{ filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.4))' }}
+                  className="w-[155px] sm:w-[175px] h-auto object-contain"
+                  style={{
+                    opacity: 0.38,
+                    filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.6))',
+                    maskImage: 'linear-gradient(to right, black 0%, black 55%, transparent 98%)',
+                    WebkitMaskImage: 'linear-gradient(to right, black 0%, black 55%, transparent 98%)',
+                  }}
                   draggable={false}
                   loading="eager"
                 />
               </div>
 
-              {/* Content — alinhado à esquerda com espaço para a imagem */}
-              <div className="relative z-10 px-5 pt-5 pb-4 sm:px-6 sm:pt-6 sm:pb-5">
+              {/* ── Content — left column ── */}
+              <div className="relative z-10 px-5 pt-5 pb-5 sm:px-6 sm:pt-6 sm:pb-5 flex flex-col gap-3.5 max-w-[70%] sm:max-w-[65%]">
 
-                <div className="absolute top-3 right-3 opacity-25">
-                  <OverlapSquares size={12} colorA="#3E5715" colorB="#8FBE3F" />
+                {/* Eyebrow */}
+                <p className="text-[7.5px] sm:text-[8.5px] text-muted-foreground/35 font-bold tracking-[0.25em] uppercase leading-none">
+                  Associação Catarinense das Fundações Educacionais
+                </p>
+
+                {/* ACAFE logo */}
+                <div style={{ filter: 'drop-shadow(0 2px 20px rgba(143,190,63,0.35))' }}>
+                  <AcafeOfficialLogo size={80} color="#ffffff" />
                 </div>
 
-                {/* ACAFE logo + titles — left-aligned */}
-                <div className="flex items-start gap-3.5 sm:gap-4">
+                {/* Title block */}
+                <div>
+                  <h2 className="text-[22px] sm:text-2xl font-black text-foreground uppercase tracking-tight leading-none">
+                    Passaporte{' '}
+                    <span className="text-primary">Acafe</span>
+                  </h2>
 
-                  {/* Logo ACAFE com glow */}
-                  <div
-                    className="shrink-0 mt-0.5"
-                    style={{ filter: 'drop-shadow(0 2px 16px rgba(143,190,63,0.3))' }}
+                  <div className="flex gap-[3px] mt-2.5" aria-hidden="true">
+                    <div className="h-[2.5px] w-9 rounded-full bg-[#8FBE3F]" />
+                    <div className="h-[2.5px] w-5 rounded-full bg-[#1B5FAD]" />
+                    <div className="h-[2.5px] w-3 rounded-full bg-[#E8B931]" />
+                  </div>
+                </div>
+
+                {/* Subtitle chip */}
+                <div className="flex">
+                  <span
+                    className="inline-flex items-center gap-1.5 text-[8px] sm:text-[9px] font-bold tracking-[0.12em] uppercase leading-none px-2.5 py-1.5 rounded-full"
+                    style={{
+                      background: 'rgba(143,190,63,0.08)',
+                      border: '1px solid rgba(143,190,63,0.12)',
+                      color: 'rgba(143,190,63,0.7)',
+                    }}
                   >
-                    <AcafeOfficialLogo size={72} color="#ffffff" />
-                  </div>
-
-                  {/* Textos */}
-                  <div className="flex flex-col min-w-0">
-                    <p className="text-[8px] sm:text-[9px] text-muted-foreground/40 font-bold tracking-[0.22em] uppercase leading-none mb-1.5">
-                      Associação Catarinense
-                    </p>
-
-                    <h2 className="text-lg sm:text-xl font-black text-foreground uppercase tracking-tight leading-[1.1]">
-                      Passaporte{' '}
-                      <span className="text-primary">Acafe</span>
-                    </h2>
-
-                    <div className="flex gap-[3px] mt-2" aria-hidden="true">
-                      <div className="h-[2px] w-7 rounded-full bg-[#8FBE3F]" />
-                      <div className="h-[2px] w-4 rounded-full bg-[#1B5FAD]" />
-                      <div className="h-[2px] w-2.5 rounded-full bg-[#E8B931]" />
-                    </div>
-
-                    <p className="text-[8px] sm:text-[9px] text-muted-foreground/35 font-semibold tracking-[0.15em] uppercase mt-1.5 leading-none">
-                      Passaporte Estudantil · SC
-                    </p>
-                  </div>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#8FBE3F]/50" />
+                    Passaporte Estudantil · Santa Catarina
+                  </span>
                 </div>
               </div>
+
+              {/* Bottom edge highlight */}
+              <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(143,190,63,0.15) 30%, rgba(27,95,173,0.1) 70%, transparent)' }} />
             </div>
 
             {/* ── Faixa universidades ── */}
@@ -286,15 +290,15 @@ function Home() {
                 />
               </div>
 
-              <p className="text-[13px] sm:text-sm text-muted-foreground/65 leading-relaxed w-full text-left">
-                Gere seu passaporte estudantil para as universidades da rede ACAFE de Santa Catarina.
+              <p className="text-[13px] sm:text-sm text-muted-foreground/60 leading-relaxed w-full">
+                Gere seu passaporte estudantil digital para as <strong className="text-muted-foreground/80 font-semibold">15 universidades comunitárias</strong> da rede ACAFE em Santa Catarina.
               </p>
 
               <button
                 onClick={() => setShowPassportModal(true)}
                 className="w-full py-3.5 sm:py-4 rounded-xl font-black text-base sm:text-lg
                            text-primary-foreground uppercase tracking-wide select-none touch-manipulation
-                           flex items-center justify-center gap-2.5 cta-pulse
+                           flex items-center justify-center gap-2.5 cta-pulse group/cta
                            active:scale-[0.97] active:opacity-90 transition-all duration-200
                            hover:-translate-y-0.5 hover:brightness-110 hover:[animation-play-state:paused]"
                 style={{
@@ -305,8 +309,17 @@ function Home() {
                 onMouseLeave={e => (e.currentTarget.style.boxShadow = S.cta)}
               >
                 Gerar Passaporte
-                <ArrowRight className="w-5 h-5 stroke-[3px] shrink-0" />
+                <ArrowRight className="w-5 h-5 stroke-[3px] shrink-0 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
               </button>
+
+              {/* Trust signal */}
+              <div className="flex items-center justify-center gap-3 pt-1">
+                <span className="text-[8px] text-muted-foreground/25 font-semibold uppercase tracking-widest">Gratuito</span>
+                <span className="w-0.5 h-0.5 rounded-full bg-muted-foreground/20" />
+                <span className="text-[8px] text-muted-foreground/25 font-semibold uppercase tracking-widest">Instantâneo</span>
+                <span className="w-0.5 h-0.5 rounded-full bg-muted-foreground/20" />
+                <span className="text-[8px] text-muted-foreground/25 font-semibold uppercase tracking-widest">Digital</span>
+              </div>
             </div>
 
             {/* ── Rodapé institucional ── */}
