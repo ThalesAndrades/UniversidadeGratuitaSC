@@ -3,5 +3,8 @@ Allow: /
 Disallow: /api/
 Disallow: /assets/*.js
 Disallow: /assets/*.css
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /src/
 
 Sitemap: https://passaporteacafe.app/sitemap.xml

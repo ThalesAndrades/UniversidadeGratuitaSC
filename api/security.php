@@ -8,6 +8,16 @@ declare(strict_types=1);
  *   require __DIR__ . '/security.php';
  */
 
+// ── Suppress PHP fingerprinting ─────────────────────────────────────────────
+@ini_set('expose_php', '0');
+@ini_set('display_errors', '0');
+@ini_set('display_startup_errors', '0');
+@ini_set('log_errors', '1');
+if (function_exists('header_remove')) {
+  @header_remove('X-Powered-By');
+  @header_remove('Server');
+}
+
 // ── Storage directory for rate-limit counters and audit logs ────────────────
 define('SECURITY_STORAGE', __DIR__ . DIRECTORY_SEPARATOR . '.security');
 
@@ -206,10 +216,17 @@ function sec_cors_check(): bool
 // ── Security headers (PHP-level backup to .htaccess) ───────────────────────
 function sec_response_headers(): void
 {
+  // Hide technology fingerprints
+  @header_remove('X-Powered-By');
+  @header_remove('Server');
+
   header('X-Content-Type-Options: nosniff');
   header('X-Frame-Options: DENY');
+  header('X-Robots-Tag: noindex, nofollow');
   header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
   header('Pragma: no-cache');
+  header('Referrer-Policy: strict-origin-when-cross-origin');
+  header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
 }
 
 // ── Photo validation ───────────────────────────────────────────────────────
