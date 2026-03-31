@@ -182,9 +182,9 @@ function Home() {
             <div className="px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center text-center gap-4">
               {/* Tagline — imagem oficial "A gente ajuda a gente." */}
               <img
-                src="./tagline.png"
+                src="./tagline.jpeg"
                 alt="A gente ajuda a gente."
-                className="w-full h-auto select-none"
+                className="w-full h-auto select-none rounded-lg"
                 draggable={false}
                 loading="eager"
               />
