@@ -47,10 +47,10 @@ const UNIVERSITIES: University[] = [
 
 function UniversityBadge({ u }: { u: University }) {
   return (
-    <div className="shrink-0 px-1.5 sm:px-2 cursor-default group">
+    <div className="shrink-0 px-1 sm:px-1.5 cursor-default group">
       <div
-        className="w-14 h-10 sm:w-16 sm:h-11
-                   flex items-center justify-center p-1.5
+        className="w-11 h-8 sm:w-13 sm:h-9
+                   flex items-center justify-center p-1
                    group-hover:scale-105 transition-transform duration-300"
         title={u.name}
       >
@@ -74,12 +74,13 @@ function UniversityLogos() {
   const items = [...UNIVERSITIES, ...UNIVERSITIES];
   return (
     <div
-      className="w-full overflow-hidden py-2.5 sm:py-3 flex items-center"
+      className="w-full overflow-hidden py-1.5 sm:py-2 mx-4 sm:mx-5 rounded-lg flex items-center"
       style={{
-        backgroundColor: '#ffffff',
-        boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.06), inset 0 -1px 4px rgba(0,0,0,0.04)',
-        maskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
+        width: 'calc(100% - 2rem)',
+        backgroundColor: '#f8f8f8',
+        boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.06)',
+        maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
       }}
     >
       <div className="flex w-max animate-marquee hover:[animation-play-state:paused] items-center">
